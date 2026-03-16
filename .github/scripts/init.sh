@@ -1,8 +1,8 @@
 
-chmod +x /workspaces/Hybrid/.github/scripts/install-git.sh
-/workspaces/Hybrid/.github/scripts/install-git.sh
-chmod -x /workspaces/Hybrid/.github/scripts/install-git.sh
+chmod +x .github/scripts/install-git.sh
+.github/scripts/install-git.sh
+chmod -x .github/scripts/install-git.sh
 
-chmod +x /workspaces/Hybrid/.github/scripts/configure-git.sh
-/workspaces/Hybrid/.github/scripts/configure-git.sh
-chmod -x /workspaces/Hybrid/.github/scripts/configure-git.sh
+chmod +x .github/scripts/configure-git.sh
+.github/scripts/configure-git.sh
+chmod -x .github/scripts/configure-git.sh
