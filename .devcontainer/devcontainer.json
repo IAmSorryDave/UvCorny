@@ -1,4 +1,4 @@
 {
   "image": "ghcr.io/astral-sh/uv:python3.12-alpine",
-  "postCreateCommand": "chmod +x /workspaces/Hybrid/.github/scripts/init.sh && /workspaces/Hybrid/.github/scripts/init.sh && -x /workspaces/Hybrid/.github/scripts/init.sh"
+  "postCreateCommand": "chmod +x /workspaces/Hybrid/.github/scripts/init.sh && /workspaces/Hybrid/.github/scripts/init.sh && chmod -x /workspaces/Hybrid/.github/scripts/init.sh"
 }
