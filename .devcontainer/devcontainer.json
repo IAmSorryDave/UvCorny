@@ -1,4 +1,10 @@
 {
   "image": "ghcr.io/astral-sh/uv:python3.12-alpine",
-  "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh"
+  "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh",
+  "remoteEnv": {
+    // Use a GitHub Codespaces secret:
+    "DEVELOPER": "${localEnv:DEVELOPER}",
+    // Use a GitHub Codespaces secret:
+    "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}"
+  }
 }
