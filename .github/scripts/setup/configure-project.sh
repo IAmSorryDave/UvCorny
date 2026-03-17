@@ -19,7 +19,7 @@ fi
 
 apk del wget
 
-touch requirements.txt && uv add -r requirements.txt
+touch requirements.txt
 
 uv add --dev pytest && echo "Pytest Installed as Development Dependency"
 
