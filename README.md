@@ -9,9 +9,10 @@ If you are using the base Codespace image, it's probably overkill (and slow) for
 
 In .devcontainer/Dockerfile -
 
+- LINK_MODE : Apache-2.0
+- LINK_MODE : symlink
 - PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
-- LINK_MODE : symlink
 
 ### ENVIROMENTAL VARIABLES
 
