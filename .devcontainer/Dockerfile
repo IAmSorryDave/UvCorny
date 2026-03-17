@@ -1,5 +1,8 @@
+
 ARG PYTHON_VERSION=3.12
-ARG LINK_MODE=symlink
 ARG IMAGE=ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine
+
 FROM $IMAGE
+
+ARG LINK_MODE=symlink
 ENV UV_LINK_MODE=$LINK_MODE
