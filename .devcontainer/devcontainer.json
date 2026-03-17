@@ -1,11 +1,8 @@
 {
   "build": {
     "dockerfile": "Dockerfile",
-    "args": {
-      "PYTHON_VERSION": "${localEnv:PYTHON_VERSION}"
-    }
+    "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"]
   },
-  "initializeCommand": "echo \"PYTHON_VERSION=$PYTHON_VERSION\" > .devcontainer/.env",
   "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh",
   "remoteEnv": {
     // GitHub Username:
