@@ -4,7 +4,12 @@ A UV Project Management Template for Python
 ## Quickstart
 
 If you are using the base Codespace image, it's probably overkill (and slow) for Python package development.
-By default UvCorny uses ghcr.io/astral-sh/uv:python3.12-alpine for the base image. Increment the Python verison as needed.
+
+### Build Arguments
+
+In .devcontainer/Dockerfile -
+
+- PYTHON_VERSION : 3.12  # Increment the Python verison as needed.
 
 ### ENVIROMENTAL VARIABLES
 
