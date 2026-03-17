@@ -5,16 +5,17 @@ A UV Project Management Template for Python
 
 If you are using the base Codespace image, it's probably overkill (and slow) for Python package development.
 
-### Build Arguments
+### Default Build Arguments
 
 In .devcontainer/Dockerfile -
 
+- PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
 - LINK_MODE : symlink
 
 ### ENVIROMENTAL VARIABLES
 
-Set in your Codespace Secret Store
+Set in your Codespace Secret Store.
 
 Essentials -
 
