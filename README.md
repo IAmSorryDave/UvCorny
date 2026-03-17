@@ -3,8 +3,6 @@ A UV Project Management Template for Python
 
 ## Quickstart
 
-If you are using the base Codespace image, it's probably overkill (and slow) for Python package development.
-
 ### Default Build Arguments
 
 In .devcontainer/Dockerfile -
