@@ -21,6 +21,6 @@ Set in your Codespace Secret Store.
 Essentials -
 
 - DEVELOPER : Your GitHub username.
-- NO_REPLY_EMAIL : Your masked Github email.
+- DEVELOPER_EMAIL : Your Github email.
 
 ####
