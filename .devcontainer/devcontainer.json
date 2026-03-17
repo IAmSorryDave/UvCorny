@@ -1,5 +1,11 @@
 {
-  "image": "ghcr.io/astral-sh/uv:python3.12-alpine",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USERNAME": "${localEnv:DEVELOPER}"
+    }
+  },
+  "initializeCommand": "echo -e \"USERNAME=$USER\nUSER_UID=$(id -u $USER)\nGROUPNAME=$(id -gn $USER)\nGROUP_GID=$(id -g $USER)\" > .devcontainer/.env",
   "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh",
   "remoteEnv": {
     // Use a GitHub Codespaces secret:
