@@ -5,12 +5,12 @@
       "PYTHON_VERSION": "${localEnv:PYTHON_VERSION}"
     }
   },
-  "initializeCommand": "echo -e \"PYTHON_VERSION=$PYTHON_VERSION\" > .devcontainer/.env",
+  "initializeCommand": "echo \"PYTHON_VERSION=$PYTHON_VERSION\" > .devcontainer/.env",
   "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh",
   "remoteEnv": {
-    // Use a GitHub Codespaces secret:
+    // GitHub Username:
     "DEVELOPER": "${localEnv:DEVELOPER}",
-    // Use a GitHub Codespaces secret:
+    // GitHub No Reply Email:
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}"
   }
 }
