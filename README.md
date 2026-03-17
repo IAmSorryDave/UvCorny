@@ -10,7 +10,7 @@ If you are using the base Codespace image, it's probably overkill (and slow) for
 In .devcontainer/Dockerfile -
 
 - PYTHON_VERSION : 3.12
-- UV_LINK_MODE : symlink
+- LINK_MODE : symlink
 
 ### ENVIROMENTAL VARIABLES
 
