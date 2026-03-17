@@ -9,7 +9,7 @@ If you are using the base Codespace image, it's probably overkill (and slow) for
 
 In .devcontainer/Dockerfile -
 
-- LICENSE : Apache-2.0
+- LICENSE : MIT
 - LINK_MODE : symlink
 - PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
