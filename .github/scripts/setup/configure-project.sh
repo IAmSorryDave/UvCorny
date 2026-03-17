@@ -8,6 +8,8 @@ uv init $UV_PROJECT_TYPE .
 
 uv tool install toml-cli && echo "TOML CLI added as UV tool."
 
+uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
+
 uv add --dev pytest && echo "Pytest Installed as Development Dependency"
 
 mkdir tests && touch tests/test_main.py
