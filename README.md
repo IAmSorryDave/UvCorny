@@ -7,7 +7,7 @@ A UV Project Management Template for Python
 
 In .devcontainer/Dockerfile -
 
-- LICENSE : MIT
+- LICENSE : MIT (or Apache-2.0)
 - LINK_MODE : symlink
 - PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
