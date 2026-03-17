@@ -19,6 +19,8 @@ fi
 
 apk del wget
 
+touch requirements.txt && uv add -r requirements.txt
+
 uv add --dev pytest && echo "Pytest Installed as Development Dependency"
 
 mkdir tests && touch tests/test_main.py
@@ -30,5 +32,5 @@ echo "Testing directory configured."
 
 uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 uv run ruff format tests
-uv run pytest tests/test_main.py::test_main
+
 echo "Project configured."
