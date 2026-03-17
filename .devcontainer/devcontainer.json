@@ -1,0 +1,12 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh",
+  "remoteEnv": {
+    // GitHub Username:
+    "DEVELOPER": "${localEnv:DEVELOPER}",
+    // GitHub No Reply Email:
+    "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}"
+  }
+}

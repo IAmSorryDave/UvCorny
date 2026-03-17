@@ -1,2 +1,24 @@
 # UvCorny
 A UV Project Management Template for Python
+
+## Quickstart
+
+### Default Build Arguments
+
+In .devcontainer/Dockerfile -
+
+- LICENSE : MIT (or Apache-2.0)
+- LINK_MODE : symlink
+- PROJECT_TYPE : --package
+- PYTHON_VERSION : 3.12
+
+### ENVIROMENTAL VARIABLES
+
+Set in your Codespace Secret Store.
+
+Essentials -
+
+- DEVELOPER : Your GitHub username.
+- DEVELOPER_EMAIL : Your Github email.
+
+####
