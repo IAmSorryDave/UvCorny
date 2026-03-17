@@ -1,7 +1,6 @@
 {
   "build": {
-    "dockerfile": "Dockerfile",
-    "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"]
+    "dockerfile": "Dockerfile"
   },
   "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh",
   "remoteEnv": {
