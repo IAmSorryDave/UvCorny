@@ -2,10 +2,10 @@
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
-      "USERNAME": "${localEnv:DEVELOPER}"
+      "PYTHON_VERSION": "${localEnv:PYTHON_VERSION}"
     }
   },
-  "initializeCommand": "echo -e \"USERNAME=$USER\nUSER_UID=$(id -u $USER)\nGROUPNAME=$(id -gn $USER)\nGROUP_GID=$(id -g $USER)\" > .devcontainer/.env",
+  "initializeCommand": "echo -e \"PYTHON_VERSION=$PYTHON_VERSION\" > .devcontainer/.env",
   "postCreateCommand": "chmod +x .github/scripts/init.sh && .github/scripts/init.sh && chmod -x .github/scripts/init.sh",
   "remoteEnv": {
     // Use a GitHub Codespaces secret:
