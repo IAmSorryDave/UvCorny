@@ -17,12 +17,11 @@ In .devcontainer/Dockerfile -
 ### ENVIROMENTAL VARIABLES
 
 The Alpine UV image does not have git configured by default.
-
-Set your 
+While git is installed automatically you still need to set your... 
 
 - DEVELOPER : Your GitHub username.
 - DEVELOPER_EMAIL : Your Github email.
 
-in your Codespace secret store.
+in your Codespace secret store for git to work properly.
 
 ####
