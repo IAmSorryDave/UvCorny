@@ -9,7 +9,7 @@ Clone this template and work with UV out of the box.
 
 In .devcontainer/Dockerfile -
 
-- LICENSE : Either MIT or Apache-2.0, default MIT
+- LICENSE : Either MIT or Apache-2.0 ... MIT by default
 - LINK_MODE : symlink
 - PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
