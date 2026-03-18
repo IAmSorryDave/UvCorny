@@ -2,7 +2,7 @@
 uv tool install toml-cli && echo "TOML CLI added as UV tool."
 
 if [ ! -f "pyproject.toml" ]; then
-  uv init $UV_PROJECT_TYPE . --description "Hello world" --force --vcs git
+  uv init $UV_PROJECT_TYPE . --force
   uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 fi
 
