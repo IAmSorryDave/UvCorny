@@ -10,7 +10,6 @@ Creating a Codespace will automatically set up your project in the working direc
 
 In .devcontainer/Dockerfile -
 
-- PROJECT_DESCRIPTION : "Hello world, this is my cool project."
 - LICENSE : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - LINK_MODE : symlink
 - PROJECT_TYPE : --package
