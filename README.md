@@ -10,7 +10,7 @@ Clone this template and work with UV out of the box.
 In .devcontainer/Dockerfile -
 
 - PROJECT_DISCRIPTION : "Hello world, this is my cool project."
-- LICENSE : MIT (See a list of valid licenses and identifiers here >> https://spdx.org/licenses/)
+- LICENSE : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - LINK_MODE : symlink
 - PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
