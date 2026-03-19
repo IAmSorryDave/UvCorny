@@ -3,7 +3,7 @@ A UV Project Management Template for Python.
 
 ## Quickstart
 
-Clone this template and work with UV out of the box.
+Clone this template and work with UV out of the ( alpine ) box.
 
 ### Default Build Arguments
 
