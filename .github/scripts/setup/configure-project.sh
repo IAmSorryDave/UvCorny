@@ -18,7 +18,7 @@ if [ ! -f "pyproject.toml" ]; then
   uv run toml set --toml-path pyproject.toml project.description $PYPROJECT_DISCRIPTION 
   uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
-  echo "# $(toml get --toml-path pyproject.toml project.name) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description) >> README.md
+  echo "# $(toml get --toml-path pyproject.toml project.name) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description ) >> README.md
   
   uvx easyignore python
 
