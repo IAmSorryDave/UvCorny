@@ -13,7 +13,7 @@ In .devcontainer/Dockerfile -
 - LICENSE : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - LINK_MODE : symlink
 - PROJECT_TYPE : --package
-- PYTHON_VERSION : 3.12
+- PYTHON_VERSION : 3.12 (available up to 3.14 at the time of this writing.)
 
 ### ENVIRONMENTAL VARIABLES
 
