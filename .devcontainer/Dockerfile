@@ -4,9 +4,6 @@ ARG IMAGE=ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine
 
 FROM $IMAGE
 
-ARG PROJECT_DESCRIPTION="Hello world, this is my cool project."
-ENV PYPROJECT_DESCRIPTION=$PROJECT_DESCRIPTION
-
 ARG LINK_MODE=symlink
 ENV UV_LINK_MODE=$LINK_MODE
 
