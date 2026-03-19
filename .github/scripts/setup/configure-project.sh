@@ -15,7 +15,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add -r requirements.txt
 
-  uv run toml set --toml-path pyproject.toml project.description $PYPROJECT_DESCRIPTION
+  uv run toml set --toml-path pyproject.toml project.description "Hello world, this is my cool project."
   uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
   echo "# $(toml get --toml-path pyproject.toml project.name) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description ) >> README.md
