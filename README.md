@@ -15,7 +15,7 @@ In .devcontainer/Dockerfile -
 - PROJECT_TYPE : --package
 - PYTHON_VERSION : 3.12
 
-### ENVIROMENTAL VARIABLES
+### ENVIRONMENTAL VARIABLES
 
 The Alpine UV image does not have git configured by default.
 While git is installed automatically you still need to set your... 
