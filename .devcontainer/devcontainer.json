@@ -10,5 +10,6 @@
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}",
     "UV_LINK_MODE": "${localEnv:UV_LINK_MODE}",
     "LICENSE_TYPE": "${localEnv:LICENSE_TYPE}",
+    "UV_PROJECT_TYPE": "${localEnv:UV_PROJECT_TYPE}"
   }
 }
