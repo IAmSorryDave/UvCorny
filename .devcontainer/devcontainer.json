@@ -7,6 +7,8 @@
     // GitHub Username:
     "DEVELOPER": "${localEnv:DEVELOPER}",
     // GitHub No Reply Email:
-    "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}"
+    "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}",
+    "UV_LINK_MODE": "${localEnv:UV_LINK_MODE}",
+    "LICENSE_TYPE": "${localEnv:LICENSE_TYPE}",
   }
 }
