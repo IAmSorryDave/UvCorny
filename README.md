@@ -22,7 +22,7 @@ ARG IMAGE=ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine
 
 FROM $IMAGE
 ```
-- See https://docs.astral.sh/uv/guides/integration/docker/ for a list of available alpine images.
+See https://docs.astral.sh/uv/guides/integration/docker/ for a list of available alpine images.
 
 ### ENVIRONMENTAL VARIABLES
 
