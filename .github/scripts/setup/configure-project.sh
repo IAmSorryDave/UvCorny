@@ -1,6 +1,8 @@
 
 if [ ! -f "pyproject.toml" ]; then
 
+  echo "Configuring project."
+
   uv tool install toml-cli && echo "TOML CLI added as UV tool."
 
   if [ -f "README.md" ]; then rm README.md ; fi
@@ -13,8 +15,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add -r requirements.txt
 
-  uv run toml set --toml-path pyproject.toml project.description $PYPROJECT_DISCRIPTION
-  uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
+  uv run toml set --toml-path pyproject.toml project.description $PYPROJECT_DISCRIPTION && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
   echo "# $(toml get --toml-path pyproject.toml project.name) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description) >> README.md
   
