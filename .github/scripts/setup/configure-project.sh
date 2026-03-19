@@ -2,9 +2,9 @@
 uv tool install toml-cli && echo "TOML CLI added as UV tool."
 
 if [ ! -f "pyproject.toml" ]; then
-  if [ -f ".gitignore" ]; then rm .gitignore fi
-  if [ -f "README.md" ]; then rm README.md fi
-  if [ -f "LICENSE" ]; then rm LICENSE fi
+  if [ -f ".gitignore" ]; then rm .gitignore ; fi
+  if [ -f "README.md" ]; then rm README.md ; fi
+  if [ -f "LICENSE" ]; then rm LICENSE ; fi
   uv init $UV_PROJECT_TYPE .
   uv run toml set --toml-path pyproject.toml project.description "Hello world, this my cool app!"
   uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
