@@ -6,7 +6,7 @@ A UV Project Management Template for Python.
 Clone this template and work with UV out of the ( alpine ) box.
 Creating a Codespace will automatically set up your project in the working directory with UV.
 
-### Default Build Arguments
+### Default Run Arguments
 
 In .devcontainer/.env -
 
