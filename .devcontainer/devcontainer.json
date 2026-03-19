@@ -8,5 +8,6 @@
     "DEVELOPER": "${localEnv:DEVELOPER}",
     // GitHub No Reply Email:
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}"
-  }
+  },
+  "runArgs": ["--env-file", ".devcontainer/.env"]
 }
