@@ -10,10 +10,19 @@ Creating a Codespace will automatically set up your project in the working direc
 
 In .devcontainer/.env -
 
-- LICENSE_TYPE : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
-- UV_LINK_MODE : symlink
-- UV_PROJECT_TYPE : --package
-- PYTHON_VERSION : 3.12 (available up to 3.14 at the time of this writing.)
+- ```LICENSE_TYPE``` : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
+- ```UV_LINK_MODE``` : symlink
+- ```UV_PROJECT_TYPE``` : --package
+
+### Dockerfile
+
+```
+ARG PYTHON_VERSION=3.12
+ARG IMAGE=ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine
+
+FROM $IMAGE
+```
+- See https://docs.astral.sh/uv/guides/integration/docker/ for a list of available alpine images.
 
 ### ENVIRONMENTAL VARIABLES
 
