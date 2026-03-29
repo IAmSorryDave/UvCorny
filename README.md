@@ -38,5 +38,6 @@ in your Codespace secret store for git to work properly.
 
 - Pytest
 - Ruff
+- Bump
 
 ####
