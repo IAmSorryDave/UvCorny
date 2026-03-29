@@ -21,9 +21,17 @@ if [ ! -f "pyproject.toml" ]; then
 
   mkdir tests && touch tests/test_main.py && echo "import pytest" >> tests/test_main.py && echo "from $(toml get --toml-path pyproject.toml project.name) import main" >> tests/test_main.py
 
-  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
+  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency" && uv add --dev uv-bump && echo "uv-bump Installed as Development Dependency"
 
   uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool."
+
+  echo "Project configured."
+
+else
+
+  uv init
+
+  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency" && uv add --dev uv-bump && echo "uv-bump Installed as Development Dependency"
 
   echo "Project configured."
   
