@@ -72,7 +72,7 @@ jobs:
           commit_message: Applied and validated code liniting.
       
   increment:
-    name: Lint code with Ruff
+    name: Increment Version
     needs: [test, format, lint]
   
     permissions: write-all
@@ -86,13 +86,13 @@ jobs:
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
       
-      - name: Version Incremeant Features:
+      - name: Version Incremeant Feature:
         if: ${{ steps.extract_branch.outputs.branch == 'features' }}
         run: |
           uv version --bump minor --dry-run
           uv version --bump minor
 
-      - name: Version Incremeant Features:
+      - name: Version Incremeant Patch:
         if: ${{ steps.extract_branch.outputs.branch == 'patches' }}
         run: |
           uv version --bump patch --dry-run
