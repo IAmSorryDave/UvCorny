@@ -1,0 +1,104 @@
+name: Validate
+
+on:
+  pull_request:
+    branches:
+      - development
+
+jobs:
+  test:
+    name: Install Dependencies, Run Pytest
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+
+      - name: Initial Pytest
+        run: uv run pytest
+
+  format:
+    name: Format code with Ruff
+    needs: test
+
+    permissions: write-all
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Run Ruff Formatter
+        run: uv run ruff format --config pyproject.toml
+
+      - name: Rerun Pytest
+        run: uv run pytest
+
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: Applied and validated code formating.
+
+  lint:
+    name: Lint code with Ruff
+    needs: [test, format]
+
+    permissions: write-all
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Run Ruff Linter
+        run: uv run ruff check --config pyproject.toml --fix
+
+      - name: Rerun Pytest Once More
+        run: uv run pytest
+
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: Applied and validated code liniting.
+      
+  increment:
+    name: Lint code with Ruff
+    needs: [test, format, lint]
+  
+    permissions: write-all
+  
+    runs-on: ubuntu-latest
+  
+    steps:
+
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      
+      - name: Version Incremeant Features:
+        if: ${{ steps.extract_branch.outputs.branch == 'features' }}
+        run: |
+          uv version --bump minor --dry-run
+          uv version --bump minor
+
+      - name: Version Incremeant Features:
+        if: ${{ steps.extract_branch.outputs.branch == 'patches' }}
+        run: |
+          uv version --bump patch --dry-run
+          uv version --bump patch
+
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: Auto-incremented Version.  
+      
