@@ -23,8 +23,6 @@ if [ ! -f "pyproject.toml" ]; then
 
   if [ $UV_PROJECT_TYPE == '--package' ]; then
 
-    uv run toml set --toml-path pyproject.toml tool.uv.package true
-
     > "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" # The default UV init file is pretty useless. Let's start fresh.
 
     echo "from importlib.metadata import version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
