@@ -23,6 +23,8 @@ if [ ! -f "pyproject.toml" ]; then
 
   if [ $UV_PROJECT_TYPE == '--package' ]; then
 
+    uv run toml set --toml-path pyproject.toml tool.uv.package true
+
     > "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" # The default UV init file is pretty useless. Let's start fresh.
 
     echo "from importlib.metadata import version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
@@ -30,18 +32,6 @@ if [ ! -f "pyproject.toml" ]; then
     echo "__version__ = version('$(toml get --toml-path pyproject.toml project.name )')" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
     echo "del version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "from os import listdir" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "from os.path import dirname" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "__all__ = [i[:-3] for i in listdir(dirname(__file__)) if not i.startswith('__') and i.endswith('.py')]" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "del listdir" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "del dirname" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
     
     uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"; fi
 
