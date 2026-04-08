@@ -31,21 +31,17 @@ if [ ! -f "pyproject.toml" ]; then
 
     echo "del version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "from importlib import import_module" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
+    echo "" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "from pathlib import Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
+    echo "from os import listdir" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "for f in Path(__file__).parent.glob('*.py'):" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
+    echo "from os.path import dirname" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "  module_name = f.stem" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
+    echo "__all__ = [i[:-3] for i in listdir(dirname(__file__)) if not i.startswith('__') and i.endswith('.py')]" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "  if (not module_name.startswith('_')) and (module_name not in globals()):" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
+    echo "del listdir" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "    import_module(f'.{module_name}', __package__)" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "  del f, module_name" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "del import_module, Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" 
+    echo "del dirname" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
     
     uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"; fi
 
