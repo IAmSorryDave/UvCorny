@@ -45,7 +45,9 @@ if [ ! -f "pyproject.toml" ]; then
 
     echo "  del f, module_name" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "del import_module, Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" ; fi
+    echo "del import_module, Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" 
+    
+    uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"; fi
 
   uvx easyignore python
 
