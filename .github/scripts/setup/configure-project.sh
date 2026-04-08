@@ -45,8 +45,8 @@ if [ ! -f "pyproject.toml" ]; then
 
     echo "  del f, module_name" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
-    echo "del import_module, Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-  
+    echo "del import_module, Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" ; fi
+
   uvx easyignore python
 
   uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool." 
