@@ -23,7 +23,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   if [ $UV_PROJECT_TYPE == '--package' ]; then
 
-    > "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" # The default UV init file is pretty useless.
+    > "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" # The default UV init file is pretty useless. Let's start fresh.
 
     echo "from importlib.metadata import version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
@@ -32,8 +32,6 @@ if [ ! -f "pyproject.toml" ]; then
     echo "del version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
     echo "from importlib import import_module" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "from pathlib import Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
     echo "from pathlib import Path" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
 
