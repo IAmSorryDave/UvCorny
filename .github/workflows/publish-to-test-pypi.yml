@@ -1,0 +1,73 @@
+name: Publish Python 🐍 distribution 📦 to TestPyPi
+
+on:
+  pull_request:
+    branches:
+      - testpypi
+
+jobs:
+  build:
+      name: Build and Validate Distribution 📦
+      runs-on: ubuntu-latest      
+  
+      steps:
+      
+        - name: Checkout Project
+          uses: actions/checkout@v6
+          with:
+            persist-credentials: false
+  
+        - name: "Set up Python"
+          uses: actions/setup-python@v6
+          with:
+            python-version-file: "pyproject.toml"
+  
+        - name: Install uv
+          uses: astral-sh/setup-uv@v7
+          
+        - name: UV Bump Version
+          run: uv version --bump major
+        
+        - name: Install dependencies
+          run: uv sync --locked --all-extras --no-dev
+  
+        - name: Build
+          run: uv build
+          
+        # Check that basic features work and we didn't miss to include crucial files
+        - name: Smoke test (wheel)
+          run: uv run --isolated --no-project --with dist/*.whl tests/test_main.py
+        - name: Smoke test (source distribution)
+          run: uv run --isolated --no-project --with dist/*.tar.gz tests/test_main.py
+
+        - name: Store the distribution packages
+          uses: actions/upload-artifact@v5
+          with:
+            name: python-package-distributions
+            path: dist/
+
+
+  publish-to-testpypi:
+          name: Publish Python 🐍 distribution 📦
+          needs:
+          - build
+          runs-on: ubuntu-latest
+          environment:
+                name: testpypi
+                url: https://test.pypi.org/p/hybridz
+  
+          permissions:
+                  id-token: write
+        
+          steps:
+                - name: Download all the dists
+                  uses: actions/download-artifact@v6
+                  with:
+                    name: python-package-distributions
+                    path: dist/
+                - name: Publish distribution 📦 to TestPyPI
+                  uses: pypa/gh-action-pypi-publish@release/v1
+                  with:
+                    repository-url: https://test.pypi.org/legacy/
+                    skip-existing: true
+                    verbose: true
