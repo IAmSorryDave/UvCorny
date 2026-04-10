@@ -21,7 +21,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
-  if [[$UV_PROJECT_TYPE == '--lib' || $UV_PROJECT_TYPE == '--package' ]]; then
+  if [ "$UV_PROJECT_TYPE" == '--lib' | "$UV_PROJECT_TYPE" == '--package' ]; then
 
     rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py file.
 
