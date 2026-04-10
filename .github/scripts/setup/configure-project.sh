@@ -21,7 +21,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
-  if [ $UV_PROJECT_TYPE == '--package' ]; then
+  if [[$UV_PROJECT_TYPE == '--lib' || $UV_PROJECT_TYPE == '--package' ]]; then
 
     rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py file.
 
@@ -31,7 +31,7 @@ if [ ! -f "pyproject.toml" ]; then
 
     echo "del version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
     
-    uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"; fi # Format and ensure single quotes are replaced by double quotes.
+    uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" ; fi # Format and ensure single quotes are replaced by double quotes.
 
   uvx easyignore python
 
