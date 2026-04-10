@@ -19,7 +19,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   mkdir tests && cp .python/test_main.py tests/
 
-  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
+  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev jinja2 && echo "Jinja2 Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
@@ -47,6 +47,6 @@ else
 
   uv add -r requirements.txt
 
-  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
+  uv sync --all-groups
 
   echo "Project configured." ; fi
