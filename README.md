@@ -12,7 +12,7 @@ In .devcontainer/.env -
 
 - ```LICENSE_TYPE``` : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - ```UV_LINK_MODE``` : symlink
-- ```UV_PROJECT_TYPE``` : --package
+- ```UV_PROJECT_TYPE``` : --lib
 
 ### Dockerfile
 
