@@ -47,6 +47,4 @@ else
 
   uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
-  echo "Project configured."
-  
-; fi
+  echo "Project configured." ; fi
