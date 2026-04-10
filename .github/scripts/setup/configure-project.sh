@@ -17,7 +17,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   echo "# $(toml get --toml-path pyproject.toml project.name ) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description ) >> README.md
 
-  mkdir tests && touch tests/test_main.py && echo "import pytest" >> tests/test_main.py && echo "from $(toml get --toml-path pyproject.toml project.name) import main" >> tests/test_main.py
+  mkdir tests && cp .python/test_main.py tests/
 
   uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
@@ -49,4 +49,4 @@ else
 
   echo "Project configured."
   
-fi
+; fi
