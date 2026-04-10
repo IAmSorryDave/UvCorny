@@ -1,3 +1,8 @@
+
+from importlib.metadata import version
+
+
+
 import pkgutil
 import importlib
 from pathlib import Path
