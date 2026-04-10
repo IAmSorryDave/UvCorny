@@ -31,7 +31,7 @@ if [ ! -f "pyproject.toml" ]; then
 
     echo "del version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
     
-    uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"; fi
+    uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"; fi # Format and ensure single quotes are replaced by double quotes.
 
   uvx easyignore python
 
