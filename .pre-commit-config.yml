@@ -3,8 +3,9 @@ repos:
     hooks:
       - id: sync-metadata
         name: Sync project metadata
-        entry: uv run python scripts/sync_metadata.py
-        language: system
+        entry: python .python/sync_metadata.py
+        language: python
+        additional_dependencies: ["jinja2"]
         files: (pyproject\.toml|README\.md\.jinja)$
         stages: [commit]
         pass_filenames: false
