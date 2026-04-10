@@ -37,6 +37,10 @@ if [ ! -f "pyproject.toml" ]; then
     
   uvx easyignore python
 
+  uv sync --all-groups
+
+  uv run pre-commit install
+
   uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool." 
 
   echo "Project configured."
@@ -48,5 +52,7 @@ else
   uv add -r requirements.txt
 
   uv sync --all-groups
+
+  uv run pre-commit install
 
   echo "Project configured." ; fi
