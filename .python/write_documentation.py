@@ -1,7 +1,7 @@
-import os
-from tomllib import load
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
+from tomllib import load
+from subprocess import run
 
 def write_documentation():
     """Generate documentation from pyproject.toml and jinja2 template."""
@@ -27,10 +27,13 @@ def write_documentation():
     template = env.get_template(template_filename)
     readme_content = template.render(context)
 
-    if not os.path.exists(readme_filename):
-        with open(readme_filename, 'w'): pass
-    
-    Path(readme_filename).write_text(readme_content)
+    with open(readme_filename, 'w') as f:
+        f.write(readme_content)
+
+    # Stage the generated file
+    run(["git", "add", readme_filename], check=True)
+
 
 if __name__ == "__main__":
     write_documentation()
+
