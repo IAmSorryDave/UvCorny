@@ -15,7 +15,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add -r requirements.txt
 
-  uv add --dev -r requirements.txt
+  uv add --dev -r requirements-dev.txt
 
   echo "# $(toml get --toml-path pyproject.toml project.name ) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description ) >> README.md
 
