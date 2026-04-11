@@ -1,3 +1,4 @@
+
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 from tomllib import load
@@ -16,6 +17,7 @@ def write_documentation():
         "title": tool_meta.get("title", project.get("name")),
         "description": project.get("description"),
         "version": project.get("version"),
+        "python_version": project.get("requires-python"),
         "license": project.get("license"),
     }
 
