@@ -14,9 +14,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   if [ ! -f "requirements.txt" ]; then touch requirements.txt ; fi
 
-  uv add -r requirements.txt
-
-  uv add --dev -r requirements-dev.txt
+  uv add -r requirements.txt && uv add --dev -r requirements-dev.txt
 
   mkdir tests && cp .python/test_main.py tests/
 
@@ -36,10 +34,6 @@ if [ ! -f "pyproject.toml" ]; then
     
   uvx easyignore python
 
-  uv sync --all-groups
-
-  uv run pre-commit install
-
   uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool." 
 
   echo "Project configured."
@@ -47,11 +41,5 @@ if [ ! -f "pyproject.toml" ]; then
 else
 
   uv init
-
-  uv add -r requirements.txt
-
-  uv sync --all-groups
-
-  uv run pre-commit install
 
   echo "Project configured." ; fi
