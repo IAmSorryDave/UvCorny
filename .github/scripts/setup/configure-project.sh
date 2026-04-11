@@ -1,11 +1,12 @@
 
+if [ -f "README.md" ]; then rm README.md ; fi
+
 if [ ! -f "pyproject.toml" ]; then
 
   echo "Configuring project."
 
   uv tool install toml-cli && echo "TOML CLI added as UV tool."
 
-  if [ -f "README.md" ]; then rm README.md ; fi
   if [ -f "LICENSE" ]; then rm LICENSE ; fi
   if [ -f ".gitignore" ]; then rm .gitignore ; fi
   
@@ -17,11 +18,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add --dev -r requirements-dev.txt
 
-  echo "# $(toml get --toml-path pyproject.toml project.name ) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description ) >> README.md
-
   mkdir tests && cp .python/test_main.py tests/
-
-  # uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev jinja2 && echo "Jinja2 Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
