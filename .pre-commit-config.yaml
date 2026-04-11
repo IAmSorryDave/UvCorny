@@ -7,11 +7,14 @@ repos:
       - id: uv-sync
       - id: uv-lock
       - id: uv-export
-      - id: sync-metadata
-        name: Sync project metadata
-        entry: uv run .python/write_documentation.py
+
+  - repo: local
+    hooks:
+      - id: write-documentation
+        name: Sync project documentation
+        entry: python .python/write_documentation.py
+        language: python
         additional_dependencies:
           - jinja2
         files: (pyproject\.toml|README\.md\.jinja)$
         stages: [pre-commit]
-        pass_filenames: false
