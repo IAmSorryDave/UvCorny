@@ -12,9 +12,7 @@ if [ ! -f "pyproject.toml" ]; then
   
   uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.description "Hello world, this is my cool project." && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
-  if [ ! -f "requirements.txt" ]; then touch requirements.txt ; fi
-
-  uv add -r requirements.txt && uv add --dev -r requirements-dev.txt
+  uv add --dev -r requirements-dev.txt
 
   mkdir tests && cp .python/test_main.py tests/
 
