@@ -10,7 +10,6 @@ repos:
       - id: sync-metadata
         name: Sync project metadata
         entry: uv run .python/sync_metadata.py
-        language: system
         additional_dependencies:
           - jinja2
         files: (pyproject\.toml|README\.md\.jinja)$
