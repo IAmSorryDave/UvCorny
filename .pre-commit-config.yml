@@ -1,12 +1,32 @@
+
 repos:
-  - repo: local
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.11.6
     hooks:
+      - id: uv-sync
+      - id: uv-lock
+      - id: uv-export
       - id: sync-metadata
         name: Sync project metadata
-        entry: python .python/sync_metadata.py
-        language: python
+        entry: uv run .python/sync_metadata.py
+        language: system
         additional_dependencies: ["jinja2"]
         files: (pyproject\.toml|README\.md\.jinja)$
         stages: [commit]
         pass_filenames: false
+
+
+
+# repos:
+#   - repo: local
+#     hooks:
+      # - id: sync-metadata
+      #   name: Sync project metadata
+      #   entry: uv run .python/sync_metadata.py
+      #   language: python
+      #   additional_dependencies: ["jinja2"]
+      #   files: (pyproject\.toml|README\.md\.jinja)$
+      #   stages: [commit]
+      #   pass_filenames: false
 
