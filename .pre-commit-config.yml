@@ -7,25 +7,13 @@ repos:
       - id: uv-sync
       - id: uv-lock
       - id: uv-export
+
+  - repo: local
+    hooks:
       - id: sync-metadata
         name: Sync project metadata
         entry: uv run .python/sync_metadata.py
         language: system
         files: (pyproject\.toml|README\.md\.jinja)$
-        stages: [commit]
+        stages: [pre-commit]
         pass_filenames: false
-
-
-
-# repos:
-#   - repo: local
-#     hooks:
-      # - id: sync-metadata
-      #   name: Sync project metadata
-      #   entry: uv run .python/sync_metadata.py
-      #   language: python
-      #   additional_dependencies: ["jinja2"]
-      #   files: (pyproject\.toml|README\.md\.jinja)$
-      #   stages: [commit]
-      #   pass_filenames: false
-
