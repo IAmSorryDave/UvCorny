@@ -15,11 +15,13 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv add -r requirements.txt
 
+  uv add --dev -r requirements.txt
+
   echo "# $(toml get --toml-path pyproject.toml project.name ) " >> README.md && echo $(toml get --toml-path pyproject.toml project.description ) >> README.md
 
   mkdir tests && cp .python/test_main.py tests/
 
-  uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev jinja2 && echo "Jinja2 Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
+  # uv add --dev pytest && echo "Pytest Installed as Development Dependency" && uv add --dev jinja2 && echo "Jinja2 Installed as Development Dependency" && uv add --dev ruff && echo "Ruff Installed as Development Dependency"
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
