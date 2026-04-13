@@ -20,15 +20,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
-    rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py file.
-
-    echo "from importlib.metadata import version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "__version__ = version('$(toml get --toml-path pyproject.toml project.name )')" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-
-    echo "del version" >> "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py"
-    
-    uv run ruff format "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" ;; # Format and ensure single quotes are replaced by double quotes.
+    rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/ ;; # The default UV init file is pretty useless. Tagging in custom __init__.py and bootstrap.py file.
 
   esac
     
@@ -42,4 +34,6 @@ else
 
   uv init
 
-  echo "Project configured." ; fi
+  echo "Project configured." 
+
+fi
