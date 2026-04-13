@@ -18,8 +18,6 @@ if [ ! -f "pyproject.toml" ]; then
   
   uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
-  mkdir tests && cp .python/test_main.py tests/
-
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
     rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py file.
