@@ -21,8 +21,6 @@ if [ ! -f "pyproject.toml" ]; then
 
     rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
 
-    cp .python/templates/bootstrap.py src/$(toml get --toml-path pyproject.toml project.name )/ ;; # And bootstrap.py script.
-     
   esac
     
   uvx easyignore python
@@ -31,7 +29,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   echo "Project configured."
 
-else
+else # It's presence indicates you are resuming work on an existing projec that uses uvcorny.
 
   uv init
 
