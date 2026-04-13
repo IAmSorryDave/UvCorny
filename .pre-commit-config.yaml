@@ -24,4 +24,4 @@ repos:
         additional_dependencies:
           - jinja2
         files: ^pyproject\.toml$
-        stages: [commit]
+        stages: [pre-commit]
