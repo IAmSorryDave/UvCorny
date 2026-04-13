@@ -1,5 +1,6 @@
 
 repos:
+
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
     rev: 0.11.6
@@ -7,6 +8,12 @@ repos:
       - id: uv-sync
       - id: uv-lock
       - id: uv-export
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.4.8
+      hooks:
+        - id: ruff
+        - id: ruff-format
 
   - repo: local
     hooks:
