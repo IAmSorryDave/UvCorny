@@ -13,8 +13,8 @@ repos:
     hooks:
       - id: write-documentation
         name: Sync project documentation.
-        entry: python .python/write_documentation.py
-        language: python
+        entry: uv run python .python/write_documentation.py
+        language: system
         additional_dependencies:
           - jinja2
         files: ^pyproject\.toml$
