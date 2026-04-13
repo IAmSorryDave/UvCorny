@@ -1,15 +1,15 @@
 
 # These files should be refreshed on every pull / push.
-if [ -f "README.md" ] then rm README.md  fi 
-if [ -f "requirements.txt"] then rm requirements.txt  fi
+if [ -f "README.md" ]; then rm README.md ; fi 
+if [ -f "requirements.txt"]; then rm requirements.txt ; fi
 
 # The absence of a TOML file indicates a project needs to be initialized.
 if [ ! -f "pyproject.toml" ]; then
 
   echo "Configuring project."
 
-  if [ -f "LICENSE" ] then rm LICENSE fi
-  if [ -f ".gitignore" ] then rm .gitignore fi
+  if [ -f "LICENSE" ]; then rm LICENSE ; fi
+  if [ -f ".gitignore" ]; then rm .gitignore ; fi
 
   uv tool install toml-cli && echo "TOML CLI added as UV tool."
   
