@@ -20,8 +20,10 @@ if [ ! -f "pyproject.toml" ]; then
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
-    rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/ ;; # The default UV init file is pretty useless. Tagging in custom __init__.py and bootstrap.py file.
+    rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
 
+    cp .python/templates/bootstrap.py src/$(toml get --toml-path pyproject.toml project.name )/ # And bootstrap.py script.
+     
   esac
     
   uvx easyignore python
