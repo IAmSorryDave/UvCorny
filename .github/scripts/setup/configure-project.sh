@@ -37,4 +37,4 @@ else # It's presence indicates you are resuming work on an existing projec that 
 
 fi
 
-uv run pre-commit install
+uv run PRE_COMMIT_USE_SH=1 pre-commit install
