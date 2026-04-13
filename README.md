@@ -10,7 +10,6 @@ Creating a Codespace will automatically set up your project in the working direc
 
 In .devcontainer/.env -
 
-- ```DEFUALT_PROJECT_DESCRIPTION``` : "Hello world, this is my cool project."
 - ```LICENSE_TYPE``` : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - ```UV_LINK_MODE``` : symlink
 - ```UV_PROJECT_TYPE``` : --lib
