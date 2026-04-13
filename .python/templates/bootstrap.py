@@ -1,3 +1,4 @@
+from importlib.metadata import version
 from pkgutil import walk_packages
 from importlib import import_module
 from pathlib import Path
@@ -16,4 +17,31 @@ for importer, module_label, this_is_a_package in walk_packages(
     except ImportError as e:
         print(f"Failed to import {module_label}: {e}")
 
-del import_module, Path, walk_packages
+
+from tomllib import load as load_toml_configuration
+
+def get_project_name(maxium_traversed_directories = 3) -> str:
+    """Get the project name by finding pyproject.toml and reading it."""
+    # Start from the current file's location and walk up
+    current_dir, traversed_directories = Path.cwd(), 0
+    
+    while traversed_directories < maxium_traversed_directories:
+        traversed_directories += 1
+        pyproject = current_dir / "pyproject.toml"
+        
+        if pyproject.exists():
+            with open(pyproject, "rb") as f:
+                data = load_toml_configuration(f)
+                project_metadata = data.get("project", None)
+                if project_metadata:
+                    project_name = project_metadata.get("name", None)
+                    if project_name:
+                        return project_name
+        
+        current_dir = current_dir.parent
+    
+    raise FileNotFoundError(f"Could not find pyproject.toml within {maxium_traversed_directories} working and parent directories")
+
+__version__ = version(get_project_name())
+
+del get_project_name, import_module, Path, walk_packages, version
