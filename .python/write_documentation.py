@@ -32,9 +32,6 @@ def write_documentation():
     with open(readme_filename, 'w') as f:
         f.write(readme_content)
 
-    # Stage the generated file
-    run(["git", "add", readme_filename], check=True)
-
 
 if __name__ == "__main__":
     write_documentation()
