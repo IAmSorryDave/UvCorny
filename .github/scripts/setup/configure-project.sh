@@ -3,7 +3,9 @@
 if [ -f "README.md" ]; then rm README.md ; fi 
 if [ -f "requirements.txt"]; then rm requirements.txt ; fi
 
-uvx pre-commit --with pre-commit-uv install # Insure hooks are installed at each pull.
+uv add --dev -r requirements-dev.txt
+
+uv run pre-commit install
 
 if [ ! -f "pyproject.toml" ]; then
 
@@ -14,9 +16,7 @@ if [ ! -f "pyproject.toml" ]; then
   if [ -f "LICENSE" ]; then rm LICENSE ; fi
   if [ -f ".gitignore" ]; then rm .gitignore ; fi
   
-  uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.description $DEFUALT_PROJECT_DESCRIPTION && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
-
-  uv add --dev -r requirements-dev.txt
+  uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
   mkdir tests && cp .python/test_main.py tests/
 
