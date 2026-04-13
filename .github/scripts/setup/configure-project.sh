@@ -33,8 +33,6 @@ else # It's presence indicates you are resuming work on an existing projec that 
 
   uv init
 
-  echo "Project configured." 
-
-fi
+  echo "Project configured." ; fi
 
 uv run PRE_COMMIT_USE_SH=1 pre-commit install
