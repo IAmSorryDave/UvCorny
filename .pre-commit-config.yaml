@@ -11,10 +11,10 @@ repos:
   - repo: local
     hooks:
       - id: write-documentation
-        name: Sync project documentation
+        name: Sync project documentation.
         entry: python .python/write_documentation.py
         language: python
         additional_dependencies:
           - jinja2
-        files: (pyproject\.toml|README\.md\.jinja)$
-        stages: [pre-commit]
+        files: ^pyproject\.toml$
+        stages: [commit]
