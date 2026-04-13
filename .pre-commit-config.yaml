@@ -9,12 +9,6 @@ repos:
       - id: uv-lock
       - id: uv-export
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.4.8
-      hooks:
-        - id: ruff
-        - id: ruff-format
-
   - repo: local
     hooks:
       - id: write-documentation
