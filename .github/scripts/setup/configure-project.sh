@@ -1,5 +1,9 @@
 
-if [ -f "README.md" ]; then rm README.md ; fi
+# These files should be refreshed on every pull / push.
+if [ -f "README.md" ]; then rm README.md ; fi 
+if [ -f "requirements.txt"]; then rm requirements.txt ; fi
+
+uvx pre-commit --with pre-commit-uv install # Insure hooks are installed at each pull.
 
 if [ ! -f "pyproject.toml" ]; then
 
@@ -10,7 +14,7 @@ if [ ! -f "pyproject.toml" ]; then
   if [ -f "LICENSE" ]; then rm LICENSE ; fi
   if [ -f ".gitignore" ]; then rm .gitignore ; fi
   
-  uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.description "Hello world, this is my cool project." && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
+  uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.description $DEFUALT_PROJECT_DESCRIPTION && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
   uv add --dev -r requirements-dev.txt
 
