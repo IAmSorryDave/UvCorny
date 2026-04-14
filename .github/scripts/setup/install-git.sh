@@ -1,1 +1,1 @@
-apk add git
+apk add --no-cache git
