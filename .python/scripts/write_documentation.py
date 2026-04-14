@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+import sys
+
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 from tomllib import load
@@ -34,3 +37,5 @@ def write_documentation():
 
 if __name__ == "__main__":
     write_documentation()
+
+sys.exit(0)
