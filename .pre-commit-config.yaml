@@ -17,5 +17,5 @@ repos:
         language: python
         additional_dependencies:
           - jinja2
-        files: ^pyproject\.toml$
+        files: pyproject.toml
         stages: [pre-commit]
