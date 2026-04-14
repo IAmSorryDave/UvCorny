@@ -31,6 +31,8 @@ if [ ! -f "pyproject.toml" ]; then
 
 else # It's presence indicates you are resuming work on an existing projec that uses uvcorny.
 
-  uv init
+  uv init ; fi
 
-  echo "Project configured." ; fi
+uv tool install pre-commit --with pre-commit-uv --force-reinstall
+
+pre-commit install
