@@ -1,9 +1,9 @@
 # UvCorny 🌽
-A UV Project Management Template for Python.
+Project Management Template for Python.
 
 ## Quickstart
 
-Clone this template and work with UV out of the ( alpine ) box.
+Clone this template and work with UV and pre-commit out of the ( alpine ) box.
 Creating a Codespace will automatically set up your project in the working directory.
 
 ### Default Run Arguments
@@ -33,11 +33,5 @@ While git is installed automatically you still need to set your...
 - DEVELOPER_EMAIL : Your Github email.
 
 in your Codespace secret store for git to work properly.
-
-### Included Development Dependencies
-
-- Pytest
-- Ruff
-
 
 ####
