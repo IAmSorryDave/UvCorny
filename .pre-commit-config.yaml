@@ -18,6 +18,14 @@ repos:
       # Run the formatter.
       - id: ruff-format
 
+  # .pre-commit-config.yaml
+  - repo: https://github.com/christophmeissner/pytest-pre-commit
+    rev: 1.0.0
+    hooks:
+    - id: pytest
+      pass_filenames: false
+      always_run: true
+
   - repo: local
     hooks:
       - id: write-documentation
