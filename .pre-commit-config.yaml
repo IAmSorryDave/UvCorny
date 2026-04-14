@@ -14,7 +14,7 @@ repos:
     hooks:
       # Run the linter.
       - id: ruff-check
-        args: [ --fix ]
+        args: [ --fix ] # Live dangerously, add the --fix-unsafe flag.
       # Run the formatter.
       - id: ruff-format
 
