@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-import sys
 
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
@@ -37,5 +35,3 @@ def write_documentation():
 
 if __name__ == "__main__":
     write_documentation()
-
-sys.exit(0)
