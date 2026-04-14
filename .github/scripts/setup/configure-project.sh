@@ -1,7 +1,6 @@
 
-# These files should be refreshed on every pull / push.
+# README.md should be refreshed on every pull / push.
 if [ -f "README.md" ]; then rm README.md ; fi 
-if [ -f "requirements.txt"]; then rm requirements.txt ; fi
 
 # The absence of a TOML file indicates a project needs to be initialized.
 if [ ! -f "pyproject.toml" ]; then
