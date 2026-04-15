@@ -19,10 +19,12 @@ if [ ! -f "pyproject.toml" ]; then
     rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
 
   esac
-    
-  uvx easyignore python
 
   uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool." 
+
+  mkdir tests && touch tests/__init__.py
+    
+  uvx easyignore python
 
   echo "Project configured."
 
