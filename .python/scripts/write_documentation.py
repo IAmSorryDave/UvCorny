@@ -32,10 +32,9 @@ def write_documentation():
     with open(readme_filename, 'w') as f:
         f.write(readme_content)
 
-    run(["git", "add", readme_filename])
-
     run(["git", "update-index", "--assume-unchanged", readme_filename])
 
+    run(["git", "add", readme_filename])
 
 if __name__ == "__main__":
     write_documentation()
