@@ -14,23 +14,30 @@ repos:
     hooks:
       # Run the linter.
       - id: ruff-check
-        args: [ --fix ] # Live dangerously, add the --fix-unsafe flag.
+        types_or: [ python, pyproject]
+        args: [ --fix ] # If you live dangerously, add the --fix-unsafe flag.
       # Run the formatter.
       - id: ruff-format
+        types_or: [ python, pyproject]
 
   # .pre-commit-config.yaml
   - repo: https://github.com/christophmeissner/pytest-pre-commit
     rev: 1.0.0
     hooks:
     - id: pytest
-      pass_filenames: false
-      always_run: true
-
+      additional_dependencies:
+        - pytest-custom_exit_code
+      args:
+        - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
+      fail_fast: true
+      stages: [pre-commit, pre-merge-commit]
+      
   - repo: local
     hooks:
       - id: write-documentation
         name: Sync project documentation.
         entry: python .python/scripts/write_documentation.py
+        fail_fast: true
         language: python
         additional_dependencies:
           - jinja2
