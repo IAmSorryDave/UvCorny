@@ -16,20 +16,14 @@ def write_documentation():
     context = {
         "title": tool_meta.get("title", project.get("name")),
         "description": project.get("description"),
-        "version": project.get("version"),
-        "python_version": project.get("requires-python"),
-        "license": project.get("license"),
     }
-
-    readme_filename = "README.md"
-    template_filename = "README.md.jinja"
+    
+    readme_filename, template_filename = "README.md", "README.md.jinja"
     
     # Render and write README.md
     env = Environment(loader=FileSystemLoader("."))
     template = env.get_template(template_filename)
     readme_content = template.render(context)
-
-    run(["git", "update-index", "--assume-unchanged", readme_filename])
 
     with open(readme_filename, 'w') as f:
         f.write(readme_content)
