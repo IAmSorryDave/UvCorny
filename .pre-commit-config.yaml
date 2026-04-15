@@ -20,7 +20,6 @@ repos:
       - id: ruff-format
         types_or: [ python, pyproject]
 
-  # .pre-commit-config.yaml
   - repo: https://github.com/christophmeissner/pytest-pre-commit
     rev: 1.0.0
     hooks:
