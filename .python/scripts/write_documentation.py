@@ -34,6 +34,8 @@ def write_documentation():
 
     run(["git", "add", readme_filename])
 
+    run(["git", "update-index", "--assume-unchanged", readme_filename])
+
 
 if __name__ == "__main__":
     write_documentation()
