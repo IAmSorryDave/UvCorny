@@ -26,77 +26,49 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install dependencies
-        run: uv sync --locked --all-extras --dev
+        run: uv sync --locked --all-extras
 
-      - name: Initial Pytest
-        run: uv run pytest
+      - name: Install Pre-Commit
+        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
 
-  format:
-    name: Format code with Ruff
-    needs: test
+      - name: Install Hooks
+        run: pre-commit install
 
-    permissions: write-all
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
 
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Run Ruff Formatter
-        run: uv run ruff format --config pyproject.toml
-
-      - name: Rerun Pytest
-        run: uv run pytest
-
-      - uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: Applied and validated code formating.
-
-  lint:
-    name: Lint code with Ruff
-    needs: [test, format]
-
-    permissions: write-all
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Run Ruff Linter
-        run: uv run ruff check --config pyproject.toml --fix
-
-      - name: Rerun Pytest Once More
-        run: uv run pytest
-
-      - uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: Applied and validated code liniting.
+      - name: Uninstall Hooks
+        run: pre-commit uninstall
       
   increment:
     name: Increment Version
-    needs: [test, format, lint]
+    needs: test
   
     permissions: write-all
   
     runs-on: ubuntu-latest
   
     steps:
+
+      - name: Dry Run Increment
+        run: uv version --bump minor --dry-run && uv version --bump patch --dry-run
 
       - name: Extract Branch Name
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
       
-      - name: Version Incremeant Feature:
+      - name: Version Incremeant Feature
         if: ${{ steps.extract_branch.outputs.branch == 'features' }}
-        run: |
-          uv version --bump minor --dry-run
-          uv version --bump minor
+        run: uv version --bump minor
 
-      - name: Version Incremeant Patch:
+      - name: Version Incremeant Patch
         if: ${{ steps.extract_branch.outputs.branch == 'patches' }}
-        run: |
-          uv version --bump patch --dry-run
-          uv version --bump patch
+        run: uv version --bump patch
+
+      - name: Incorperate Version Change Into Version Control
+        shell: bash
+        run: git add pyproject.toml
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
