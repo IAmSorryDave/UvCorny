@@ -29,10 +29,10 @@ def write_documentation():
     template = env.get_template(template_filename)
     readme_content = template.render(context)
 
+    run(["git", "update-index", "--assume-unchanged", readme_filename])
+
     with open(readme_filename, 'w') as f:
         f.write(readme_content)
-
-    run(["git", "update-index", "--again", readme_filename])
 
 if __name__ == "__main__":
     write_documentation()
