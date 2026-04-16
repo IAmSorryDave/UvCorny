@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-      name: Build and Validate Distribution 📦
+      name: Increment Version and Build Distribution 📦
       runs-on: ubuntu-latest      
   
       steps:
