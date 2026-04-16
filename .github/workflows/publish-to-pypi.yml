@@ -1,0 +1,74 @@
+name: Publish Python 🐍 distribution 📦 to TestPyPi
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+      name: Increment Version and Build Distribution 📦
+      runs-on: ubuntu-latest      
+  
+      steps:
+      
+        - name: Checkout Project
+          uses: actions/checkout@v6
+          with:
+            persist-credentials: false
+  
+        - name: "Set up Python"
+          uses: actions/setup-python@v6
+          with:
+            python-version-file: "pyproject.toml"
+  
+        - name: Install uv
+          uses: astral-sh/setup-uv@v7
+
+        - name: Install dependencies
+          run: uv sync --locked --all-extras
+
+        - name: UV Bump Version Dry Run
+          run: uv version --bump major --dry-run
+          
+        - name: UV Bump Version
+          run: uv version --bump major
+
+        - name: Incorperate Version Change into Source Control
+          shell: bash
+          run: git add pyproject.toml
+
+        - uses: stefanzweifel/git-auto-commit-action@v7
+          with:
+            commit_message: Auto-incremented Major Version Change.
+  
+        - name: Build
+          run: uv build
+
+        - name: Store the distribution packages
+          uses: actions/upload-artifact@v5
+          with:
+            name: python-package-distributions
+            path: dist/
+
+
+  publish-to-pypi:
+      name: Publish Python 🐍 distribution 📦
+      needs:
+      - build
+      runs-on: ubuntu-latest
+      environment:
+            name: pypi
+            url: https://pypi.org/p/${{ github.event.repository.name }}
+  
+      permissions:
+            id-token: write
+      
+      steps:
+        - name: Download all the dists
+          uses: actions/download-artifact@v6
+          with:
+            name: python-package-distributions
+            path: dist/
+        - name: Publish distribution 📦 to PyPI
+          uses: pypa/gh-action-pypi-publish@release/v1
