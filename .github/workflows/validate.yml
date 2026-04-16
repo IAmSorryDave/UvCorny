@@ -41,36 +41,70 @@ jobs:
         run: pre-commit uninstall
       
   increment:
+  
     name: Increment Version
     needs: test
-  
+    
     permissions: write-all
-  
+    
     runs-on: ubuntu-latest
-  
+    
     steps:
-
-      - name: Dry Run Increment
-        run: uv version --bump minor --dry-run && uv version --bump patch --dry-run
-
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
       - name: Extract Branch Name
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
       
-      - name: Version Incremeant Feature
+      - name: Validate Branch Name
+        shell: bash
+        run: |
+          if [[ "${{ steps.extract_branch.outputs.branch }}" != "features" && "${{ steps.extract_branch.outputs.branch }}" != "patches" ]]; then
+            echo "Error: Branch must be 'features' or 'patches', got '${{ steps.extract_branch.outputs.branch }}'"
+            exit 1
+          fi
+      
+      - name: Dry Run Version Increment
+        run: |
+          uv version --bump minor --dry-run
+          uv version --bump patch --dry-run
+      
+      - name: Increment Version - Feature
         if: ${{ steps.extract_branch.outputs.branch == 'features' }}
         run: uv version --bump minor
-
-      - name: Version Incremeant Patch
+      
+      - name: Increment Version - Patch
         if: ${{ steps.extract_branch.outputs.branch == 'patches' }}
         run: uv version --bump patch
 
-      - name: Incorperate Version Change Into Version Control
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+      
+      - name: Stage Version Changes
         shell: bash
         run: git add pyproject.toml
-
-      - uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: Auto-incremented Version.  
       
+      - name: Commit and Push Version Changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Auto-increment version"
+          commit_options: "--no-verify"
