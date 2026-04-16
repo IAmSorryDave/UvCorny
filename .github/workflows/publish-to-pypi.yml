@@ -1,4 +1,4 @@
-name: Publish Python 🐍 distribution 📦 to TestPyPi
+name: Publish Python 🐍 distribution 📦 to PyPi
 
 on:
   pull_request:
