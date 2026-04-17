@@ -1,4 +1,4 @@
-name: Release beta 🍏
+name: Release Beta 🍏
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ jobs:
       
   increment:
   
-    name: Increment Version
+    name: Increment Version ⬆️
 
     permissions:
       contents: write  # Allows writing to the repository
