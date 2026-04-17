@@ -3,7 +3,7 @@ name: Validate Merge Request 👾
 on:
   pull_request:
     branches:
-      - beta
+      - development
 
 jobs:
   setup:
