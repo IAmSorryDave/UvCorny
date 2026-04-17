@@ -6,73 +6,191 @@ on:
       - testpypi
 
 jobs:
-  build:
-      name: Increment Version and Build Distribution 📦
-      runs-on: ubuntu-latest      
+
+  setup:
+    name: Setup Dependencies
+    runs-on: ubuntu-latest
   
-      steps:
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+  
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+  
+      - name: Install dependencies
+        run: uv sync --locked --all-extras
+  
+      - name: Cache UV environment
+        uses: actions/upload-artifact@v4
+        with:
+          name: uv-cache
+          path: |
+            .venv
+            .uv
+          retention-days: 1
+  
+  increment:
+    name: Increment Version ⬆️
+    needs: setup
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+  
+      - name: Restore UV environment
+        uses: actions/download-artifact@v4
+        with:
+          name: uv-cache
+
+      - name: Check if version already has RC suffix
+        id: check_version
+        run: |
+          CURRENT_VERSION=$(uv version)
+          if [[ $CURRENT_VERSION == *"rc"* ]]; then
+            echo "needs_bump=false" >> $GITHUB_OUTPUT
+            echo "Version already contains RC suffix: $CURRENT_VERSION"
+          else
+            echo "needs_bump=true" >> $GITHUB_OUTPUT
+            echo "Version does not contain RC suffix: $CURRENT_VERSION"
+          fi
+
+      - name: Dry Run Release Canidate Version Increment
+        run: uv version --bump rc --dry-run
+
+      - name: Bump Version to Release Candidate
+        if: steps.check_version.outputs.needs_bump == 'true'
+        run: uv version --bump rc
+
+      - name: Stage Version Changes
+        if: steps.check_version.outputs.needs_bump == 'true'
+        run: git add pyproject.toml
+
+      - name: Commit Version Changes
+        if: steps.check_version.outputs.needs_bump == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Auto-incremented Release Candidate Version."
       
-        - name: Checkout Project
-          uses: actions/checkout@v6
-          with:
-            persist-credentials: false
+      - name: Build Distribution
+        run: uv build
+
+      - name: Store Distribution Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+          retention-days: 1
+
+  build:
+    name: Build Distribution 📦
+    needs: increment
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
   
-        - name: "Set up Python"
-          uses: actions/setup-python@v6
-          with:
-            python-version-file: "pyproject.toml"
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
   
-        - name: Install uv
-          uses: astral-sh/setup-uv@v7
+      - name: Restore UV environment
+        uses: actions/download-artifact@v4
+        with:
+          name: uv-cache
 
-        - name: Install dependencies
-          run: uv sync --locked --all-extras
+      - name: Build Distribution
+        run: uv build
 
-        - name: UV Bump Version Dry Run
-          run: uv version --bump major --dry-run
-          
-        - name: UV Bump Version
-          run: uv version --bump major
-
-        - name: Incorperate Version Change into Source Control
-          shell: bash
-          run: git add pyproject.toml
-
-        - uses: stefanzweifel/git-auto-commit-action@v7
-          with:
-            commit_message: Auto-incremented Major Version Change.
-  
-        - name: Build
-          run: uv build
-
-        - name: Store the distribution packages
-          uses: actions/upload-artifact@v5
-          with:
-            name: python-package-distributions
-            path: dist/
-
+      - name: Store Distribution Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+          retention-days: 1
 
   publish-to-testpypi:
-          name: Publish Python 🐍 distribution 📦
-          needs:
-          - build
-          runs-on: ubuntu-latest
-          environment:
-                name: testpypi
-                url: https://test.pypi.org/p/${{ github.event.repository.name }}
-  
-          permissions:
-                  id-token: write
-        
-          steps:
-                - name: Download all the dists
-                  uses: actions/download-artifact@v6
-                  with:
-                    name: python-package-distributions
-                    path: dist/
-                - name: Publish distribution 📦 to TestPyPI
-                  uses: pypa/gh-action-pypi-publish@release/v1
-                  with:
-                    repository-url: https://test.pypi.org/legacy/
-                    skip-existing: true
-                    verbose: true
+    name: Publish Python 🐍 Distribution 📦 to TestPyPi
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/${{ steps.repo_name.outputs.name }}
+    
+    permissions:
+      id-token: write
+      pull-requests: write
+      contents: read
+    
+    steps:
+
+      - name: Set Lowercase Repository Name
+        id: repo_name
+        run: echo "name=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Download Distribution Packages
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      
+      - name: Publish Distribution 📦 to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+          verbose: true
+
+      - name: Auto-Merge Pull Request
+        if: success()
+        run: gh pr merge ${{ github.event.pull_request.number }} --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
