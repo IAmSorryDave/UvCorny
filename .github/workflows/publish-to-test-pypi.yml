@@ -37,10 +37,49 @@ jobs:
             .venv
             .uv
           retention-days: 1
+
+  test:
+    name: Run Tests
+    needs: setup
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+  
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+  
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+  
+      - name: Restore UV environment
+        uses: actions/download-artifact@v4
+        with:
+          name: uv-cache
+  
+      - name: Install Pre-Commit
+        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
+  
+      - name: Install Hooks
+        run: pre-commit install
+  
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
+  
+      - name: Uninstall Hooks
+        run: pre-commit uninstall
   
   increment:
     name: Increment Version ⬆️
-    needs: setup
+    needs: test
     runs-on: ubuntu-latest
     
     permissions:
