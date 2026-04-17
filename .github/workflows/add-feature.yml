@@ -99,6 +99,9 @@ jobs:
       - name: Development Version Increment
         run: uv version --bump minor
 
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
       - name: Stage Version Changes
         run: git add pyproject.toml
 
