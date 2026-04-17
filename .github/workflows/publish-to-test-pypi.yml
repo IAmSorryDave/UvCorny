@@ -101,16 +101,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Auto-incremented Release Candidate Version."
-      
-      - name: Build Distribution
-        run: uv build
-
-      - name: Store Distribution Packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
-          retention-days: 1
 
   build:
     name: Build Distribution 📦
