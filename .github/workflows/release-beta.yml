@@ -1,0 +1,94 @@
+name: Release Alpha 🍎
+
+on:
+  pull_request:
+    branches:
+      - alpha
+
+jobs:
+  setup:
+    name: Setup Dependencies
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+  
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+  
+      - name: Install dependencies
+        run: uv sync --locked --all-extras
+  
+      - name: Cache UV environment
+        uses: actions/upload-artifact@v4
+        with:
+          name: uv-cache
+          path: |
+            .venv
+            .uv
+          retention-days: 1
+      
+  increment:
+  
+    name: Increment Version
+    needs: setup
+    
+    permissions:
+      contents: write  # Allows writing to the repository
+      pull-requests: read  # Allows reading PR information
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Restore UV environment
+        uses: actions/download-artifact@v4
+        with:
+          name: uv-cache
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Dry Run Version Increment
+        run: |
+          uv version --bump beta --dry-run
+
+      - name: Dry Run Version Increment
+        run: |
+          uv version --bump beta
+  
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+      
+      - name: Stage Version Changes
+        shell: bash
+        run: git add pyproject.toml
+      
+      - name: Commit and Push Version Changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Auto-increment version; New Beta Released"
