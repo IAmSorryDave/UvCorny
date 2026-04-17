@@ -3,7 +3,7 @@ name: Publish Python 🐍 distribution 📦 to TestPyPi
 on:
   pull_request:
     branches:
-      - testpypi
+      - beta
 
 jobs:
 
