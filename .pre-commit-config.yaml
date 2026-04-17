@@ -7,6 +7,7 @@ repos:
     hooks:
       - id: uv-sync
       - id: uv-lock
+      - id: uv-export
       
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
@@ -24,12 +25,11 @@ repos:
     rev: 1.0.0
     hooks:
     - id: pytest
-      additional_dependencies:
-        - pytest-custom_exit_code
+      additional_dependencies: [ "pytest-custom_exit_code", "-r", "requirements.txt]
       args:
         - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
       fail_fast: true
-      stages: [pre-commit, pre-merge-commit]
+      stages: [pre-commit]
       
   - repo: local
     hooks:
