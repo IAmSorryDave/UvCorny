@@ -131,6 +131,10 @@ jobs:
         if: steps.check_version.outputs.needs_bump == 'true'
         run: uv version --bump rc
 
+      - name: Verify Version Changed
+        if: steps.check_version.outputs.needs_bump == 'true'
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"  
+
       - name: Stage Version Changes
         if: steps.check_version.outputs.needs_bump == 'true'
         run: git add pyproject.toml
