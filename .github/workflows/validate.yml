@@ -1,4 +1,4 @@
-name: Validate
+name: Validate Merge Request 👾
 
 on:
   pull_request:
@@ -6,47 +6,82 @@ on:
       - development
 
 jobs:
-  test:
-    name: Install Dependencies, Run Pytest
+  setup:
+    name: Setup Dependencies
     runs-on: ubuntu-latest
-
+  
     steps:
-    
       - name: Checkout Project
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-
-      - name: "Set up Python"
+  
+      - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version-file: "pyproject.toml"
-
+  
       - name: Install UV
         uses: astral-sh/setup-uv@v7
-
+  
       - name: Install dependencies
         run: uv sync --locked --all-extras
+  
+      - name: Cache UV environment
+        uses: actions/upload-artifact@v4
+        with:
+          name: uv-cache
+          path: |
+            .venv
+            .uv
+          retention-days: 1
 
+  test:
+    name: Run Tests
+    needs: setup
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+  
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+  
+      - name: Restore UV environment
+        uses: actions/download-artifact@v4
+        with:
+          name: uv-cache
+  
       - name: Install Pre-Commit
         run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
-
+  
       - name: Install Hooks
         run: pre-commit install
-
+  
       - name: Run Tests
         run: pre-commit run pytest --all-files
-
+  
       - name: Uninstall Hooks
         run: pre-commit uninstall
+
       
   increment:
   
     name: Increment Version
     needs: test
     
-    permissions: write-all
-    
+    permissions:
+      contents: write  # Allows writing to the repository
+      pull-requests: read  # Allows reading PR information
+  
     runs-on: ubuntu-latest
     
     steps:
@@ -54,8 +89,9 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v6
         with:
-          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+  
       
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -95,7 +131,7 @@ jobs:
       - name: Increment Version - Patch
         if: ${{ steps.extract_branch.outputs.branch == 'patches' }}
         run: uv version --bump patch
-
+  
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
       
