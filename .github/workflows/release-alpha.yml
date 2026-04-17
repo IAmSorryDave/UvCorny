@@ -1,4 +1,4 @@
-name: Validate Merge Request 👾
+name: Release Alpha 🍎
 
 on:
   pull_request:
@@ -35,48 +35,11 @@ jobs:
             .venv
             .uv
           retention-days: 1
-
-  test:
-    name: Run Tests
-    needs: setup
-    runs-on: ubuntu-latest
-  
-    steps:
-      - name: Checkout Project
-        uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-  
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version-file: "pyproject.toml"
-  
-      - name: Install UV
-        uses: astral-sh/setup-uv@v7
-  
-      - name: Restore UV environment
-        uses: actions/download-artifact@v4
-        with:
-          name: uv-cache
-  
-      - name: Install Pre-Commit
-        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
-  
-      - name: Install Hooks
-        run: pre-commit install
-  
-      - name: Run Tests
-        run: pre-commit run pytest --all-files
-  
-      - name: Uninstall Hooks
-        run: pre-commit uninstall
-
       
   increment:
   
     name: Increment Version
-    needs: test
+    needs: setup
     
     permissions:
       contents: write  # Allows writing to the repository
@@ -91,7 +54,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-  
       
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -100,37 +62,24 @@ jobs:
       
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+
+      - name: Restore UV environment
+        uses: actions/download-artifact@v4
+        with:
+          name: uv-cache
       
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-      - name: Extract Branch Name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
-      
-      - name: Validate Branch Name
-        shell: bash
-        run: |
-          if [[ "${{ steps.extract_branch.outputs.branch }}" != "features" && "${{ steps.extract_branch.outputs.branch }}" != "patches" ]]; then
-            echo "Error: Branch must be 'features' or 'patches', got '${{ steps.extract_branch.outputs.branch }}'"
-            exit 1
-          fi
-      
       - name: Dry Run Version Increment
         run: |
-          uv version --bump minor --dry-run
-          uv version --bump patch --dry-run
-      
-      - name: Increment Version - Feature
-        if: ${{ steps.extract_branch.outputs.branch == 'features' }}
-        run: uv version --bump minor
-      
-      - name: Increment Version - Patch
-        if: ${{ steps.extract_branch.outputs.branch == 'patches' }}
-        run: uv version --bump patch
+          uv version --bump alpha --dry-run
+
+      - name: Dry Run Version Increment
+        run: |
+          uv version --bump alpha
   
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
@@ -142,5 +91,4 @@ jobs:
       - name: Commit and Push Version Changes
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "Auto-increment version"
-          commit_options: "--no-verify"
+          commit_message: "Auto-increment version; New Alpha Released"
