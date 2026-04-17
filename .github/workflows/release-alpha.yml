@@ -3,7 +3,7 @@ name: Release Alpha 🍎
 on:
   pull_request:
     branches:
-      - development
+      - alpha
 
 jobs:
       
