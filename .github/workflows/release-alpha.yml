@@ -33,11 +33,6 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v7
 
-      - name: Restore UV environment
-        uses: actions/download-artifact@v4
-        with:
-          name: uv-cache
-      
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
