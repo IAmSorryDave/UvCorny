@@ -1,3 +1,4 @@
+#!/bin/sh
 
 chmod +x .github/scripts/setup/install-git.sh && .github/scripts/setup/install-git.sh && chmod -x .github/scripts/setup/install-git.sh
 
