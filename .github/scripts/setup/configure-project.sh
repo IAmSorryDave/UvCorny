@@ -1,3 +1,4 @@
+#!/bin/sh
 
 # README.md should be refreshed on every pull / push.
 if [ -f "README.md" ]; then rm README.md ; fi 
