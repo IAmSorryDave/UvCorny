@@ -8,6 +8,7 @@ repos:
       - id: uv-sync
       - id: uv-lock
       - id: uv-export
+        args: [ --format, requirements.txt, --output-file, requirements.txt ]
       
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
