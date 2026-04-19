@@ -8,8 +8,6 @@ repos:
       - id: uv-sync
       - id: uv-lock
       - id: uv-export
-      - id: pip-compile
-        args: [requirements.in, -o, requirements.txt]
       
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
