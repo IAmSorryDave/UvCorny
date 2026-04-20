@@ -8,3 +8,7 @@ yq eval '(.. | select(has("id") and .id == "pytest") | .additional_dependencies)
 
 ## Add absolute path of requirements file.
 yq eval '(.. | select(has("id") and .id == "pytest") | .additional_dependencies) += [strenv(PWD) + "/requirements.txt"]' -i ${PWD}/.pre-commit-config.yaml
+
+git update-index --assume-unchanged ${PWD}/.pre-commit-config.yaml
+
+git update-index --no-kip-worktree ${PWD}/.pre-commit-config.yaml
