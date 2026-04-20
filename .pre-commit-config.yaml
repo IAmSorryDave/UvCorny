@@ -29,7 +29,7 @@ repos:
       additional_dependencies:
         - pytest-custom_exit_code
         - -r # Transition pip arguments to requirements.txt
-        - requirements.txt
+        - ${PWD}/requirements.txt
       args:
         - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
       fail_fast: true
