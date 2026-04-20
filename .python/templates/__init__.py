@@ -1,2 +1,2 @@
-from _loader.py import *
+from ._loader import *
 # Customize your definitions here-after.
