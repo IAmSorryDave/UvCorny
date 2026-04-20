@@ -14,7 +14,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
-    rm "src/$(toml get --toml-path pyproject.toml project.name )/__init__.py" && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
+    rm src/$(toml get --toml-path pyproject.toml project.name )/__init__.py && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/ && cp .python/templates/_loader.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
 
   esac
 
@@ -26,6 +26,6 @@ if [ ! -f "pyproject.toml" ]; then
 
   echo "Project configured."
 
-else # It's presence indicates you are resuming work on an existing projec that uses uvcorny.
+else # It's presence indicates you are resuming work on an existing project that uses uvcorny.
 
   uv init ; fi
