@@ -16,7 +16,7 @@ for importer, module_label, this_is_a_package in walk_packages(
     # Skip the _loader module itself to avoid circular imports
     if module_label == __name__:
         continue
-    
+
     try:
         module = import_module(module_label)
         # Import all public objects from the module into this namespace
