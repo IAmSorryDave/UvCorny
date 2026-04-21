@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git commit (skip pytest on alpha branch)",
+      "type": "shell",
+      "command": "SKIP=SKIPPED_HOOK git commit -m '${input:commitMessage}'",
+      "inputs": [
+        {
+          "id": "commitMessage",
+          "description": "Commit message",
+          "type": "promptString"
+        }
+      ]
+    }
+  ]
+}
