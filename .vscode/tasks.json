@@ -4,7 +4,11 @@
     {
       "label": "Git commit (skip pytest on alpha branch)",
       "type": "shell",
-      "command": "SKIP=SKIPPED_HOOK git commit -m '${input:commitMessage}'",
+      "command": "bash",
+      "args": [
+        "-c",
+        "BRANCH=$(git rev-parse --abbrev-ref HEAD); if [[ \"$BRANCH\" == \"alpha\" ]]; then SKIP=pytest git commit -m '${input:commitMessage}'; else git commit -m '${input:commitMessage}'; fi"
+      ],
       "inputs": [
         {
           "id": "commitMessage",
