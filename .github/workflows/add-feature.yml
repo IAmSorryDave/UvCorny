@@ -35,7 +35,7 @@ jobs:
           name: uv-cache
           path: |
             .venv
-            .uv
+            uv.lock
           retention-days: 1
 
   increment:
@@ -73,7 +73,7 @@ jobs:
         with:
           name: uv-cache
 
-      - name: Check if version already has RC suffix
+      - name: Check if version already has Development suffix
         id: check_version
         run: |
           CURRENT_VERSION=$(uv version)
