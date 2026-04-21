@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Have git ignore patch.
-git update-index --skip-worktree ${PWD}/.pre-commit-config.yaml
+# git update-index --skip-worktree ${PWD}/.pre-commit-config.yaml
 
 ## Add requirements flag
 yq eval '(.. | select(has("id") and .id == "pytest") | .additional_dependencies) += ["-r"]' -i ${PWD}/.pre-commit-config.yaml
@@ -11,4 +11,4 @@ yq eval '(.. | select(has("id") and .id == "pytest") | .additional_dependencies)
 
 git update-index --assume-unchanged ${PWD}/.pre-commit-config.yaml
 
-git update-index --no-kip-worktree ${PWD}/.pre-commit-config.yaml
+# git update-index --no-kip-worktree ${PWD}/.pre-commit-config.yaml
