@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git commit (conditional skip)",
+      "type": "shell",
+      "command": ".sh/scripts/git-commit-skip.sh '${input:commitMessage}'",
+      "inputs": [
+        {
+          "id": "commitMessage",
+          "description": "Commit message",
+          "type": "promptString"
+        }
+      ]
+    }
+  ]
+}
