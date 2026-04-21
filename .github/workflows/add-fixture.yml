@@ -1,4 +1,4 @@
-name: Add ➕ Feature to Development Branch
+name: Add ➕ Fixture to Development Branch
 
 on:
   pull_request: 
@@ -78,19 +78,19 @@ jobs:
         run: |
           CURRENT_VERSION=$(uv version)
           if [[ $CURRENT_VERSION == *"dev"* ]]; then
-            echo "needs_bump=false" >> $GITHUB_OUTPUT
-            echo "Version already contains dev suffix: $CURRENT_VERSION"
+            echo "needs_development_bump=false" >> $GITHUB_OUTPUT
+            echo "Version already contains development suffix: $CURRENT_VERSION"
           else
-            echo "needs_bump=true" >> $GITHUB_OUTPUT
-            echo "Version does not contain dev suffix: $CURRENT_VERSION"
+            echo "needs_development_bump=true" >> $GITHUB_OUTPUT
+            echo "Version does not contain development suffix: $CURRENT_VERSION"
           fi
 
       - name: Dry Run Development Version Increment
-        if: steps.check_version.outputs.needs_bump == 'true'
+        if: steps.check_version.outputs.needs_development_bump == 'true'
         run: uv version --bump dev --dry-run
 
       - name: Development Version Increment
-        if: steps.check_version.outputs.needs_bump == 'true'
+        if: steps.check_version.outputs.needs_development_bump == 'true'
         run: uv version --bump dev
 
       - name: Dry Run Minor Version Increment
@@ -109,7 +109,7 @@ jobs:
         if: steps.check_version.outputs.needs_bump == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "Added Feature; $(uv version)."
+          commit_message: "Added Fixture; $(uv version)."
 
       - name: Auto-Merge Pull Request
         if: success()
