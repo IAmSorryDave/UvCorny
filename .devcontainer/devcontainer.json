@@ -6,9 +6,11 @@
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}",
-    "CODESPACES_SKIP_SERVICE_RESTART": "1",
-    "GIT_SERVICE_RESTART_DELAY": "5",
-    "VSCODE_SKIP_EXTENSIONS_RESTART": "true"
+    "GIT_SERVICE_RESTART_DELAY": 5,
+    "VSCODE_SKIP_EXTENSIONS_RESTART": true,
+    "CODESPACES_SKIP_SERVICE_RESTART": 1,
+    "VSCODE_SKIP_EXTENSIONS_RESTART": true,
+    "VSCODE_SKIP_AUTO_RESTART": true
   },
   "waitFor": "onCreateCommand",
   "updateContentCommand": "sleep 2",
