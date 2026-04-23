@@ -6,7 +6,7 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # Check if branch is alpha
 if [ "$BRANCH" = "main" ]; then
   # Delete the pytest hook from .pre-commit-config.yaml
-  yq 'del(.repos[] | select(.id == "pytest"))' -i .pre-commit-config.yaml
+  yq 'del(.repos[].hooks[] | select(.id == "pytest"))' -i .pre-commit-config.yaml
   echo "✓ Pytest hook removed from .pre-commit-config.yaml"
 fi
 
