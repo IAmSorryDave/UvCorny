@@ -2,17 +2,29 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh",
+  "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
+  "postCreateCommand": "sleep 1",
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}",
-    "GIT_SERVICE_RESTART_DELAY": 5,
-    "VSCODE_SKIP_EXTENSIONS_RESTART": true,
-    "CODESPACES_SKIP_SERVICE_RESTART": 1,
-    "VSCODE_SKIP_EXTENSIONS_RESTART": true,
-    "VSCODE_SKIP_AUTO_RESTART": true
+    "CODESPACES_SKIP_SERVICE_RESTART": "1",
+    "VSCODE_SKIP_EXTENSIONS_RESTART": "true",
+    "VSCODE_SKIP_AUTO_RESTART": "true"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "extensions.autoStartRequiredExtensions": false,
+        "extensions.updateAutomatically": false,
+        "github.copilot.enable": true,
+        "github.gitProtocol": "ssh"
+      },
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.vscode-pull-request-github"
+      ]
+    }
   },
   "waitFor": "onCreateCommand",
-  "updateContentCommand": "sleep 2",
   "runArgs": ["--env-file", ".devcontainer/.env"]
 }
