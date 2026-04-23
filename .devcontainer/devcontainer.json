@@ -14,11 +14,12 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "extensions.autoStartRequiredExtensions": false,
-        "extensions.updateAutomatically": false,
-        "github.copilot.enable": true,
-        "github.gitProtocol": "ssh"
-      },
+      "extensions.autoStartRequiredExtensions": false,
+      "extensions.updateAutomatically": false,
+      "github.copilot.enable": true,
+      "github.gitProtocol": "ssh",
+      "terminal.integrated.shellArgs.linux": ["-l"]
+    },
       "extensions": [
         "GitHub.copilot",
         "GitHub.vscode-pull-request-github"
