@@ -45,6 +45,9 @@ jobs:
   
       - name: Run Tests
         run: pre-commit run pytest --all-files
+
+      - name: Clean Up
+        run: pre-commit uninstall
       
   build:
       name: Build Distribution 📦
