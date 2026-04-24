@@ -55,7 +55,7 @@ jobs:
         run: |
           git add pyproject.toml
           git commit -m "Bumped Version to $(uv version)"
-          git push origin develop
+          git push origin development
       
       - name: Create RC branch
         if: steps.commit_increment.conclusion == 'success'
