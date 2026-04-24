@@ -12,6 +12,8 @@ if [ ! -f "pyproject.toml" ]; then
   
   uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
+  uv run toml set --toml-path pyproject.toml tool.ruff.per-file-ignores '{"**/__init__.py":["F403"]}'
+
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
     rm src/$(toml get --toml-path pyproject.toml project.name )/__init__.py && cp .python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/ && cp .python/templates/_loader.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
