@@ -14,7 +14,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   echo "[tool.ruff]" >> pyproject.toml
 
-  uv run toml set --toml-path pyproject.toml tool.ruff.per-file-ignores "{ '**/__init__.py' : '[F403]' }"
+  uv run toml set --toml-path pyproject.toml tool.ruff.per-file-ignores "{'**/__init__.py':['F403']}"
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
