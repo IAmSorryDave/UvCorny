@@ -4,6 +4,7 @@
   },
   "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
   "postCreateCommand": "killall -u root",
+  "postStartCommand": "exec sh -i -l",
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}"
