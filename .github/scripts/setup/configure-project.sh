@@ -20,7 +20,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool." 
 
-  mkdir tests && touch tests/__init__.py
+  mkdir tests && touch tests/__init__.py && conftest.py
     
   uvx easyignore python
 
