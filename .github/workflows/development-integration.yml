@@ -8,8 +8,9 @@ on:
     types:
       - closed
 
+
 jobs:
-  test-and-bump:
+  increment_commit_and_create_release_canidate:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
@@ -24,36 +25,38 @@ jobs:
           version: "0.x"
       
       - name: Sync dependencies
-        run: uv sync --all-extras
-      
-      - name: Run full test suite
-        run: uv run pytest --cov=src --cov-report=xml
-      
-      - name: Extract current version
-        id: current_version
         run: |
-          VERSION=$(grep "^version" pyproject.toml | head -1 | cut -d'"' -f2)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          uv sync --all-extras
+          uv lock
+
+      - name: Test Version Increment 
+        id: test_increment
+        run: |
+          uv version --bump patch --dry-run
       
       - name: Bump patch version
+        if: steps.test_increment.conclusion == 'success'
         id: new_version
         run: |
-          CURRENT=${{ steps.current_version.outputs.version }}
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
-          NEW_PATCH=$((PATCH + 1))
-          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
-          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          sed -i "s/version = \"$CURRENT\"/version = \"$NEW_VERSION\"/" pyproject.toml
-      
-      - name: Commit version bump
+          uv version --bump patch
+          echo "version=$(uv version)" >> $GITHUB_OUTPUT
+
+      - name: Configure Git
+        id: configure_git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Commit version bump
+        if: steps.configure_git.conclusion == 'success'
+        id: commit_increment
+        run: |
           git add pyproject.toml
-          git commit -m "chore: bump version to ${{ steps.new_version.outputs.version }}"
+          git commit -m "Bumped Version to $(uv version)"
           git push origin develop
       
       - name: Create RC branch
+        if: steps.commit_increment.conclusion == 'success'
         run: |
           git checkout -b rc/v${{ steps.new_version.outputs.version }}
           git push origin rc/v${{ steps.new_version.outputs.version }}
