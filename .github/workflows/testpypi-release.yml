@@ -1,0 +1,42 @@
+name: TestPyPI Release
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+  push:
+    branches:
+      - 'rc/v*'
+
+jobs:
+  test-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v2
+        with:
+          version: "0.x"
+      
+      - name: Sync dependencies
+        run: uv sync --all-extras
+      
+      - name: Run pytest
+        run: uv run pytest --strict-markers -v
+      
+      - name: Build distribution
+        run: uv build
+      
+      - name: Publish to TestPyPI
+        run: uv publish --publish-url https://test.pypi.org/legacy/ -t ${{ secrets.TEST_PYPI_TOKEN }}
+      
+      - name: Test installation from TestPyPI
+        run: |
+          pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ \
+            $(grep "^name" pyproject.toml | cut -d'"' -f2)==$(grep "^version" pyproject.toml | cut -d'"' -f2)
+      
+      - name: Smoke test
+        run: uv run python -c "import $(grep '^name' pyproject.toml | cut -d'\"' -f2 | tr '-' '_'); print('OK')"
