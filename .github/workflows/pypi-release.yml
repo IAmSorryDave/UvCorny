@@ -8,36 +8,103 @@ on:
       - closed
 
 jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install YQ
+        id: install_yq
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y yq
+
+      - name: Append Requirements to pre-commit Pytest Hook
+        id: append_requirements 
+        shell: bash
+        run: ${PWD}/.sh/scripts/append_requirements.sh
+      
+      - name: Install Pre-Commit
+        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
+  
+      - name: Install Hooks
+        run: pre-commit install
+  
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
+
+      - name: Clean Up
+        run: pre-commit uninstall
+
+  build:
+    name: Build Distribution 📦
+    needs: test
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Build Distribution
+        run: uv build
+
+      - name: Store Distribution Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+          retention-days: 1
+
+  
   release:
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'rc/v')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
       
       - name: Install UV
-        uses: astral-sh/setup-uv@v2
-        with:
-          version: "0.x"
-      
-      - name: Sync and test
-        run: |
-          uv sync --all-extras
-          uv run pytest --strict-markers -v
+        uses: astral-sh/setup-uv@v7
       
       - name: Extract version
         id: version
         run: |
-          VERSION=$(grep "^version" pyproject.toml | head -1 | cut -d'"' -f2)
+          VERSION=$(uv version)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      
-      - name: Build distribution
-        run: uv build
-      
-      - name: Publish to PyPI
-        run: uv publish -t ${{ secrets.PYPI_TOKEN }}
       
       - name: Tag release
         run: |
