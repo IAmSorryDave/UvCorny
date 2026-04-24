@@ -1,0 +1,72 @@
+
+name: Development Integration & Patch Bump
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - closed
+
+jobs:
+  test-and-bump:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v2
+        with:
+          version: "0.x"
+      
+      - name: Sync dependencies
+        run: uv sync --all-extras
+      
+      - name: Run full test suite
+        run: uv run pytest --cov=src --cov-report=xml
+      
+      - name: Extract current version
+        id: current_version
+        run: |
+          VERSION=$(grep "^version" pyproject.toml | head -1 | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Bump patch version
+        id: new_version
+        run: |
+          CURRENT=${{ steps.current_version.outputs.version }}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          sed -i "s/version = \"$CURRENT\"/version = \"$NEW_VERSION\"/" pyproject.toml
+      
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pyproject.toml
+          git commit -m "chore: bump version to ${{ steps.new_version.outputs.version }}"
+          git push origin develop
+      
+      - name: Create RC branch
+        run: |
+          git checkout -b rc/v${{ steps.new_version.outputs.version }}
+          git push origin rc/v${{ steps.new_version.outputs.version }}
+      
+      - name: Open RC merge PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `chore: release ${{ steps.new_version.outputs.version }}`,
+              body: `Automated release candidate for v${{ steps.new_version.outputs.version }}`,
+              head: `rc/v${{ steps.new_version.outputs.version }}`,
+              base: 'main',
+            })
