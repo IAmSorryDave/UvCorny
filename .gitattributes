@@ -6,6 +6,8 @@
 *.toml linguist-language=TOML
 *.md linguist-documentation
 *.txt linguist-documentation
+*.sh linguist-documentation
+*Dockerfile linguist-documentation
 
 # Specific to UV projects
 uv.lock linguist-generated=true
