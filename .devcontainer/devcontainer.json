@@ -3,7 +3,7 @@
     "dockerfile": "Dockerfile"
   },
   "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
-  "postCreateCommand": "sleep 1 && killall -9 bash sh || true; sleep 2",
+  "postCreateCommand": "sleep 1 && killall bash sh || true; sleep 2",
   "postStartCommand": "sh -i -l -c 'exit 0'",
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
