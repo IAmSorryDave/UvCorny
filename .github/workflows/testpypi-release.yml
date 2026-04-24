@@ -15,14 +15,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
       
       - name: Install UV
-        uses: astral-sh/setup-uv@v2
-        with:
-          version: "0.x"
+        uses: astral-sh/setup-uv@v7
       
       - name: Sync dependencies
-        run: uv sync --all-extras
+        run: |
+          uv sync --all-extras
+          uv lock
       
       - name: Run pytest
         run: uv run pytest --strict-markers -v
