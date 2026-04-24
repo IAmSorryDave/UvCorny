@@ -3,11 +3,11 @@
     "dockerfile": "Dockerfile"
   },
   "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
-  "postStartCommand": "sh -i -l -c 'exit 0'",
+  "postStartCommand": "bash -i -l -c 'exit 0'",
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}",
-    "SHELL": "/bin/sh"
+    "SHELL": "/bin/bash"
   },
   "customizations": {
     "vscode": {
