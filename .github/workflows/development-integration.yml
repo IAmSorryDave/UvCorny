@@ -4,7 +4,7 @@ name: Development Integration & Patch Bump
 on:
   pull_request:
     branches:
-      - develop
+      - development
     types:
       - closed
 
