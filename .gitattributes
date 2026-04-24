@@ -10,3 +10,6 @@
 # Specific to UV projects
 uv.lock linguist-generated=true
 pyproject.toml linguist-language=TOML
+
+# Exclude all other files from language stats
+* linguist-generated=true
