@@ -12,7 +12,7 @@ if [ ! -f "pyproject.toml" ]; then
   
   uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
-  sleep 5
+  echo "[tool.ruff]" >> pyproject.toml
 
   uv run toml set --toml-path pyproject.toml tool.ruff.per-file-ignores "{ '**/__init__.py' : '[F403]' }"
 
