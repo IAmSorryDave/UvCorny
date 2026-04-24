@@ -8,7 +8,6 @@ on:
     types:
       - closed
 
-
 jobs:
   increment_commit_and_create_release_canidate:
     if: github.event.pull_request.merged == true
@@ -18,11 +17,14 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
       
       - name: Install UV
         uses: astral-sh/setup-uv@v7
-        with:
-          version: "0.x"
       
       - name: Sync dependencies
         run: |
