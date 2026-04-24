@@ -57,11 +57,13 @@ jobs:
       
       - name: Create RC branch
         if: steps.commit_increment.conclusion == 'success'
+        id: create_release_canidate_branch
         run: |
           git checkout -b rc/v${{ steps.new_version.outputs.version }}
           git push origin rc/v${{ steps.new_version.outputs.version }}
       
       - name: Open RC merge PR
+        if: steps.create_release_canidate_branch.conclusion == 'success'
         uses: actions/github-script@v7
         with:
           script: |
