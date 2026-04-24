@@ -82,21 +82,45 @@ jobs:
           path: dist/
           retention-days: 1
 
-  
-  release:
+  publish-to-pypi:
+    name: Publish Python 🐍 Distribution 📦 to PyPi
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'rc/v')
+    needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ steps.repo_name.outputs.name }}
+    
+    permissions:
+      id-token: write
+      pull-requests: write
+      contents: read
+    
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Set Lowercase Repository Name
+        id: repo_name
+        run: echo "name=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkout Project
+        uses: actions/checkout@v6
         with:
-          python-version-file: "pyproject.toml"
+          token: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Download Distribution Packages
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      
+      - name: Publish Distribution 📦 toPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
       - name: Install UV
         uses: astral-sh/setup-uv@v7
       
@@ -108,8 +132,6 @@ jobs:
       
       - name: Tag release
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a v${{ steps.version.outputs.version }} -m "Release v${{ steps.version.outputs.version }}"
           git push origin v${{ steps.version.outputs.version }}
       
@@ -124,4 +146,4 @@ jobs:
               name: 'Release v${{ steps.version.outputs.version }}',
               draft: false,
               prerelease: false,
-            })
+            })    
