@@ -11,7 +11,7 @@ on:
       - 'rc/v*'
 
 jobs:
-  test-and-release:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -26,19 +26,101 @@ jobs:
       
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+
+      - name: Install YQ
+        id: install_yq
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y yq
+
+      - name: Append Requirements to pre-commit Pytest Hook
+        id: append_requirements 
+        shell: bash
+        run: ${PWD}/.sh/scripts/append_requirements.sh
       
-      - name: Run pytest
-        run: uv run pytest --strict-markers -v
+      - name: Install Pre-Commit
+        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
+  
+      - name: Install Hooks
+        run: pre-commit install
+  
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
       
-      - name: Build distribution
-        run: uv build
+  build:
+      name: Build Distribution 📦
+      needs: test
+      runs-on: ubuntu-latest
       
-      - name: Publish to TestPyPI
-        run: uv publish --publish-url https://test.pypi.org/legacy/ -t ${{ secrets.TEST_PYPI_TOKEN }}
+      permissions:
+        contents: read
+        pull-requests: write
       
-      - name: Test installation from TestPyPI
-        run: |
-          uv install --index-url https://test.pypi.org/simple/ $(grep "^name" pyproject.toml | cut -d'"' -f2)==$(grep "^version" pyproject.toml | cut -d'"' -f2)
+      steps:
       
-      - name: Smoke test
-        run: uv run python -c "import $(grep '^name' pyproject.toml | cut -d'\"' -f2 | tr '-' '_'); print('OK')"
+        - name: Checkout Project
+          uses: actions/checkout@v6
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            fetch-depth: 0
+  
+        - name: Set up Python
+          uses: actions/setup-python@v6
+          with:
+            python-version-file: "pyproject.toml"
+    
+        - name: Install UV
+          uses: astral-sh/setup-uv@v7
+
+        - name: Build Distribution
+          run: uv build
+          
+        - name: Store Distribution Packages
+          uses: actions/upload-artifact@v4
+          with:
+            name: python-package-distributions
+            path: dist/
+            retention-days: 1
+
+  publish-to-testpypi:
+      name: Publish Python 🐍 Distribution 📦 to TestPyPi
+      needs: build
+      runs-on: ubuntu-latest
+      environment:
+        name: testpypi
+        url: https://test.pypi.org/p/${{ steps.repo_name.outputs.name }}
+      
+      permissions:
+        id-token: write
+        pull-requests: write
+        contents: read
+      
+      steps:
+  
+        - name: Set Lowercase Repository Name
+          id: repo_name
+          run: echo "name=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      
+        - name: Checkout Project
+          uses: actions/checkout@v6
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+        
+        - name: Download Distribution Packages
+          uses: actions/download-artifact@v4
+          with:
+            name: python-package-distributions
+            path: dist/
+        
+        - name: Publish Distribution 📦 to TestPyPI
+          uses: pypa/gh-action-pypi-publish@release/v1
+          with:
+            repository-url: https://test.pypi.org/legacy/
+            skip-existing: true
+            verbose: true
+
+        - name: Test installation from TestPyPI
+          run: |
+            uv install --index-url https://test.pypi.org/simple/ $(grep "^name" pyproject.toml | cut -d'"' -f2)==$(grep "^version" pyproject.toml | cut -d'"' -f2)
+        
+        - name: Smoke test
+          run: uv run python -c "import $(grep '^name' pyproject.toml | cut -d'\"' -f2 | tr '-' '_'); print('OK')"
