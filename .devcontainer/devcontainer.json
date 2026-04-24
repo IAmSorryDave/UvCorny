@@ -8,7 +8,7 @@
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
     "NO_REPLY_EMAIL": "${localEnv:NO_REPLY_EMAIL}",
-    "SHELL": "/bin/bash"
+    "SHELL": "/bin/sh"
   },
   "customizations": {
     "vscode": {
