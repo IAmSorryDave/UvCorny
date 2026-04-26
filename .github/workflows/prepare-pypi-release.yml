@@ -69,6 +69,14 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v7
 
+      - name: Dry Run Version Increment
+        run: |
+          uv version --bump major --dry-run
+
+      - name: Version Increment
+        run: |
+          uv version --bump major
+
       - name: Build Distribution
         run: uv build
 
