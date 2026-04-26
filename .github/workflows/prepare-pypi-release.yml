@@ -6,6 +6,7 @@ on:
       - main
 jobs:
   test:
+    name: Validate Distribution ✅
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -78,7 +79,7 @@ jobs:
           path: dist/
           retention-days: 1
   close:
-    name: Close Pull Request
+    name: Close ❎ Pull Request ☑️ 
     needs: build
     runs-on: ubuntu-latest
     steps:    
