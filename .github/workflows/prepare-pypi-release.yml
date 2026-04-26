@@ -80,6 +80,8 @@ jobs:
     name: Close Pull Request
     needs: test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     steps:    
       - name: Auto-Merge Pull Request
         if: success()
