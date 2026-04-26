@@ -9,6 +9,7 @@ on:
       - closed
 jobs:
   publish-to-pypi:
+    if: github.event.pull_request.merged == true
     name: Publish Python 🐍 Distribution 📦 to PyPi
     runs-on: ubuntu-latest
     strategy:
