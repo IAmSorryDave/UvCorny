@@ -1,4 +1,4 @@
-name: PyPI Production Release
+name: Prepare PyPI Production Release
 
 on:
   pull_request:
@@ -43,11 +43,9 @@ jobs:
         run: pre-commit uninstall
 
   build:
-    name: Build Distribution 📦
+    name: Build Distribution 📦; Cache Distribution ⬆️
     needs: test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
     
     permissions:
       contents: read
@@ -68,9 +66,6 @@ jobs:
   
       - name: Install UV
         uses: astral-sh/setup-uv@v7
-
-      - name: Sync & Lock
-        run: 
 
       - name: Build Distribution
         run: uv build
