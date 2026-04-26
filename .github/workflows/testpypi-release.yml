@@ -30,7 +30,7 @@ jobs:
         - name: Download Distribution Packages
           uses: actions/download-artifact@v4
           with:
-            name: python-package-distributions
+            name: release-canidate-python-package-distributions
             path: dist/
         
         - name: Publish Distribution 📦 to TestPyPI
