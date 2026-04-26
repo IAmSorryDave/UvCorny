@@ -9,15 +9,53 @@ on:
       - closed
 
 jobs:
-  increment_commit_and_create_release_canidate:
+
+  increment:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+      
+      - name: Dry Run Version Increment
+        run: |
+          uv version --bump rc --dry-run
+
+      - name: Version Increment
+        run: |
+          uv version --bump rc
+
+      - name: Commit Version Increment 
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: development
+          commit_message: "Released v$(uv version)"
+          tag_name: "v$(uv version)"
+
+  create_release_canidate:
+    runs-on: ubuntu-latest
+    needs: increment
+    steps:
+    
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkout Project
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
+    
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -25,45 +63,13 @@ jobs:
       
       - name: Install UV
         uses: astral-sh/setup-uv@v7
-      
-      - name: Sync dependencies
-        run: |
-          uv sync --all-extras
-          uv lock
-
-      - name: Test Version Increment 
-        id: test_increment
-        run: |
-          uv version --bump patch --dry-run
-      
-      - name: Bump patch version
-        if: steps.test_increment.conclusion == 'success'
-        id: new_version
-        run: |
-          uv version --bump patch
-          echo "version=$(uv version)" >> $GITHUB_OUTPUT
-
-      - name: Configure Git
-        id: configure_git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-      
-      - name: Commit version bump
-        if: steps.configure_git.conclusion == 'success'
-        id: commit_increment
-        run: |
-          git add pyproject.toml
-          git commit -m "Bumped Version to $(uv version)"
-          git push origin development
-      
+    
       - name: Create RC branch
-        if: steps.commit_increment.conclusion == 'success'
         id: create_release_canidate_branch
         run: |
-          git checkout -b rc/v${{ steps.new_version.outputs.version }}
-          git push origin rc/v${{ steps.new_version.outputs.version }}
-      
+          git checkout -b rc/v$( uv version )
+          git push origin rc/v$( uv version )
+    
       - name: Open RC merge PR
         if: steps.create_release_canidate_branch.conclusion == 'success'
         uses: actions/github-script@v7
@@ -72,8 +78,21 @@ jobs:
             github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `chore: release ${{ steps.new_version.outputs.version }}`,
-              body: `Automated release candidate for v${{ steps.new_version.outputs.version }}`,
-              head: `rc/v${{ steps.new_version.outputs.version }}`,
+              title: `chore: release $( uv version )`,
+              body: `Automated release candidate for v$( uv version )',
+              head: `rc/v$( uv version )`,
               base: 'main',
             })
+
+      - name: Create GitHub release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: 'v$(uv version)',
+              name: 'Release v$(uv version)',
+              draft: false,
+              prerelease: true,
+            })  
