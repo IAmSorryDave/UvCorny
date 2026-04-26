@@ -1,6 +1,7 @@
 
 from pathlib import Path
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import FileSystemLoader
+from jinja2.sandbox import SandboxedEnvironment
 from tomllib import load
 from subprocess import run
 
@@ -21,7 +22,7 @@ def write_documentation():
     readme_filename, template_filename = "README.md", "README.md.jinja"
     
     # Render and write README.md
-    env = Environment(loader=FileSystemLoader("."))
+    env = SandboxedEnvironment(loader=FileSystemLoader("."))
     template = env.get_template(template_filename)
     readme_content = template.render(context)
 
