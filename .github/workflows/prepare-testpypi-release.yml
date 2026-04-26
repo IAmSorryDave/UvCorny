@@ -1,24 +1,24 @@
-name: TestPyPI Release
+name: Prepare TestPyPI Release
 
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
   push:
     branches:
       - 'rc/v*'
 
 jobs:
   test:
+    name: Validate Distribution ✅
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      
     steps:
+    
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
+          
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -27,15 +27,10 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v7
 
-      - name: Install YQ
-        id: install_yq
+      - name: Install YQ && Append Requirements to pre-commit Pytest Hook
+        id: append_requirements
         shell: bash
-        run: sudo apt-get update && sudo apt-get install -y yq
-
-      - name: Append Requirements to pre-commit Pytest Hook
-        id: append_requirements 
-        shell: bash
-        run: ${PWD}/.sh/scripts/append_requirements.sh
+        run: sudo apt-get update && sudo apt-get install -y yq && ${PWD}/.sh/scripts/append_requirements.sh && sudo apt purge yq
       
       - name: Install Pre-Commit
         run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
@@ -48,41 +43,47 @@ jobs:
 
       - name: Clean Up
         run: pre-commit uninstall
-      
-  build:
-      name: Build Distribution 📦
-      needs: test
-      runs-on: ubuntu-latest
-      
-      permissions:
-        contents: read
-        pull-requests: write
-      
-      steps:
-      
-        - name: Checkout Project
-          uses: actions/checkout@v6
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            fetch-depth: 0
-  
-        - name: Set up Python
-          uses: actions/setup-python@v6
-          with:
-            python-version-file: "pyproject.toml"
-    
-        - name: Install UV
-          uses: astral-sh/setup-uv@v7
 
-        - name: Build Distribution
-          run: uv build
-          
-        - name: Store Distribution Packages
-          uses: actions/upload-artifact@v4
-          with:
-            name: python-package-distributions
-            path: dist/
-            retention-days: 1
+  build:
+    name: Build Distribution 📦; Cache Distribution ⬆️
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+  
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Build Distribution
+        run: uv build
+
+      - name: Store Distribution Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+          retention-days: 1
+
+   
+
+
+jobs:      
 
   publish-to-testpypi:
       name: Publish Python 🐍 Distribution 📦 to TestPyPi
