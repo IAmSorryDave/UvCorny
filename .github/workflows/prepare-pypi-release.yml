@@ -75,4 +75,15 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
-          retention-days: 1  
+          retention-days: 1
+  close:
+    name: Close Pull Request
+    needs: test
+    runs-on: ubuntu-latest
+    steps:    
+      - name: Auto-Merge Pull Request
+        if: success()
+        run: gh pr merge ${{ github.event.pull_request.number }} --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   
