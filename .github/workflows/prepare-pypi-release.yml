@@ -72,17 +72,6 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v7
 
-      - name: Dry Run Version Increment
-        run: |
-          uv version --bump major --dry-run
-
-      - name: Version Increment
-        run: |
-          uv version --bump major
-
-      - name: Verify Version Changed
-        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
-
       - name: Build Distribution
         run: uv build
 
