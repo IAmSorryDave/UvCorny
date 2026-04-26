@@ -1,10 +1,11 @@
-name: Add ➕ Test 🔧
+name: Add ➕ Feature 🔧
 
 on:
-  push:
+  pull_request:
     branches:
       - features
-    
+    types: closed
+
 jobs:
 
   increment:
