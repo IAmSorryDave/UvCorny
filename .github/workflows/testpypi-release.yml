@@ -12,6 +12,8 @@ jobs:
   publish-to-testpypi:
       name: Publish Python 🐍 Distribution 📦 to TestPyPi
       runs-on: ubuntu-latest
+      strategy:
+        fail-fast: true
       environment:
         name: testpypi
         url: https://test.pypi.org/p/${{ steps.repo_name.outputs.name }}
