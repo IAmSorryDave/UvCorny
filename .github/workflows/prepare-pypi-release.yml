@@ -46,7 +46,8 @@ jobs:
     name: Build Distribution 📦; Cache Distribution ⬆️
     needs: test
     runs-on: ubuntu-latest
-    
+    strategy:
+      fail-fast: true
     permissions:
       contents: read
       pull-requests: write
@@ -80,8 +81,6 @@ jobs:
     name: Close Pull Request
     needs: test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
     steps:    
       - name: Auto-Merge Pull Request
         if: success()
