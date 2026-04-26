@@ -79,7 +79,7 @@ jobs:
           retention-days: 1
   close:
     name: Close Pull Request
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     steps:    
       - name: Auto-Merge Pull Request
