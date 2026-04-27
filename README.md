@@ -1,10 +1,23 @@
 # UvCorny 🌽
-Project Management Template for Python.
+UvCorny is a GitHub template that accelerates Python package development with automated, secure releases to both TestPyPI and PyPI.
+The template combines Alpine Linux, GitHub Actions, pre-commit, and UV into one seemless interface.
+It's intended for AI - Test Driven Development. 
 
 ## Quickstart
 
-Clone this template and work with UV and pre-commit out of the ( alpine ) box.
-Creating a Codespace will automatically set up your project in the working directory.
+1. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure.
+2. Opening a Codespace on any branch will automatically setup your project.
+
+### Recommended Development Path
+```
+fixtures branch
+    ↓ (new fixtures)
+tests branch → (merge fixtures)
+    ↓ (new tests)
+features branch → (merge tests) → (write implementation with AI)
+    ↓ (feature commit)
+development branch → [CI/CD] → TestPyPI → PyPI
+```
 
 ### Default Run Arguments
 
