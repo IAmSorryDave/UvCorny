@@ -53,7 +53,7 @@ In .devcontainer/.env -
 
 - ```LICENSE_TYPE``` : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - ```UV_LINK_MODE``` : symlink
-- ```UV_PROJECT_TYPE``` : --lib
+- ```UV_PROJECT_TYPE``` : --lib ( Must be one of --app, --lib, --package. See https://docs.astral.sh/uv/concepts/projects/init/#libraries for more on project set up)
 
 ### Dockerfile
 
