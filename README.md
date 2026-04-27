@@ -5,7 +5,7 @@ It's intended for AI - Test Driven Development.
 
 ## Quickstart
 
-1. If you intend to ship your package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches.
+1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches.
 2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure.
 3. Opening a Codespace on any branch will automatically setup your project.
 
