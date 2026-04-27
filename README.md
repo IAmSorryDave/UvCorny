@@ -72,7 +72,7 @@ The Alpine UV image does not have git configured by default.
 While git is installed automatically you still need to set your... 
 
 - DEVELOPER : Your GitHub username.
-- DEVELOPER_EMAIL : Your Github email.
+- DEVELOPER_EMAIL : Your Github email. ( You may want to consider making your email private. See: https://github.com/settings/emails )
 
 in your Codespace secret store for git to work properly.
 
