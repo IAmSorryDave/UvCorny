@@ -53,9 +53,8 @@ jobs:
     strategy:
       fail-fast: true
     permissions:
-      contents: read
-      pull-requests: write
-    
+      contents: write
+      
     steps:
     
       - name: Checkout Project
@@ -85,6 +84,9 @@ jobs:
     name: Close ❎ Pull Request ☑️ 
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:    
       - name: Auto-Merge Pull Request
         if: success()
