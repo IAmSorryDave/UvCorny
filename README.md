@@ -85,7 +85,7 @@ Two custom hooks are added by defualt.
 
 - Cristopher Meissner's pytest-pre-commit (https://github.com/christophmeissner/pytest-pre-commit) is modified to allow the pytest hook to pass on the absence of tests. This let's you add fixtures and features independently of tests. By default this hook is disabled when pushing to the test branch, which is necessary if there's no data to test against. Finally there's a .sh/scripts/append_requirements.sh script which on codespace creation, appends the '-r' flag and absolute path of the exported requirements.txt to the additional_dependencies pytest hook attribute. This has the net effect of recreating your projects dependencies in an isolated test enviroment upon runing the pytest hook.
   
-- A custom hook which automatially updates your README.md title and description according to the title and description in the pyproject.toml
+- A custom hook which automatially updates your README.md title and description according to the title and description in the pyproject.toml. Thus you should not edit your README.md directly but rather the README.md.jinja file.
 
 If you are not familar with pre-commit, any files modified by hooks will cause the hook to fail and block the commit. This ensures you double check any modifications before commitng to them. 
 By combining these hooks together, you can reduce the need to add these steps to your CI/CD workflows.
