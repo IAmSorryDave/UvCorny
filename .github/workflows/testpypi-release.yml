@@ -163,7 +163,7 @@ jobs:
               repo: context.repo.repo,
               title: `chore: release $( uv version )`,
               body: `Automated pull request for v$( uv version )',
-              head: `$( uv version )`,
+              head: `v/$( uv version )`,
               base: 'main',
             })
         
