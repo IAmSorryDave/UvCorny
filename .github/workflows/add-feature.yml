@@ -1,16 +1,18 @@
 name: Add ➕ Feature 🔧
 
 on:
-  pull_request:
+  push: 
     branches:
       - features
-    types: closed
 
 jobs:
 
   increment:
-    if: github.event.pull_request.merged == true
+
+    if: always()
     runs-on: ubuntu-latest
+    permissions: write-all
+    
     steps:
     
     - name: Checkout Project
@@ -22,13 +24,20 @@ jobs:
       uses: astral-sh/setup-uv@v7
     
     - name: Dry Run Version Increment
+      id: is_alpha
       run: |
-        uv version --bump minor --dry-run --bump alpha --dry-run
+        uv version --bump alpha --dry-run
 
-    - name: Version Increment
+    - name: Version Increment Alpha Alone
+      if: steps.is_alpha.outcome == 'success'
+      run: |
+        uv version --bump alpha
+
+    - name: Version Increment Minor as Alpha 
+      if: steps.is_alpha.outcome == 'failure'
       run: |
         uv version --bump minor --bump alpha
-
+    
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
