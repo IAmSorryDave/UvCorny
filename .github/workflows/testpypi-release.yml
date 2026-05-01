@@ -3,7 +3,7 @@ name: TestPyPI Release
 on:
   push:
     branches:
-      - 'rc/v*'
+      - '*.rc*'
 
 jobs:
   test:
@@ -51,8 +51,7 @@ jobs:
     strategy:
       fail-fast: true
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
     
     steps:
     
@@ -92,7 +91,6 @@ jobs:
       
       permissions:
         id-token: write
-        pull-requests: write
         contents: read
       
       steps:
@@ -120,6 +118,8 @@ jobs:
     needs: publish-to-testpypi
     strategy:
       fail-fast: true
+
+    permissions: write-all
     
     steps:
 
@@ -134,6 +134,11 @@ jobs:
 
       - name: Install TOML ⚙️ CLI
         run: uv tool install toml-cli
+
+      - name: Create Test Virtual Enviroment
+        run: |
+          uv venv test-env
+          source test-env/bin/activate
         
       - name: Test installation from TestPyPI
         run: |
@@ -156,7 +161,7 @@ jobs:
               repo: context.repo.repo,
               title: `chore: release $( uv version )`,
               body: `Automated pull request for v$( uv version )',
-              head: `rc/v$( uv version )`,
+              head: `$( uv version )`,
               base: 'main',
             })
         
