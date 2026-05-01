@@ -1,15 +1,14 @@
-name: Add ➕ Test 🧪
+name: Add Test 🧪 to development.
 
 on:
-  push: 
-    branches:
-      - tests
-
+  pull_request:
+    branches: development
+    types: closed
+  
 jobs:
 
   increment:
-
-    if: always()
+  
     runs-on: ubuntu-latest
     permissions: write-all
     
@@ -44,6 +43,6 @@ jobs:
     - name: Tag release
       uses: stefanzweifel/git-auto-commit-action@v7
       with:
-        branch: tests
+        branch: development
         commit_message: "Released $(uv version)"
         tag_name: "v$(uv version)"
