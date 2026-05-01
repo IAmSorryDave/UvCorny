@@ -1,10 +1,10 @@
 
-name: Development Integration 🚥 & Spawn Release Canidate 🧪
+name: Spawn Release Canidate 🧪
 
 on:
   pull_request:
     branches:
-      - development
+      - canidate
     types:
       - closed
 
@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
+
+    permissions: write-all
 
     steps:
       - name: Checkout Project
@@ -41,7 +43,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: development
-          commit_message: "Released v$(uv version)"
+          commit_message: "Released $(uv version)"
           tag_name: "v$(uv version)"
 
   create_release_canidate:
@@ -72,8 +74,8 @@ jobs:
       - name: Create RC branch
         id: create_release_canidate_branch
         run: |
-          git checkout -b rc/v$( uv version )
-          git push origin rc/v$( uv version )
+          git checkout -b v/$( uv version )
+          git push origin v/$( uv version )
 
       - name: Create GitHub release
         uses: actions/github-script@v7
@@ -83,7 +85,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: 'v$(uv version)',
-              name: 'Release v$(uv version)',
+              name: 'Release $(uv version)',
               draft: false,
               prerelease: false,
             })  
