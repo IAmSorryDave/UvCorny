@@ -23,11 +23,11 @@ jobs:
     
     - name: Dry Run Version Increment
       run: |
-        uv version --bump minor --dry-run
+        uv version --bump minor --dry-run --bump alpha --dry-run
 
     - name: Version Increment
       run: |
-        uv version --bump minor
+        uv version --bump minor --bump alpha
 
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
@@ -36,6 +36,6 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v7
       with:
         branch: tests
-        commit_message: "Released v$(uv version)"
+        commit_message: "Released $(uv version)"
         tag_name: "v$(uv version)"
   
