@@ -35,7 +35,7 @@ jobs:
     - name: Version Increment Patch as Dev 
       if: steps.is_development.outcome == 'failure'
       run: |
-        uv version --bump patch --bump dev
+        uv version --bump minor --bump dev
     
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
