@@ -1,0 +1,44 @@
+
+name: Release Beta Branch
+
+
+
+test:
+    name: Validate Distribution ✅
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    permissions: write-all
+      
+    steps:
+    
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install YQ && Append Requirements to pre-commit Pytest Hook
+        id: append_requirements
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y yq && ${PWD}/.sh/scripts/append_requirements.sh && sudo apt purge yq
+      
+      - name: Install Pre-Commit
+        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
+  
+      - name: Install Hooks
+        run: pre-commit install
+  
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
+
+      - name: Clean Up
+        run: pre-commit uninstall
