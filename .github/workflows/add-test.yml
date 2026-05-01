@@ -1,4 +1,4 @@
-name: Add Test 🧪 to development.
+name: Add Test 🧪 to Development Branch.
 
 on:
   pull_request:
