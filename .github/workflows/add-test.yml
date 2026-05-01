@@ -1,0 +1,49 @@
+name: Add ➕ Test 🧪
+
+on:
+  push: 
+    branches:
+      - tests
+
+jobs:
+
+  increment:
+
+    if: always()
+    runs-on: ubuntu-latest
+    permissions: write-all
+    
+    steps:
+    
+    - name: Checkout Project
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install UV
+      uses: astral-sh/setup-uv@v7
+    
+    - name: Dry Run Version Increment
+      id: is_development
+      run: |
+        uv version --bump dev --dry-run
+
+    - name: Version Increment Dev Alone
+      if: steps.is_development.outcome == 'success'
+      run: |
+        uv version --bump dev
+
+    - name: Version Increment Patch as Dev 
+      if: steps.is_development.outcome == 'failure'
+      run: |
+        uv version --bump patch --bump dev
+    
+    - name: Verify Version Changed
+      run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+    - name: Tag release
+      uses: stefanzweifel/git-auto-commit-action@v7
+      with:
+        branch: tests
+        commit_message: "Released $(uv version)"
+        tag_name: "v$(uv version)"
