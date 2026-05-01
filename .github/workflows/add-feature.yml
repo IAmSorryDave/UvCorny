@@ -8,8 +8,6 @@ on:
 jobs:
 
   increment:
-
-    if: always()
     runs-on: ubuntu-latest
     permissions: write-all
     
@@ -24,19 +22,12 @@ jobs:
       uses: astral-sh/setup-uv@v7
     
     - name: Dry Run Version Increment
-      id: is_alpha
       run: |
         uv version --bump alpha --dry-run
 
     - name: Version Increment Alpha Alone
-      if: steps.is_alpha.outcome == 'success'
       run: |
         uv version --bump alpha
-
-    - name: Version Increment Minor as Alpha 
-      if: steps.is_alpha.outcome == 'failure'
-      run: |
-        uv version --bump minor --bump alpha
     
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
