@@ -96,4 +96,26 @@ However if you choose to do so, do not remove the pytest hook. No tests are requ
 Furthermore, do not edit the pre-commit configuration in a codespace! This also risks breaking UvCorny.
 Any modifications to the configuration should be made from the web editor.
 
+### Creating Pytests
+
+```
+import pytest
+
+
+@pytest.fixture
+def resilient_import():
+    try:
+        from uvcornyalpha import my_object
+
+        return my_object
+    except Exception:
+        return None  # or some default mock object
+
+
+def test_with_fallback(resilient_import):
+    if resilient_import is None:
+        pytest.skip("Import unavailable")
+    assert resilient_import == "foo"
+```
+
 ####
