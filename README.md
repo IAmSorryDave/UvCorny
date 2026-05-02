@@ -11,13 +11,14 @@ It's intended for AI - Test Driven Development.
 
 ### Recommended Development Path
 ```
-fixtures branch
-    ↓ (new fixtures)
-tests branch → (merge fixtures)
-    ↓ (new tests)
-features branch → (merge tests) → (write implementation with AI)
-    ↓ (feature commit)
-development branch → [CI/CD] → TestPyPI → PyPI
+development branch
+    ↓ (new tests / fixtures)
+features branch → (write implementation with AI)
+    ↓ (new feature) → spawns potential beta
+                            ↓                     
+                        beta-nth branch
+                            ↓ (merge)
+                        canidate branch → spawns potential release canidate → TestPyPI → PyPI
 ```
 
 ### Step-by-Step: From Fixture to Production
