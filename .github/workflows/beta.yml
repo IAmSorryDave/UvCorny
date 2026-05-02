@@ -50,52 +50,40 @@ jobs:
       - name: Clean Up
         run: pre-commit uninstall
 
-  increment:
-    runs-on: ubuntu-latest
-    permissions: write-all
-    
-    steps:
-    
-    - name: Checkout Project
-      uses: actions/checkout@v6
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Install UV
-      uses: astral-sh/setup-uv@v7
-    
-    - name: Dry Run Version Increment
-      run: |
-        uv version --bump beta --dry-run
-
-    - name: Version Increment Alpha Alone
-      run: |
-        uv version --bump beta
-    
-    - name: Verify Version Changed
-      run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
-
-    - name: Tag release
-      uses: stefanzweifel/git-auto-commit-action@v7
-      with:
-        branch: tests
-        commit_message: "Released $(uv version)"
-        tag_name: "v$(uv version)"
-
-  pull:
-    name: Request to Pull Changes into Main 🎯
+  create_beta:
+  
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Open RC merge PR
-        uses: actions/github-script@v7
+    
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+    
+      - name: Checkout Project
+        uses: actions/checkout@v6
         with:
-          script: |
-            github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `chore: release $( uv version )`,
-              body: `Automated pull request for v$( uv version )',
-              head: `v/$( uv version )`,
-              base: 'main',
-            })
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Dry Run Increment
+        run: uv version --bump beta --bump --dry-run
+
+      - name: Increment
+        run: uv version --bump beta --bump
+    
+      - name: Create RC branch
+        id: create_release_canidate_branch
+        run: |
+          git checkout -b v/$( uv version )
+          git push origin v/$( uv version )
+    
