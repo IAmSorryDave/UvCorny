@@ -1,0 +1,69 @@
+name: Release Beta
+
+on:
+  workflow_run:
+      workflows: 
+        - 'add-feature'
+      types: 
+        - completed
+      branches:
+        - features
+
+jobs:
+  test:
+    name: Validate Features Branch ✅
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    permissions: write-all
+      
+    steps:
+    
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install YQ && Append Requirements to pre-commit Pytest Hook
+        id: append_requirements
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y yq && ${PWD}/.sh/scripts/append_requirements.sh && sudo apt purge yq
+      
+      - name: Install Pre-Commit
+        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
+  
+      - name: Install Hooks
+        run: pre-commit install
+  
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
+
+      - name: Clean Up
+        run: pre-commit uninstall
+
+  pull:
+    name: Request to Pull Changes into Main 🎯
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Open RC merge PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `chore: release $( uv version )`,
+              body: `Automated pull request for v$( uv version )',
+              head: `v/$( uv version )`,
+              base: 'main',
+            })
