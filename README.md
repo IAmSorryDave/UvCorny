@@ -11,43 +11,16 @@ It's intended for AI - Test Driven Development.
 
 ### Recommended Development Path
 ```
-development branch
-    ↓ (new tests / fixtures)
-features branch → (write implementation with AI)
-    ↓ (new feature) → spawns potential beta
-                            ↓                     
-                        beta-nth branch
-                            ↓ (merge)
-                        canidate branch → spawns potential release canidate → TestPyPI → PyPI
+development branch ← (merge implementation changes)
+    ↓ (new tests / fixtures)                      ↑
+features branch ← (write implementation with AI)  ↑
+    ↓ (new feature)                               ↑
+beta branch → (tests fail) → → → → → → → → → → →  ↑
+    ↓ (tests fail pass)
+spawns potential post-beta
+    ↓ (merge)
+canidate branch → spawns potential release canidate → TestPyPI → PyPI
 ```
-
-### Step-by-Step: From Fixture to Production
-
-1. Create Fixtures (fixtures branch)
-- Develop test fixtures and mock data structures
-- Document expected data formats
-- Commit to `fixtures` branch
-      
-2. Write Tests (tests branch)
-- Merge new `fixtures` from fixtures branch
-- Write test cases using those fixtures
-- Keep tests aligned with the contract you want features to fulfill
-- Commit to `tests` branch
-
-3. Implement Features (features branch)
-- Merge tests from `tests` branch
-- Use AI tools (GitHub Copilot, Claude, etc.) to generate feature implementations
-- AI can see your tests and generate code that satisfies them
-- All features ship on passing tests
-- Commit to `features` branch
-  
-4. Release (development branch)
-- Merge your feature branch into `development`
-- CI/CD pipeline automatically:
-    - Runs full test suite
-    - Creates a release candidate
-    - Deploys to TestPyPI for validation
-    - Deploys to PyPI for production release
 
 ### Default Run Arguments
 
