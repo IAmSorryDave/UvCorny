@@ -7,19 +7,23 @@ It's intended for AI - Test Driven Development.
 
 1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches.
 2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. You are of course welcome to clone only the main branch. However, this doing so does not garentee UvCorny's GitHub Actions workflows will work as intended. Please consult .github/workflows when structuring your branches.
-3. Opening a Codespace on any branch will automatically setup your project.
+3. Open a Codespace on the development branch. This will automatically setup your project. Push the changes back to the development branch.
 
 ### Recommended Development Path
 ```
-development (.dev) branch ← ← (merge implementation changes)
+development branch ← (increment .dev) ← (merge implementation changes)
     ↓ (new tests / fixtures)                              ↑
+    ↓ (increment .alpha)                                  ↑
 features (.alpha) branch ← (write implementation with AI) ↑
     ↓ (new feature)                                       ↑
+    ↓ (increment .beta)                                   ↑
 beta (.beta) branch → (tests fail) → → → → → → → → → → →  ↑
     ↓ (tests pass)
 spawns potential post-beta branch
     ↓ (merge)
-canidate branch → spawns potential release canidate branch → Auto-Deploy to TestPyPI → Manual Deploy to PyPI
+canidate branch → spawns potential release canidate branch → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge) → main
+    ↑
+hotfix branch ← (increment patch) ← patch
 ```
 
 ### Default Run Arguments
@@ -71,23 +75,17 @@ Any modifications to the configuration should be made from the web editor.
 
 ### Creating Pytests
 
-```
-import pytest
+Becuase tests should be writen before code, structure your fixtures/tests like this to ensure the pytest hook permits adding new structures.
 
+```python
+import pytest
 
 @pytest.fixture
 def resilient_import():
-    try:
-        from uvcornyalpha import my_object
-
-        return my_object
-    except Exception:
-        return None  # or some default mock object
+    return pytest.importorskip('your_cool_python_module.whatever')
 
 
 def test_with_fallback(resilient_import):
-    if resilient_import is None:
-        pytest.skip("Import unavailable")
     assert resilient_import == "foo"
 ```
 
