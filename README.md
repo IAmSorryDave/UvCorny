@@ -11,15 +11,15 @@ It's intended for AI - Test Driven Development.
 
 ### Recommended Development Path
 ```
-development branch ← (merge implementation changes)
-    ↓ (new tests / fixtures)                      ↑
-features branch ← (write implementation with AI)  ↑
-    ↓ (new feature)                               ↑
-beta branch → (tests fail) → → → → → → → → → → →  ↑
-    ↓ (tests fail pass)
-spawns potential post-beta
+development (.dev) branch ← ← (merge implementation changes)
+    ↓ (new tests / fixtures)                              ↑
+features (.alpha) branch ← (write implementation with AI) ↑
+    ↓ (new feature)                                       ↑
+beta (.beta) branch → (tests fail) → → → → → → → → → → →  ↑
+    ↓ (tests pass)
+spawns potential post-beta branch
     ↓ (merge)
-canidate branch → spawns potential release canidate → TestPyPI → PyPI
+canidate branch → spawns potential release canidate branch → Auto-Deploy to TestPyPI → Manual Deploy to PyPI
 ```
 
 ### Default Run Arguments
