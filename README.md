@@ -3,13 +3,13 @@ UvCorny is a GitHub template that accelerates Python development with automated,
 The template organizes Alpine Linux, GitHub Actions/Codespaces, pre-commit, and UV into one seemless interface.
 It's intended for AI - Test Driven Development. 
 
-## Quickstart
+## Quickstart 🚀
 
 1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches.
 2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. You are of course welcome to clone only the main branch. However, this doing so does not garentee UvCorny's GitHub Actions workflows will work as intended. Please consult .github/workflows when structuring your branches.
-3. Open a Codespace on the development branch. This will automatically setup your project. Push the changes back to the development branch.
+3. Open a Codespace on any branch to get started. When cloning the entire branch structure, start on the development branch. This will automatically setup your project. Push the changes back to the development branch.
 
-### Recommended Development Path
+### Recommended Development Path 🚗
 ```
 development branch ← (increment .dev) ← (merge implementation changes)
     ↓ (new tests / fixtures)                              ↑
@@ -70,6 +70,7 @@ By combining these hooks together, you can reduce the need to add these steps to
 
 You are free to modify the pre-commit configuration to your liking.
 However if you choose to do so, do not remove the pytest hook. No tests are required of you, but removing this hook will cause UvCorny to break.
+
 Furthermore, do not edit the pre-commit configuration in a codespace! This also risks breaking UvCorny.
 Any modifications to the configuration should be made from the web editor.
 
