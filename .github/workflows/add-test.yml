@@ -1,16 +1,20 @@
-name: Add Test 🧪 to Development Branch.
+name: Add Test Set 🧪 to Development Branch.
 
 on:
-  pull_request:
-    branches: development
-    types: closed
+  push:
+    branches: 
+      - development
+
+permissions:
+  contents: write
+  pull-requests: write
   
 jobs:
 
   increment:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    permissions: write-all
+    strategy:
+      fail-fast: true
     
     steps:
     
@@ -40,9 +44,15 @@ jobs:
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
-    - name: Tag release
+    - name: Increment Minor Version
+      id: version
+      shell: bash
+      run: |
+        VERSION=$(uv version)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT 
+
+    - name: Commit & Push Version Change
       uses: stefanzweifel/git-auto-commit-action@v7
       with:
-        branch: development
-        commit_message: "Released $(uv version)"
-        tag_name: "v$(uv version)"
+        commit_message: "chore: bump development version to ${{ steps.version.outputs.version }}"
+        file_pattern: pyproject.toml
