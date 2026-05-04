@@ -12,7 +12,7 @@ It's intended for AI - Test Driven Development.
 ### Recommended Development Path 🚗
 ```
 development branch ← (increment .dev) ← (merge implementation changes)
-    ↓ (new tests / fixtures)                              ↑
+    ↓ (merge new tests / fixtures)                              ↑
     ↓ (increment .alpha)                                  ↑
 features (.alpha) branch ← (write implementation with AI) ↑
     ↓ (new feature)                                       ↑
