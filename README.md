@@ -83,11 +83,11 @@ import pytest
 
 @pytest.fixture
 def resilient_import():
-    return pytest.importorskip('your_cool_python_module.whatever')
+    return pytest.importorskip("uvcorny.foo") # Foo not existing yet.
 
 
-def test_with_fallback(resilient_import):
-    assert resilient_import == "foo"
+def test_foo(resilient_import):
+    assert resilient_import is False
 ```
 
 ####
