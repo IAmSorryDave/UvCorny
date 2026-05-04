@@ -26,7 +26,7 @@ canidate branch → spawns potential release canidate branch → Auto-Deploy to 
 hotfix branch ← (increment patch) ← patch
 ```
 
-### Default Run Arguments
+### Default Run Arguments 🏃‍♀️
 
 In .devcontainer/.env -
 
@@ -34,7 +34,7 @@ In .devcontainer/.env -
 - ```UV_LINK_MODE``` : symlink ( This setting is the least noisy link mode when working in a codespace. If required, adapt this setting to your needs. )
 - ```UV_PROJECT_TYPE``` : --lib ( Must be one of --app, --lib, --package. See https://docs.astral.sh/uv/concepts/projects/init/#libraries for more on project setup)
 
-### Dockerfile
+### Dockerfile 🐳
 
 ```
 ARG PYTHON_VERSION=3.12
@@ -44,7 +44,7 @@ FROM $IMAGE
 ```
 See https://docs.astral.sh/uv/guides/integration/docker/ for a list of available alpine images.
 
-### ENVIRONMENTAL VARIABLES
+### ENVIRONMENTAL VARIABLES ❎
 
 The Alpine UV image does not have git configured by default.
 While git is installed automatically you still need to set your... 
@@ -54,7 +54,7 @@ While git is installed automatically you still need to set your...
 
 in your Codespace secret store for git to work properly.
 
-### pre-commit Hooks
+### pre-commit Hooks 🪝
 
 By default, UvCorny calls official sync, lock, and export Astral hooks.
 Offical Ruff hooks are also built in for formatting and code style standardization.
@@ -74,7 +74,7 @@ However if you choose to do so, do not remove the pytest hook. No tests are requ
 Furthermore, do not edit the pre-commit configuration in a codespace! This also risks breaking UvCorny.
 Any modifications to the configuration should be made from the web editor.
 
-### Creating Pytests
+### Creating Pytests 🧪
 
 Becuase tests should be writen before code, structure your fixtures/tests like this to ensure the pytest hook permits adding new structures.
 
@@ -83,8 +83,7 @@ import pytest
 
 @pytest.fixture
 def resilient_import():
-    return pytest.importorskip("uvcorny.foo") # Foo not existing yet.
-
+    return pytest.importorskip("uvcorny.foo") # 'foo' might not yet exist. Your co-pilot should infer it's properties from the tests.
 
 def test_foo(resilient_import):
     assert resilient_import is False
