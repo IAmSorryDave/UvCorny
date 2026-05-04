@@ -1,4 +1,4 @@
-name: Release Beta
+name: Release Beta 🍏
 
 on:
   push:
@@ -12,8 +12,6 @@ jobs:
   test:
     name: Validate Features Branch ✅
     runs-on: ubuntu-latest
-
-    permissions: write-all
       
     steps:
     
@@ -77,6 +75,9 @@ jobs:
         run: |
           uv version --bump patch --bump dev
 
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
       - name: Increment Patch & Dev Version
         id: version
         shell: bash
@@ -91,4 +92,40 @@ jobs:
           file_pattern: pyproject.toml
           push_options: --force
 
-    
+  increment:
+      needs: test
+      runs-on: ubuntu-latest
+      if: success()
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v6
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+  
+        - name: Setup UV
+          uses: astral-sh/setup-uv@v7
+
+        - name: Dry Run Version Increment
+          run: |
+            uv version --bump beta --dry-run
+  
+        - name: Version Increment Dev Alone
+          run: |
+            uv version --bump beta
+  
+        - name: Verify Version Changed
+          run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+  
+        - name: Increment Beta Version
+          id: version
+          shell: bash
+          run: |
+            VERSION=$(uv version)
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+  
+        - name: Commit & Push Version Change
+          uses: stefanzweifel/git-auto-commit-action@v7
+          with:
+            commit_message: "chore: bump beta version to ${{ steps.version.outputs.version }}"
+            file_pattern: pyproject.toml
+
