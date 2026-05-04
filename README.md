@@ -10,10 +10,10 @@ It's intended for AI - Test Driven Development.
 3. Open a Codespace on any branch to get started. When cloning the entire branch structure, start on the development branch. This will automatically setup your project. Push the changes back to the development branch.
 
 ### Recommended Development Path 🚗
-```
+```markdown
     ↓ (push new tests / fixtures)
     ↓ (increment minor) 
-development branch ← (increment .dev) ← (merge implementation changes) ← ← ← ← ←              
+development branch ← (increment patch and dev) ← (merge implementation changes) ← ← ← ← ←              
     ↓ (merge changes)                                                          ↑
     ↓ (increment alpha)                                                        ↑
 features branch ← (push new feature) ← (write implementation with AI)          ↑
