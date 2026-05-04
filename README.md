@@ -13,7 +13,7 @@ It's intended for AI - Test Driven Development.
 ```
     ↓ (push new tests / fixtures)
     ↓ (increment minor) 
-development branch ← (increment patch and dev) ← (merge implementation changes) ← ← ← ← ←              
+development branch ← (increment patch and dev) ← (merge implementation changes)←            
     ↓ (merge changes)                                                          ↑
     ↓ (increment alpha)                                                        ↑
 features branch ← (push new feature) ← (write implementation with AI)          ↑
