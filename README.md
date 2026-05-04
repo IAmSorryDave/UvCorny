@@ -11,19 +11,25 @@ It's intended for AI - Test Driven Development.
 
 ### Recommended Development Path 🚗
 ```
-development branch ← (increment .dev) ← (merge implementation changes)
-    ↓ (merge new tests / fixtures)                              ↑
-    ↓ (increment .alpha)                                  ↑
-features (.alpha) branch ← (write implementation with AI) ↑
-    ↓ (new feature)                                       ↑
-    ↓ (increment .beta)                                   ↑
-beta (.beta) branch → (tests fail) → → → → → → → → → → →  ↑
+    ↓ (push new tests / fixtures)
+    ↓ (increment minor) 
+development branch ← (increment .dev) ← (merge implementation changes) ← ← ← ← ←              
+    ↓ (merge changes)                                                          ↑
+    ↓ (increment alpha)                                                        ↑
+features branch ← (push new feature) ← (write implementation with AI)          ↑
+    ↓ (increment beta)                                                         ↑
+beta branch → (tests fail) → → → → → → → → → → → → → → → → → → → → → → → → → → ↑
     ↓ (tests pass)
-spawns potential post-beta branch
-    ↓ (merge)
-canidate branch → spawns potential release canidate branch → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge) → main
+spawns potential release canidate branch, the nth beta
+    ↓ (merge changes)
+    ↓ (increment release canidate)
+canidate branch → (spawns release canidate branch) → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge changes) → main
     ↑
-hotfix branch ← (increment patch) ← patch
+ (increment patch)
+    ↑
+ (merge changes)
+    ↑
+hotfix branch ← (push new patch)
 ```
 
 ### Default Run Arguments 🏃‍♀️
@@ -88,5 +94,4 @@ def resilient_import():
 def test_foo(resilient_import):
     assert resilient_import is False
 ```
-
 ####
