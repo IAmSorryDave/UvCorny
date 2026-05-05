@@ -1,4 +1,4 @@
-name: Prepare PyPI Production Release
+name: Prepare PyPI Production Release 🐍
 
 on:
   pull_request:
