@@ -1,9 +1,10 @@
 name: Add Test Set 🧪 to Development Branch.
 
 on:
-  push:
+  pull_request: 
     branches: 
       - development
+    types: closed
 
 permissions:
   contents: write
