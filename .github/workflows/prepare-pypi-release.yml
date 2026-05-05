@@ -50,9 +50,6 @@ jobs:
     name: Close ❎ Pull Request ☑️ 
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:    
       - name: Auto-Merge Pull Request
         if: success()
