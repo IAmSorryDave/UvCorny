@@ -53,6 +53,7 @@ jobs:
           file_pattern: pyproject.toml
           
   build:
+    name: Build Distribution 📦; Cache Distribution ⬆️
     needs: increment
     runs-on: ubuntu-latest
     if: success()
