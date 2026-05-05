@@ -3,7 +3,7 @@ name: TestPyPI Release
 on:
   push:
     branches:
-      - 'v/*.rc*'
+      - 'v*.*.*.rc*'
 
 permissions:
   contents: write
