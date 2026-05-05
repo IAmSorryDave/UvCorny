@@ -1,5 +1,5 @@
 
-name: PyPI Production Release
+name: PyPI Production Release 🐍
 
 on:
   pull_request:
