@@ -109,7 +109,7 @@ jobs:
           run: |
             uv version --bump beta --dry-run
   
-        - name: Version Increment Dev Alone
+        - name: Version Increment
           run: |
             uv version --bump beta
   
