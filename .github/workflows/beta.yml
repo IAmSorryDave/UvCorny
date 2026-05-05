@@ -71,7 +71,7 @@ jobs:
         run: |
           uv version --bump patch --bump dev --dry-run
   
-      - name: Version Increment Dev Alone
+      - name: Version Increment
         run: |
           uv version --bump patch --bump dev
 
