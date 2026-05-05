@@ -8,16 +8,16 @@ on:
     types:
       - closed
 
+permissions:
+  contents: write
+
 jobs:
 
   increment:
-  
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-
-    permissions: write-all
 
     steps:
       - name: Checkout Project
@@ -39,53 +39,37 @@ jobs:
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
-      - name: Commit Version Increment 
+      - name: Increment Release Candidate Version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$( uv version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit & Push Version Change
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          branch: development
-          commit_message: "Released $(uv version)"
-          tag_name: "v$(uv version)"
-
-  create_release_canidate:
-  
-    runs-on: ubuntu-latest
+          commit_message: "chore: bump rc version to ${{ steps.version.outputs.version }}"
+          file_pattern: pyproject.toml
+          
+  build:
     needs: increment
+    runs-on: ubuntu-latest
+    if: success()
     steps:
-    
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Checkout Project
+      - name: Checkout Code
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-    
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version-file: "pyproject.toml"
-      
-      - name: Install UV
-        uses: astral-sh/setup-uv@v7
-    
-      - name: Create RC branch
-        id: create_release_canidate_branch
-        run: |
-          git checkout -b v/$( uv version )
-          git push origin v/$( uv version )
 
-      - name: Create GitHub release
-        uses: actions/github-script@v7
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Build Package
+        run: uv build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: 'v$(uv version)',
-              name: 'Release $(uv version)',
-              draft: false,
-              prerelease: false,
-            })  
+          name: python-package
+          path: dist/
+          retention-days: 2
+ 
