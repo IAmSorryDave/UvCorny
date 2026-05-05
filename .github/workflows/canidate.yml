@@ -69,9 +69,9 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: python-package
+          name: release-canidate-python-package-distributions
           path: dist/
-          retention-days: 2
+          retention-days: 3
 
   release:
     permissions: # Read more at : https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
