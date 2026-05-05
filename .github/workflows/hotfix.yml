@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   test:
+    name: Validate Hotfix ✅
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
