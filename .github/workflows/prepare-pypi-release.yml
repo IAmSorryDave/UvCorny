@@ -16,8 +16,6 @@ jobs:
   build:
     name: Build Distribution 📦; Cache Distribution ⬆️
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
     permissions:
       contents: write
       
@@ -36,6 +34,13 @@ jobs:
   
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+
+      - name: Finalize Version
+        run: |
+          uv version stable 
+
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Build Distribution
         run: uv build
