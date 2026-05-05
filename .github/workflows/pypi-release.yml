@@ -80,15 +80,33 @@ jobs:
           commit_message: "Released v$(uv version)"
           tag_name: "v$(uv version)"
       
-      - name: Create GitHub release
+  create-github-release:
+    needs: finalize
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+  
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v7
+  
+      - name: Extract Version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$( uv version )
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+  
+      - name: Create GitHub Release
         uses: actions/github-script@v7
         with:
           script: |
             github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: 'v$(uv version)',
-              name: 'Release v$(uv version)',
+              tag_name: 'v${{ steps.version.outputs.version }}',
+              name: 'Release v${{ steps.version.outputs.version }}',
               draft: false,
-              prerelease: false,
+              prerelease: false
             })  
