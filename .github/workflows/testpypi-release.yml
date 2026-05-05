@@ -5,88 +5,15 @@ on:
     branches:
       - '*.rc*'
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
-  test:
-    name: Validate Distribution ✅
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-
-    permissions: write-all
-      
-    steps:
-    
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version-file: "pyproject.toml"
-      
-      - name: Install UV
-        uses: astral-sh/setup-uv@v7
-
-      - name: Install YQ && Append Requirements to pre-commit Pytest Hook
-        id: append_requirements
-        shell: bash
-        run: sudo apt-get update && sudo apt-get install -y yq && ${PWD}/.sh/scripts/append_requirements.sh && sudo apt purge yq
-      
-      - name: Install Pre-Commit
-        run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
-  
-      - name: Install Hooks
-        run: pre-commit install
-  
-      - name: Run Tests
-        run: pre-commit run pytest --all-files
-
-      - name: Clean Up
-        run: pre-commit uninstall
-
-  build:
-    name: Build Distribution 📦; Cache Distribution ⬆️
-    needs: test
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-    
-    permissions: write-all
-      
-    steps:
-    
-      - name: Checkout Project
-        uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version-file: "pyproject.toml"
-  
-      - name: Install UV
-        uses: astral-sh/setup-uv@v7
-
-      - name: Build Distribution
-        run: uv build
-
-      - name: Store Distribution Packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-canidate-python-package-distributions
-          path: dist/
-          retention-days: 1
 
   publish-to-testpypi:
       name: Publish Python 🐍 Distribution 📦 to TestPyPi
-      needs: build
       runs-on: ubuntu-latest
-      strategy:
-        fail-fast: true
       environment:
         name: testpypi
         url: https://test.pypi.org/p/${{ steps.repo_name.outputs.name }}
@@ -115,11 +42,9 @@ jobs:
             verbose: true
 
   install:
-    name: Check TestPyPi Distribution❓
+    name: Check TestPyPi Distribution Installatiop❓
     runs-on: ubuntu-latest
     needs: publish-to-testpypi
-    strategy:
-      fail-fast: true
 
     permissions: write-all
     
@@ -148,22 +73,3 @@ jobs:
       
       - name: Smoke Test Test Index
         run: uv run python -c "import $( toml get --toml-path pyproject.toml project.name ); print('OK')"
-
-  pull:
-    name: Request to Pull Changes into Main 🎯
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Open RC merge PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `chore: release $( uv version )`,
-              body: `Automated pull request for v$( uv version )',
-              head: `v/$( uv version )`,
-              base: 'main',
-            })
-        
