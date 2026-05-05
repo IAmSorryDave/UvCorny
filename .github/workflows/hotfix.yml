@@ -16,7 +16,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup UV
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+      
+      - name: Install UV
         uses: astral-sh/setup-uv@v7
 
       - name: Install YQ && Append Requirements to pre-commit Pytest Hook
@@ -29,3 +34,9 @@ jobs:
 
       - name: Install Hooks
         run: pre-commit install
+
+      - name: Run Tests
+        run: pre-commit run pytest --all-files
+
+      - name: Clean Up
+        run: pre-commit uninstall
