@@ -1,8 +1,9 @@
-name: Test Hotfix Branch 🔥
+name: Test Hotfix Branch 🧯
 
 on:
   push:
-    branches: hotfix
+    branches:
+      -  v/hotfix/*.*.*.rc*
 
 permissions:
   contents: write
