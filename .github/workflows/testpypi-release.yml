@@ -3,7 +3,7 @@ name: TestPyPI Release
 on:
   push:
     branches:
-      - '*.rc*'
+      - 'v/*.rc*'
 
 permissions:
   contents: write
@@ -17,10 +17,6 @@ jobs:
       environment:
         name: testpypi
         url: https://test.pypi.org/p/${{ steps.repo_name.outputs.name }}
-      
-      permissions:
-        id-token: write
-        contents: read
       
       steps:
   
