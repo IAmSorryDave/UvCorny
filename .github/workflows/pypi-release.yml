@@ -31,18 +31,18 @@ jobs:
     - name: Download Distribution Packages
       uses: actions/download-artifact@v4
       with:
-        name: python-package-distributions
+        name: pypi-python-package-distributions
         path: dist/
     
-    - name: Publish Distribution 📦 toPyPI
+    - name: Publish Distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        skip-existing: true
 
   finalize:
     name: Increment Version ⬆️ and Issue Release
     runs-on: ubuntu-latest
     needs: publish-to-pypi
-
-    permissions: write-all
     
     steps:
 
@@ -57,14 +57,21 @@ jobs:
       
       - name: Dry Run Version Increment
         run: |
-          uv version --bump stable --dry-run
+          uv version --bump major --bump stable --dry-run
 
       - name: Version Increment
         run: |
-          uv version --bump stable
+          uv version --bump major --bump stable
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+      - name: Extract Version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$( uv version )
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Tag release
         uses: stefanzweifel/git-auto-commit-action@v7
