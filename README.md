@@ -1,6 +1,6 @@
 # UvCorny 🌽
 UvCorny is a GitHub template that accelerates Python development with automated, secure releases to both TestPyPI and PyPI.
-The template organizes Alpine Linux Dev container, GitHub Actions/Codespaces, pre-commit, and UV into one seemless interface.
+The template organizes Alpine Linux Dev container, GitHub Actions/Codespaces, pre-commit, pytest, ruff, and UV into one seemless interface.
 It's intended for AI - Test Driven Development.
 
 ## Why Should You Care❓
@@ -8,6 +8,8 @@ Software Development is changing rapidly. The author wanted to create a framewor
 
 - Leverge software agents without ceading total control to the machines. With GitHub moving to usage based billing (https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/) it's never been more important to keep your agents on track.
 - Streamline Python package deployment. In the author's opinion, the easier it is to off load AI capabilites to software, the less risk they pose.
+
+If UvCorny made your day easier, please consider staring the project, it costs you nothing. It's production required vasts amounts of time and attention to detail.
 
 ## Quickstart 🚀
 
@@ -103,4 +105,10 @@ def resilient_import():
 def test_foo(resilient_import):
     assert resilient_import is False
 ```
+
+### Acknowledgments 🙏
+
+Thank you to all the open source authors that made this project posssible.
+I know first hand how hard it is to keep things moving.
+
 ####
