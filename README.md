@@ -12,7 +12,7 @@ Software Development is changing rapidly. The author wanted to create a framewor
 ## Quickstart 🚀
 
 1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches. The namespace is not claimed until you push your first release. It's good thing UvCorny deployment is automated...
-2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. workflows will work as intended. Please consult .github/workflows when structuring your branches.
+2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. Please consult .github/workflows when structuring your branches.
 3. Open a Codespace on any branch to get started. When cloning the entire branch structure, start on the development branch. This will automatically setup your project. Push the changes back to the development branch.
 
 ### Recommended Development Path 🚗
@@ -50,7 +50,7 @@ In .devcontainer/.env -
 ### Dev Container Dockerfile 🐳
 
 ```dockerfile
-ARG PYTHON_VERSION=3.12
+ARG PYTHON_VERSION=3.14
 ARG IMAGE=ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine
 
 FROM $IMAGE
