@@ -148,7 +148,9 @@ def test_main(main_fn):
 ```
 
 Your main function may not even exist, but that's the point!
-Wrting this test tells your software agent a main function should exist and it's return value should be None.
+Wrting this test tells your software agent a main function should exist and it's return value should be 'None'.
+Nor do you need to implement this feature right away, you can delay it's implementation untill you have merged your tests into the feature branch.
+This can be acomplished by leveraging pytest's importorskip fuction, as seen in the example above.
 
 ### Acknowledgments 🙏
 
