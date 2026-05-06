@@ -6,12 +6,13 @@ It's intended for AI - Test Driven Development.
 ## Quickstart 🚀
 
 1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches. The namespace is not claimed until you push your first release. It's good thing UvCorny deployment is automated...
-2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. You are of course welcome to clone only the main branch. However, this doing so does not garentee UvCorny's GitHub Actions workflows will work as intended. Please consult .github/workflows when structuring your branches.
+2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. workflows will work as intended. Please consult .github/workflows when structuring your branches.
 3. Open a Codespace on any branch to get started. When cloning the entire branch structure, start on the development branch. This will automatically setup your project. Push the changes back to the development branch.
 
 ### Recommended Development Path 🚗
 ```
-    ↓ (push new tests / fixtures)
+nth experimental branch
+    ↓ (merge new tests / fixtures)
     ↓ (increment minor) 
 development branch ← (increment patch and dev) ← (merge implementation changes)←            
     ↓ (merge changes)                                                          ↑
@@ -24,12 +25,12 @@ spawns potential release canidate branch, the nth beta
     ↓ (merge changes)
     ↓ (increment release canidate)
 canidate branch → (spawns release canidate branch) → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge changes) → main
-    ↑
- (increment patch)
-    ↑
- (merge changes)
-    ↑
-hotfix branch ← (push new patch)
+    ↑           → → (spawns hotfix branch)
+ (increment patch)       ↓
+    ↑                    ↓
+ (merge changes)         ↓
+    ↑                    ↓
+hotfix branch ← (push new patch if necessary)
 ```
 
 ### Default Run Arguments 🏃‍♀️
@@ -40,7 +41,7 @@ In .devcontainer/.env -
 - ```UV_LINK_MODE``` : symlink ( This setting is the least noisy link mode when working in a codespace. If required, adapt this setting to your needs. )
 - ```UV_PROJECT_TYPE``` : --lib ( Must be one of --app, --lib, --package. See https://docs.astral.sh/uv/concepts/projects/init/#libraries for more on project setup)
 
-### Dockerfile 🐳
+### Dev Container Dockerfile 🐳
 
 ```dockerfile
 ARG PYTHON_VERSION=3.12
@@ -50,7 +51,7 @@ FROM $IMAGE
 ```
 See https://docs.astral.sh/uv/guides/integration/docker/ for a list of available alpine images.
 
-### ENVIRONMENTAL VARIABLES ❎
+### Dev Container ENVIRONMENTAL VARIABLES ❎
 
 The Alpine UV image does not have git configured by default.
 While git is installed automatically you still need to set your... 
