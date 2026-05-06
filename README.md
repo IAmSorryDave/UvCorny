@@ -9,12 +9,12 @@ Software Development is changing rapidly. The author wanted to create a framewor
 - Leverge software agents without ceading total control to the machines. With GitHub moving to usage based billing (https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/) it's never been more important to keep your agents on track.
 - Streamline Python package deployment. In the author's opinion, the easier it is to off load AI capabilites to software, the less risk they pose.
 
-If UvCorny made your day easier, please consider staring the project, it costs you nothing. It's production required vasts amounts of time and attention to detail.
+If UvCorny made your day easier, please consider staring the project, it costs you nothing. It's production required vast amounts of time and attention to detail.
 
 ## Quickstart 🚀
 
-1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches. The namespace is not claimed until you push your first release. It's good thing UvCorny deployment is automated...
-2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. Please consult .github/workflows when structuring your branches.
+1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches. The namespace is not claimed until you publish your first release. It's good thing UvCorny deployment is automated...
+2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. 
 3. Open a Codespace on the development branch to get started. This will automatically setup your project. Push the changes back to the development branch. Then create experiment branches off development. As you merge those changes into development, your projects minor SemVer will increment. Write only fixtures and test sets on experiment branches. When you push changes to the features branch your agent should have all it needs to implement the new features. 
 
 ### Recommended Development Path 🚗
@@ -93,18 +93,62 @@ Any modifications to the configuration should be made from the web editor.
 
 ### Creating Pytests 🧪
 
-Becuase tests should be writen before code, structure your fixtures/tests like this to ensure the pytest hook permits adding new structures.
+Tests should be writen before code. 
+UvCorny automatically generates a conftest.py file which furnishes project metadata fixtures.
+
+```python
+import pytest
+import os  # Always import the os module at the top level. Doing otherwise will cause unexpected behavior.
+
+
+@pytest.fixture
+def curent_working_directory_path():
+    from pathlib import Path
+
+    return Path(os.getcwd())
+
+
+@pytest.fixture
+def project_configuration(curent_working_directory_path):
+    from tomllib import load
+
+    with open(curent_working_directory_path / "pyproject.toml", "rb") as f:
+        configuration = load(f)
+    return configuration
+
+
+@pytest.fixture
+def project_metadata(project_configuration):
+    return project_configuration.get("project")
+
+
+@pytest.fixture
+def project_name(project_metadata):
+    return project_metadata.get("name")
+```
+
+With these fixtures you could write a test called 'test_main.py'
 
 ```python
 import pytest
 
-@pytest.fixture
-def resilient_import():
-    return pytest.importorskip("uvcorny.foo") # 'foo' might not yet exist. Your co-pilot should infer it's properties from the tests.
 
-def test_foo(resilient_import):
-    assert resilient_import is False
+@pytest.fixture
+def main_module_label(project_name):
+    return f"{project_name}.main"
+
+
+@pytest.fixture
+def main_fn(main_module_label):
+    return pytest.importorskip(main_module_label)
+
+
+def test_main(main_fn):
+    assert main_fn() is None
 ```
+
+Your main function may not even exist, but that's the point!
+Wrting this test tells your software agent a main function should exist and is return value should be None.
 
 ### Acknowledgments 🙏
 
