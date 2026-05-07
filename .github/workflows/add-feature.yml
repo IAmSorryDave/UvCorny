@@ -1,9 +1,10 @@
 name: Add ➕ Feature 🔧
 
 on:
-  push: 
+  pull_request:
     branches:
       - features
+    types: closed
 
 permissions:
   contents: write
@@ -46,6 +47,9 @@ jobs:
     - name: Commit & Push Version Change
       uses: stefanzweifel/git-auto-commit-action@v7
       with:
+        branch: features
         commit_message: "chore: bump features version to ${{ steps.version.outputs.version }}"
+        file_pattern: pyproject.toml
+  
         file_pattern: pyproject.toml
   
