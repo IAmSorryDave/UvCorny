@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir tests && touch tests/__init__.py
+
 # Generate blank requiements.txt if none found. Required for pre-commit install. Subsequent uv-export hooks will update this file.
 if [ ! -f "requirements.txt" ]; then touch requirements.txt ; fi
 
