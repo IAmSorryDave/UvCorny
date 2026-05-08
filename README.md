@@ -131,11 +131,12 @@ With these fixtures you could write a test called 'test_main.py'
 
 ```python
 import pytest
+from pathlib import Path
 
 
 @pytest.fixture
 def main_module_label(project_name):
-    return f"{project_name}.main"
+    return f"{project_name}.{Path(__file__).parent.name}.main"
 
 
 @pytest.fixture
