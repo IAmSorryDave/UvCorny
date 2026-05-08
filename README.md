@@ -29,7 +29,7 @@ features branch ← (push new feature) ← (write implementation with AI)       
     ↓ (increment beta)                                                         ↑
 beta branch → (tests fail) → → → → → → → → → → → → → → → → → → → → → → → → → → ↑
     ↓ (tests pass)
-spawns potential release canidate branch, the nth beta
+spawns stable branch, the nth beta
     ↓ (merge changes)
     ↓ (increment release canidate)
 canidate branch → (spawns release canidate branch) → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge changes) → main
