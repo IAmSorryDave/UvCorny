@@ -32,12 +32,22 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
   
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install UV
         uses: astral-sh/setup-uv@v7
-
-      - name: Finalize Version
+      
+      - name: Dry Run Version Increment
         run: |
-          uv version stable 
+          uv version --bump major --bump stable --dry-run
+
+      - name: Version Increment
+        run: |
+          uv version --bump major --bump stable
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
