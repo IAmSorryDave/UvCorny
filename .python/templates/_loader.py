@@ -3,7 +3,7 @@ import importlib
 import importlib.metadata
 import pathlib
 
-__all__ = []
+__all__ = list()
 
 # Get the parent package name
 parent_package = __name__.rsplit(".", 1)[0]
