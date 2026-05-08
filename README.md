@@ -4,7 +4,7 @@ The template organizes Alpine Linux Dev container, GitHub Actions/Codespaces, pr
 It's intended for AI - Test Driven Development.
 
 ## Why Should You Care❓
-Software Development is changing rapidly. The author wanted to create a framework that could acomplish the following:
+Software development is changing rapidly. The author wanted to create a framework that could acomplish the following:
 
 - Leverge software agents without ceading total control to the machines. With GitHub moving to usage based billing (https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/) it's never been more important to keep your software agents on track.
 - Streamline Python package deployment. In the author's opinion, the easier it is to off load AI capabilites to software, the less risk AI poses.
