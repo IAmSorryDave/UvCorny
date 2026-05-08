@@ -1,6 +1,6 @@
-from importlib.metadata import version
 import pkgutil
 import importlib
+import importlib.metadata
 import pathlib
 
 __all__ = []
@@ -19,10 +19,14 @@ for importer, module_label, this_is_a_package in pkgutil.walk_packages(
 
     try:
         module = importlib.import_module(module_label)
-        if hasattr(module, '__all__'):
-            module_variable_list = module.__all__ # Import only __all__ objects from the module into this namespace
+        if hasattr(module, "__all__"):
+            module_variable_list = (
+                module.__all__
+            )  # Import only __all__ objects from the module into this namespace
         else:
-            module_variable_list = dir(module) # Import all public objects from the module into this namespace
+            module_variable_list = dir(
+                module
+            )  # Import all public objects from the module into this namespace
         for attribute_label in module_variable_list:
             if not attribute_label.startswith("_"):
                 globals()[attribute_label] = getattr(module, attribute_label)
@@ -31,5 +35,5 @@ for importer, module_label, this_is_a_package in pkgutil.walk_packages(
         print(f"Failed to import {module_label}: {e}")
 
 # Grab __version__
-__version__ = version(pathlib.Path.cwd().name.lower())
+__version__ = importlib.metadata.version(pathlib.Path.cwd().name.lower())
 __all__.append("__version__")
