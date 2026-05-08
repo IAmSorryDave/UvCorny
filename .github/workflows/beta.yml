@@ -1,15 +1,17 @@
 name: Release Beta 🍏
 
 on:
-  push:
-    branches: [beta]
-
+  pull_request:
+    branches: beta
+    types: opened
+    
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
   test:
+    if: 
     name: Validate Features Branch ✅
     runs-on: ubuntu-latest
       
@@ -88,9 +90,9 @@ jobs:
       - name: Commit & Push Version Change
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
+          branch: development
           commit_message: "chore: merge from beta with patch and dev version bump to ${{ steps.version.outputs.version }}"
           file_pattern: pyproject.toml
-          push_options: --force
 
   increment:
       needs: test
@@ -126,6 +128,7 @@ jobs:
         - name: Commit & Push Version Change
           uses: stefanzweifel/git-auto-commit-action@v7
           with:
+            branch: beta
             commit_message: "chore: bump beta version to ${{ steps.version.outputs.version }}"
             file_pattern: pyproject.toml
 
