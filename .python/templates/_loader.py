@@ -35,5 +35,5 @@ for importer, module_label, this_is_a_package in pkgutil.walk_packages(
         print(f"Failed to import {module_label}: {e}")
 
 # Grab __version__
-__version__ = importlib.metadata.version(pathlib.Path.cwd().name.lower())
+__version__ = importlib.metadata.version(pathlib.Path(__file__).parent.stem)
 __all__.append("__version__")
