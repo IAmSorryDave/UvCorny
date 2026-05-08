@@ -27,6 +27,10 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v7
 
+      - name: Make Append Script Executable
+        shell: bash
+        run: chmod +x ${PWD}/.sh/scripts/append_requirements.sh
+
       - name: Install YQ && Append Requirements to pre-commit Pytest Hook
         id: append_requirements
         shell: bash
