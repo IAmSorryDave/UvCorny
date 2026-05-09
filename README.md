@@ -15,25 +15,26 @@ If UvCorny made your day easier, please consider staring the project, it costs y
 
 1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches. The namespace is not claimed until you publish your first release. It's good thing UvCorny deployment is automated...
 2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. 
-3. Open a Codespace on the development branch to get started. This will automatically setup your project. Push the changes back to the development branch. Then create experiment branches off development. As you merge those changes into development, your projects minor SemVer will increment. Write only fixtures and test sets on experiment branches. When you push changes to the features branch your agent should have all it needs to implement the new features. 
+3. Open a Codespace on the development branch to get started. This will automatically setup your project. Push the changes back to the development branch. Then create experiment branches off the development branch. As you merge those changes into development, your projects sementic versioning will increment a feature. Write only fixtures and test sets on experiment branches. When you merge changes to the features branch your agent should have all it needs to implement the new features, while perserving any old ones. 
 
 ### Recommended Development Path 🚗
 ```
 nth experimental branch
     ↓ (merge new tests / fixtures)
     ↓ (increment minor) 
-development branch ← (increment patch and dev) ← (merge implementation changes)←            
-    ↓ (merge changes)                                                          ↑
-    ↓ (increment alpha)                                                        ↑
-features branch ← (push new feature) ← (write implementation with AI)          ↑
-    ↓ (increment beta)                                                         ↑
-beta branch → (tests fail) → → → → → → → → → → → → → → → → → → → → → → → → → → ↑
+development branch             
+    ↓ (merge changes)                                                          
+    ↓ (increment alpha)                                                        
+features branch ← (push new feature) ← (write implementation with AI)          
     ↓ (tests pass)
+    ↓ (increment beta)
+beta branch
+    ↓ 
 spawns stable branch, the nth beta
     ↓ (merge changes)
     ↓ (increment release canidate)
 candidate branch → (spawns release canidate branch) → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge changes) → main
-    ↑           → → (spawns hotfix branch)
+    ↑            → → (spawns hotfix branch)
 (increment patch)            ↓
     ↑                        ↓
 (merge changes)              ↓
@@ -98,21 +99,19 @@ UvCorny automatically generates a conftest.py file which furnishes project metad
 
 ```python
 import pytest
-import os  # Always import the os module at the top level. Doing otherwise will cause unexpected behavior.
-
 
 @pytest.fixture
-def curent_working_directory_path():
+def project_directory_path():
     from pathlib import Path
 
-    return Path(os.getcwd())
+    return Path(__file__).parent.parent
 
 
 @pytest.fixture
-def project_configuration(curent_working_directory_path):
+def project_configuration(project_directory_path):
     from tomllib import load
 
-    with open(curent_working_directory_path / "pyproject.toml", "rb") as f:
+    with open(project_directory_path / "pyproject.toml", "rb") as f:
         configuration = load(f)
     return configuration
 
@@ -152,6 +151,38 @@ Your main function may not even exist, but that's the point!
 Wrting this test tells your software agent a main function should exist and it's return value should be 'None'.
 Nor do you need to implement this feature right away, you can delay it's implementation untill you have merged your tests into the feature branch.
 This can be acomplished by leveraging pytest's importorskip fuction, as seen in the example above.
+
+When implementing a new feature, create a new test set folder like so...
+```markdown
+\tests
+   |
+\new-feature-folder
+   |
+__init__.py
+test_1_needed_to_implement_feature.py
+test_2_needed_to_implement_feature.py
+...
+```
+
+Copilot is prompted to create features like so...
+```markdown
+\src
+   |
+\your-cool-package
+   |
+__init__.py
+_loader.py
+\your-new-feature
+  ...
+```
+
+This ensures a one to one mapping between test sets and features.
+
+### Prompts 💬
+
+There are two defualt prompts under ```.github/prompts/```.
+These add relevant context to CoPilot specific to UvCorny.
+Add or subtract as needed.
 
 ### Acknowledgments 🙏
 
