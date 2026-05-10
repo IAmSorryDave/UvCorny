@@ -49,6 +49,17 @@ jobs:
         run: |
           uv version --bump minor --bump dev
 
+      - name: Sync Development Cycle
+        if: steps.check_version.outputs.has_dev == 'false'
+        shell: bash
+        run: |
+          MAJOR=$(uv version --major)
+          if (( $MAJOR > 0 )) ; then
+          for element in $(seq $MAJOR) ;
+            uv version --bump dev
+          fi ;
+          fi ;
+          
       - name: Verify Version Changed
         if: steps.check_version.outputs.has_dev == 'false'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
