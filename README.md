@@ -100,6 +100,7 @@ UvCorny automatically generates a conftest.py file which furnishes project metad
 ```python
 import pytest
 
+
 @pytest.fixture
 def project_directory_path():
     from pathlib import Path
@@ -124,6 +125,7 @@ def project_metadata(project_configuration):
 @pytest.fixture
 def project_name(project_metadata):
     return project_metadata.get("name")
+
 ```
 
 With these fixtures you could write a test called 'test_main.py'
