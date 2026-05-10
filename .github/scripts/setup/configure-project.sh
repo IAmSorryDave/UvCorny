@@ -12,7 +12,7 @@ if [ ! -f "pyproject.toml" ]; then
   
   uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
-  uv version "0.0.0"
+  uv version 0.0.0
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
