@@ -1,6 +1,9 @@
 {
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "Dockerfile",
+    "args": {
+      "PYTHON_VERSION": "${localEnv:PYTHON_VERSION}"
+    }
   },
   "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
   "postStartCommand": "bash -i -l -c 'exit 0'",
