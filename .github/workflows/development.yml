@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   increment:
-    
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
@@ -21,7 +20,7 @@ jobs:
         id: check_pyproject_file
         uses: andstor/file-existence-action@v3
         with:
-          files: "pypropject.toml"
+          files: "pyproject.toml"
 
       - name: Install UV
         if: steps.check_pyproject_file.outputs.files_exists == 'true'
