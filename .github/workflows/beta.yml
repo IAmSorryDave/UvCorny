@@ -7,7 +7,6 @@ on:
     
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   test:
@@ -49,67 +48,3 @@ jobs:
 
       - name: Clean Up
         run: pre-commit uninstall
-
-  increment:
-      needs: test
-      runs-on: ubuntu-latest
-
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v6
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-  
-        - name: Setup UV
-          uses: astral-sh/setup-uv@v7
-
-        - name: Dry Run Version Increment
-          run: |
-            uv version --bump beta --dry-run
-  
-        - name: Version Increment
-          run: |
-            uv version --bump beta
-  
-        - name: Verify Version Changed
-          run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
-  
-        - name: Increment Beta Version
-          id: version
-          shell: bash
-          run: |
-            VERSION=$(uv version)
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-  
-        - name: Commit & Push Version Change
-          uses: stefanzweifel/git-auto-commit-action@v7
-          with:
-            branch: beta
-            commit_message: "chore: bump beta version to ${{ steps.version.outputs.version }}"
-            file_pattern: pyproject.toml
-
-  release:
-    permissions: # Read more at : https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
-      contents: write
-    name: Create Branch
-    needs: increment
-    runs-on: ubuntu-latest
-    steps:
-    
-      - name: Checkout Code
-        uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup UV
-        uses: astral-sh/setup-uv@v7
-          
-      - name: Create Branch
-        id: create_branch
-        uses: lablnet/create-branch-from-tag@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: "v$( uv version )"
-          owner: ${{ github.repository_owner }} # https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-context
-          repo: ${{ github.event.repository.name }} # https://www.reddit.com/r/github/comments/tjkj6f/get_repo_name_on_github_actions_without_owner/
