@@ -30,11 +30,11 @@ jobs:
     
     - name: Dry Run Version Increment
       run: |
-        uv version --bump minor --bump dev --dry-run
+        uv version --bump minor --dry-run
 
     - name: Version Increment
       run: |
-        uv version --bump minor --bump dev
+        uv version --bump minor
     
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
