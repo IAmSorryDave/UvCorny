@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture
 def project_directory_path():
     from pathlib import Path
