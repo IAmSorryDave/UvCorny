@@ -25,9 +25,6 @@ jobs:
 
     - name: Install UV
       uses: astral-sh/setup-uv@v7
-    
-    - name: Verify Version Changed
-      run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
     - name: Increment Minor Version
       id: version
