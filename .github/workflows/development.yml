@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   increment:
+    
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
@@ -16,10 +17,18 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check pyproject.toml Existence
+        id: check_pyproject_file
+        uses: andstor/file-existence-action@v3
+        with:
+          files: "pypropject.toml"
+
       - name: Install UV
+        if: steps.check_pyproject_file.outputs.files_exists == 'true'
         uses: astral-sh/setup-uv@v7
 
       - name: Check Current Version
+        if: steps.check_pyproject_file.outputs.files_exists == 'true'
         id: check_version
         shell: bash
         run: |
@@ -46,6 +55,7 @@ jobs:
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Get Updated Version
+        if: steps.check_pyproject_file.outputs.files_exists == 'true'
         id: version
         shell: bash
         run: |
