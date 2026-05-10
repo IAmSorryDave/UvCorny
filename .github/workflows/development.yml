@@ -1,0 +1,45 @@
+name: Begin New Development Cycle 🔄
+
+on:
+  pull_request: 
+    branches: 
+      - main
+    types: closed
+
+permissions:
+  contents: write
+  pull-requests: write
+  
+jobs:
+
+  increment:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - name: Checkout Project
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install UV
+      uses: astral-sh/setup-uv@v7
+    
+    - name: Verify Version Changed
+      run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+    - name: Increment Minor Version
+      id: version
+      shell: bash
+      run: |
+        VERSION=$(uv version)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT 
+
+    - name: Commit & Push Major Version Change and any patches.
+      uses: stefanzweifel/git-auto-commit-action@v7
+      with:
+        branch: development
+        commit_message: "chore: bump development version to ${{ steps.version.outputs.version }}"
+        file_pattern: pyproject.toml
+        
