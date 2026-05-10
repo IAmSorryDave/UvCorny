@@ -1,7 +1,6 @@
 {
   "build": {
-    "dockerfile": "Dockerfile",
-    "runArgs": ["--env-file", ".devcontainer/.env"]
+    "dockerfile": "Dockerfile"
   },
   "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
   "postStartCommand": "bash -i -l -c 'exit 0'",
