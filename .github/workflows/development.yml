@@ -1,0 +1,61 @@
+name: Tag Development Cycle 🛠️
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: write
+
+jobs:
+  increment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Check Current Version
+        id: check_version
+        shell: bash
+        run: |
+          CURRENT_VERSION=$(uv version)
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          if [[ "$CURRENT_VERSION" == *.dev* ]]; then
+            echo "has_dev=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_dev=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Dry Run Version Increment
+        if: steps.check_version.outputs.has_dev == 'false'
+        run: |
+          uv version --bump minor --bump dev --dry-run
+
+      - name: Version Increment
+        if: steps.check_version.outputs.has_dev == 'false'
+        run: |
+          uv version --bump minor --bump dev
+
+      - name: Verify Version Changed
+        if: steps.check_version.outputs.has_dev == 'false'
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+      - name: Get Updated Version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(uv version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit & Push Version Change
+        if: steps.check_version.outputs.has_dev == 'false'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: development
+          commit_message: "chore: bump development version to ${{ steps.version.outputs.version }}"
+          file_pattern: pyproject.toml
