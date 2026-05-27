@@ -53,12 +53,13 @@ jobs:
         if: steps.check_version.outputs.has_dev == 'false'
         shell: bash
         run: |
-          MAJOR=$(uv version -- --major)
-          if (( $MAJOR > 0 )) ; then
-          for element in $(seq $MAJOR) ;
-            uv version --bump dev
-          fi ;
-          fi ;
+          VERSION=$(uv version)
+          MAJOR=$(echo $VERSION | sed 's@^[^0-9]*\([0-9]\+\).*@\1@')
+          if (( MAJOR > 0 )); then
+            for element in $(seq "$MAJOR"); do
+                uv version --bump dev
+            done
+          fi
           
       - name: Verify Version Changed
         if: steps.check_version.outputs.has_dev == 'false'
