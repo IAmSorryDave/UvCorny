@@ -14,7 +14,7 @@ If UvCorny made your day easier, please consider staring the project, it costs y
 ## Quickstart 🚀
 
 1. If you intend to ship a package to pypi, be sure to create accounts on https://test.pypi.org and https://pypi.org. Before you write a line of code, REGISTER YOUR PACKAGE for trusted publishing in both indicies. This will save you headaches. The namespace is not claimed until you publish your first release. It's good thing UvCorny deployment is automated...
-2. Click on the green use this template box in the top right corner. Be sure to clone the entire branch structure. 
+2. Click on the green use this template box in the top right corner.
 3. Open a Codespace on the development branch to get started. This will automatically setup your project. Push the changes back to the development branch. Then create experiment branches off the development branch. As you merge those changes into development, your projects sementic versioning will increment a feature. Write only fixtures and test sets on experiment branches. When you merge changes to the features branch your agent should have all it needs to implement new features, while perserving any old ones. 
 
 ### Recommended Development Path 🚗
