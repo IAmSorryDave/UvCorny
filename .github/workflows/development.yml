@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   increment:
+    if: github.event.head_commit.author.name != 'GitHub Actions'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
