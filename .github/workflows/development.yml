@@ -62,12 +62,12 @@ jobs:
             done
           fi
 
-      - name: Dry Run Version Minor and Dev Increment
+      - name: Dry Run Version Minor Increment
         if: steps.check_version.outputs.has_dev == 'true'
         run: |
           uv version --bump minor --dry-run
 
-      - name: Version Minor and Dev Increment
+      - name: Version Minor Increment
         if: steps.check_version.outputs.has_dev == 'true'
         run: |
           uv version --bump minor
