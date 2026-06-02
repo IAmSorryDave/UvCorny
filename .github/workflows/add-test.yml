@@ -1,4 +1,4 @@
-name: Add Test Set 🧪 to Development Branch.
+name: Add Test Set 🧪 to Development Branch / Begin New Development Development.
 
 on:
   pull_request: 
@@ -28,11 +28,11 @@ jobs:
     
     - name: Dry Run Version Increment
       run: |
-        uv version --bump minor --dry-run
+        uv version --bump minor --bump dev --dry-run
 
     - name: Version Increment
       run: |
-        uv version --bump minor
+        uv version --bump minor --bump dev
     
     - name: Verify Version Changed
       run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
