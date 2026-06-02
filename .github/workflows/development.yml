@@ -50,27 +50,15 @@ jobs:
         run: |
           uv version --bump minor --bump dev
 
-      - name: Sync Development Cycle
-        if: steps.check_version.outputs.has_dev == 'false'
-        shell: bash
-        run: |
-          VERSION=$(uv version --short)
-          MAJOR=$(echo $VERSION | sed 's@^[^0-9]*\([0-9]\+\).*@\1@')
-          if (( MAJOR > 0 )); then
-            for element in $(seq "$MAJOR"); do
-                uv version --bump dev
-            done
-          fi
-
       - name: Dry Run Version Minor Increment
         if: steps.check_version.outputs.has_dev == 'true'
         run: |
-          uv version --bump minor --dry-run
+          uv version --bump dev --dry-run
 
       - name: Version Minor Increment
         if: steps.check_version.outputs.has_dev == 'true'
         run: |
-          uv version --bump minor
+          uv version --bump dev
           
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
