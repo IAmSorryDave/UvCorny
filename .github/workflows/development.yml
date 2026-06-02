@@ -54,7 +54,7 @@ jobs:
         if: steps.check_version.outputs.has_dev == 'false'
         shell: bash
         run: |
-          VERSION=$(uv version)
+          VERSION=$(uv version --short)
           MAJOR=$(echo $VERSION | sed 's@^[^0-9]*\([0-9]\+\).*@\1@')
           if (( MAJOR > 0 )); then
             for element in $(seq "$MAJOR"); do
