@@ -32,7 +32,7 @@ jobs:
         id: check_version
         shell: bash
         run: |
-          CURRENT_VERSION=$(uv version)
+          CURRENT_VERSION=$(uv version --short)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           if [[ "$CURRENT_VERSION" == *".dev"* ]]; then
             echo "has_dev=true" >> $GITHUB_OUTPUT
