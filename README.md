@@ -1,7 +1,7 @@
 # UvCorny 🌽
 UvCorny is a GitHub template that accelerates Python development with automated, secure releases to both TestPyPI and PyPI.
 The template organizes an Alpine Linux Dev container, GitHub Actions/Codespaces, pre-commit, pytest, ruff, and UV into one seemless interface.
-It's intended for AI - Test Driven Development.
+It's intended for Black Box - Test Driven Development.
 
 ## Why Should You Care❓
 Software development is changing rapidly. The author wanted to create a framework that could acomplish the following:
@@ -186,6 +186,12 @@ This ensures a one to one mapping between test sets and features.
 There are two defualt prompts under ```.github/prompts/```.
 These add relevant context to CoPilot specific to UvCorny.
 Add or subtract as needed.
+
+### Why Not Configure GitHub Actions to Automatically Setup Your Project When Cloning the Template❓
+
+GitHub does not support users defining ENV variables for Actions and Codespaces on project creation, which is why I have given you the opportunity to modify the devcontainer .env and Dockerfile on the development branch.
+That would be a nice feature though, cough cough GitHub.
+Let me know if you find a work around. 
 
 ### Acknowledgments 🙏
 
