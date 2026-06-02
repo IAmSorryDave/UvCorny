@@ -49,18 +49,9 @@ jobs:
         if: steps.check_version.outputs.has_dev == 'false'
         run: |
           uv version --bump minor --bump dev
-
-      - name: Dry Run Version Minor Increment
-        if: steps.check_version.outputs.has_dev == 'true'
-        run: |
-          uv version --bump dev --dry-run
-
-      - name: Version Minor Increment
-        if: steps.check_version.outputs.has_dev == 'true'
-        run: |
-          uv version --bump dev
           
       - name: Verify Version Changed
+        if: steps.check_version.outputs.has_dev == 'false'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Get Updated Version
