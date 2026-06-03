@@ -26,11 +26,11 @@ jobs:
     - name: Install UV
       uses: astral-sh/setup-uv@v7
 
-    - name: Increment Minor Version
+    - name: Log Major Version
       id: version
       shell: bash
       run: |
-        VERSION=$(uv version)
+        VERSION=$(uv version --short)
         echo "version=$VERSION" >> $GITHUB_OUTPUT 
 
     - name: Commit & Push Major Version Change and any patches.
