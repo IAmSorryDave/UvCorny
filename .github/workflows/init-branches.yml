@@ -1,4 +1,4 @@
-name: Initialize Repository Branches
+name: Initialize Repository Branches 🚀
 
 on:
   push:
@@ -38,4 +38,3 @@ jobs:
 
       - name: Verify branches
         run: git branch -r
-
