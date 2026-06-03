@@ -4,7 +4,9 @@ on:
   pull_request:
     branches: beta
     types: closed
-  
+
+permissions: write-all
+
 jobs:
 
     increment:
@@ -56,10 +58,15 @@ jobs:
         - name: Checkout Code
           uses: actions/checkout@v6
           with:
+            ref: beta
             token: ${{ secrets.GITHUB_TOKEN }}
     
         - name: Setup UV
           uses: astral-sh/setup-uv@v7
+
+        - name: Get Stable Version
+          id: version
+          run: echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
             
         - name: Create Branch
           id: create_branch
@@ -67,7 +74,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
           with:
-            tag_name: "v$( uv version )"
+            tag_name: v${{ steps.version.outputs.version }}
             owner: ${{ github.repository_owner }} # https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-context
             repo: ${{ github.event.repository.name }} # https://www.reddit.com/r/github/comments/tjkj6f/get_repo_name_on_github_actions_without_owner/
   
