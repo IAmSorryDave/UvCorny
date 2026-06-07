@@ -1,23 +1,19 @@
 name: Spawn Stable Branch 🗒️
 
 on: 
-  pull_request:
+  push:
     branches: beta
-    types: closed
-
-permissions: write-all
 
 jobs:
 
     increment:
-      if: github.event.pull_request.merged == true
+      permissions:
+        contents: write
       runs-on: ubuntu-latest
 
       steps:
         - name: Checkout Code
           uses: actions/checkout@v6
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
   
         - name: Setup UV
           uses: astral-sh/setup-uv@v7
@@ -37,7 +33,7 @@ jobs:
           id: version
           shell: bash
           run: |
-            VERSION=$(uv version)
+            VERSION=$(uv version --short)
             echo "version=$VERSION" >> $GITHUB_OUTPUT
   
         - name: Commit & Push Version Change
@@ -48,7 +44,7 @@ jobs:
             file_pattern: pyproject.toml
 
     release:
-      permissions: # Read more at : https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+      permissions:
         contents: write
       name: Create Branch
       needs: increment
@@ -59,22 +55,18 @@ jobs:
           uses: actions/checkout@v6
           with:
             ref: beta
-            token: ${{ secrets.GITHUB_TOKEN }}
     
         - name: Setup UV
           uses: astral-sh/setup-uv@v7
 
-        - name: Get Stable Version
-          id: version
-          run: echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
-            
-        - name: Create Branch
-          id: create_branch
-          uses: lablnet/create-branch-from-tag@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-          with:
-            tag_name: v${{ steps.version.outputs.version }}
-            owner: ${{ github.repository_owner }} # https://docs.github.com/en/actions/learn-github-actions/contexts#example-contents-of-the-github-context
-            repo: ${{ github.event.repository.name }} # https://www.reddit.com/r/github/comments/tjkj6f/get_repo_name_on_github_actions_without_owner/
+        - name: Create release branch from version
+          run: |
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git checkout beta
+            git checkout -b release@v$(uv version --short)
+            git push origin release@v$(uv version --short)
+
+
+        
   
