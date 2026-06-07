@@ -3,7 +3,7 @@ name: Test Hotfix Branch 🧯
 on:
   pull_request:
     branches:
-      -  v/hotfix/*.*.*.rc*
+      -  hotfix
     types: opened
 
 permissions:
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          ref: hotfix
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -51,22 +51,23 @@ jobs:
   increment:
     needs: test
     runs-on: ubuntu-latest
+    if: success()
     steps:
       - name: Checkout Project
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: hotfix
   
       - name: Install UV
         uses: astral-sh/setup-uv@v7
       
       - name: Dry Run Version Increment
         run: |
-          uv version --bump patch --dry-run
+          uv version --bump patch --bump rc --dry-run
 
       - name: Version Increment
         run: |
-          uv version --bump patch
+          uv version --bump patch --bump rc
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
@@ -81,6 +82,6 @@ jobs:
       - name: Commit & Push Version Change
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          branch: v/hotfix/*.*.*.rc*
+          branch: hotfix
           commit_message: "chore: added patch; bump rc version to ${{ steps.version.outputs.version }}"
           file_pattern: pyproject.toml
