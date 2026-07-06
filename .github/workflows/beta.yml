@@ -16,9 +16,7 @@ jobs:
     steps:
     
       - name: Checkout Code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v7
           
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -26,7 +24,7 @@ jobs:
           python-version-file: "pyproject.toml"
       
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8
 
       - name: Make Append Script Executable
         shell: bash
