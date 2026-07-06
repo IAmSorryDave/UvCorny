@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: hotfix
 
@@ -25,7 +25,7 @@ jobs:
           python-version-file: "pyproject.toml"
       
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8
 
       - name: Make Append Script Executable
         shell: bash
@@ -54,12 +54,12 @@ jobs:
     if: success()
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: hotfix
   
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8
       
       - name: Dry Run Version Increment
         run: |
