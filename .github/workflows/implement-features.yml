@@ -18,12 +18,10 @@ jobs:
     steps:
     
     - name: Checkout Project
-      uses: actions/checkout@v6
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      uses: actions/checkout@v7
 
     - name: Install UV
-      uses: astral-sh/setup-uv@v7
+      uses: astral-sh/setup-uv@v8
     
     - name: Dry Run Version Increment
       run: |
