@@ -13,9 +13,48 @@ permissions:
   id-token: write
 
 jobs:
-  publish-to-pypi:
+
+  build:
     if: github.event.pull_request.merged == true
+    name: Build Distribution 📦; Cache Distribution ⬆️
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    
+      - name: Checkout Project
+        uses: actions/checkout@v7
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v8
+      
+      - name: Dry Run Stable Version Increment
+        run: |
+          uv version --bump stable --dry-run
+
+      - name: Stable Version Increment
+        run: |
+          uv version --bump stable 
+
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+      - name: Build Distribution
+        run: uv build
+
+      - name: Store Distribution Packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: pypi-python-package-distributions
+          path: dist/
+          if-no-files-found: error
+          overwrite: 'true'
+          retention-days: 1
+
+  publish-to-pypi:
     name: Publish Python 🐍 Distribution 📦 to PyPi
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -29,10 +68,13 @@ jobs:
       run: echo "name=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
     
     - name: Download Distribution Packages
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: pypi-python-package-distributions
         path: dist/
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        workflow: prepare-pypi-release
+        run_conclusion: success
     
     - name: Publish Distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -47,21 +89,18 @@ jobs:
     steps:
 
       - name: Checkout Project
-        uses: actions/checkout@v6
-        with:
-          persist-credentials: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v7
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8
       
-      - name: Dry Run Version Increment
+      - name: Dry Run Stable Version Increment
         run: |
-          uv version --bump major --bump stable --dry-run
+          uv version --bump stable --dry-run
 
-      - name: Version Increment
+      - name: Stable Version Increment
         run: |
-          uv version --bump major --bump stable
+          uv version --bump stable
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
@@ -79,34 +118,3 @@ jobs:
           branch: main
           commit_message: "Released v$(uv version)"
           tag_name: "v$(uv version)"
-      
-  create-github-release:
-    needs: finalize
-    runs-on: ubuntu-latest
-    if: success()
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v6
-  
-      - name: Setup UV
-        uses: astral-sh/setup-uv@v7
-  
-      - name: Extract Version
-        id: version
-        shell: bash
-        run: |
-          VERSION=$( uv version )
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-  
-      - name: Create GitHub Release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: 'v${{ steps.version.outputs.version }}',
-              name: 'Release v${{ steps.version.outputs.version }}',
-              draft: false,
-              prerelease: false
-            })  
