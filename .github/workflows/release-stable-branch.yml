@@ -13,10 +13,10 @@ jobs:
 
       steps:
         - name: Checkout Code
-          uses: actions/checkout@v6
+          uses: actions/checkout@v7
   
         - name: Setup UV
-          uses: astral-sh/setup-uv@v7
+          uses: astral-sh/setup-uv@v8
 
         - name: Dry Run Version Increment
           run: |
@@ -52,12 +52,12 @@ jobs:
       steps:
       
         - name: Checkout Code
-          uses: actions/checkout@v6
+          uses: actions/checkout@v7
           with:
             ref: beta
     
         - name: Setup UV
-          uses: astral-sh/setup-uv@v7
+          uses: astral-sh/setup-uv@v8
 
         - name: Create release branch from version
           run: |
