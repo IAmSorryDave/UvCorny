@@ -46,7 +46,7 @@ jobs:
 
       - name: Major Version Increment
         run: |
-          uv version --bump stable 
+          uv version --bump major
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
@@ -122,7 +122,7 @@ jobs:
 
       - name: Major Version Increment
         run: |
-          uv version --bump stable 
+          uv version --bump major
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
