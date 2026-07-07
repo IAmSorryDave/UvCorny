@@ -40,6 +40,17 @@ jobs:
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
+      - name: Dry Run Major Version Increment
+        run: |
+          uv version --bump major --dry-run
+
+      - name: Major Version Increment
+        run: |
+          uv version --bump stable 
+
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
       - name: Build Distribution
         run: uv build
 
@@ -101,6 +112,17 @@ jobs:
       - name: Stable Version Increment
         run: |
           uv version --bump stable
+
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+      - name: Dry Run Major Version Increment
+        run: |
+          uv version --bump major --dry-run
+
+      - name: Major Version Increment
+        run: |
+          uv version --bump stable 
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
