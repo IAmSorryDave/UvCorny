@@ -20,7 +20,7 @@ jobs:
           ref: candidate
   
       - name: Install UV
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@v7
       
       - name: Dry Run Version Increment
         run: |
@@ -90,7 +90,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup UV
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@v7
 
       - name: Create release branch from version
         run: |
