@@ -18,7 +18,9 @@ jobs:
     steps:
     
     - name: Checkout Project
-      uses: actions/checkout@v7
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install UV
       uses: astral-sh/setup-uv@v7
