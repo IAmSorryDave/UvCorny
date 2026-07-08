@@ -25,7 +25,7 @@ jobs:
 
       - name: Install UV
         if: steps.check_pyproject_file.outputs.files_exists == 'true'
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@v7
 
       - name: Check Current Version
         if: steps.check_pyproject_file.outputs.files_exists == 'true'
