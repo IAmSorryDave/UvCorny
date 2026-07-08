@@ -22,17 +22,17 @@ If UvCorny made your day easier, please consider staring the project, it costs y
 nth test set branch
     ↓ (merge new tests / fixtures)
     ↓ (increment minor) 
-development branch             
-    ↓ (merge changes)                                                          
-    ↓ (increment alpha)                                                        
-features branch ← (push new feature) ← (write implementation with AI)          
-    ↓ (tests pass)
-    ↓ (increment beta)
-beta branch
-    ↓ 
-spawns stable branch, the nth beta
-    ↓ (merge changes)
-    ↓ (increment release canidate)
+development branch ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← (New Development Cycle)
+    ↓ (merge changes)                                                                                                 ↑
+    ↓ (increment alpha)                                                                                               ↑
+features branch ← (push new feature) ← (write implementation with AI)                                                 ↑
+    ↓ (tests pass)                                                                                                    ↑
+    ↓ (increment beta)                                                                                                ↑
+beta branch                                                                                                           ↑
+    ↓                                                                                                                 ↑
+spawns stable branch, the nth beta                                                                                    ↑
+    ↓ (merge changes)                                                                                                 ↑
+    ↓ (increment release canidate)                                                                                    ↑
 candidate branch → (spawns release canidate branch) → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge changes) → main
     ↑            → → (spawns hotfix branch)
 (increment patch)            ↓
