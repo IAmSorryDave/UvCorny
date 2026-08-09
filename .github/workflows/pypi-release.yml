@@ -138,5 +138,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: main
-          commit_message: "Released v$(uv version)"
-          tag_name: "v$(uv version)"
+          commit_message: "Released {{ steps.version.output.version }}"
