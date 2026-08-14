@@ -7,4 +7,4 @@ if [ ! -d "tests" ]; then mkdir tests && touch tests/__init__.py && cp .python/t
 if [ ! -f "requirements.txt" ]; then touch requirements.txt ; fi
 
 # Monkey patch .pre-commit-config.yaml
-chmod +x scripts/pre-commit/append_requirements.sh && scripts/pre-commit/append_requirements.sh && chmod -x scripts/pre-commit/append_requirements.sh
+chmod +x scripts/pre-commit/append_requirements.bash && scripts/pre-commit/append_requirements.bash && chmod -x scripts/pre-commit/append_requirements.bash
