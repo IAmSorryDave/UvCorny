@@ -29,12 +29,12 @@ jobs:
 
       - name: Make Append Script Executable
         shell: bash
-        run: chmod +x ${PWD}/scripts/append_requirements.bash
+        run: chmod +x ${PWD}/scripts/pre-commit/append_requirements.bash
 
       - name: Install YQ && Append Requirements to pre-commit Pytest Hook
         id: append_requirements
         shell: bash
-        run: sudo apt-get update && sudo apt-get install -y yq && ${PWD}/scripts/append_requirements.bash && sudo apt purge -y yq
+        run: sudo apt-get update && sudo apt-get install -y yq && ${PWD}/scripts/pre-commit/append_requirements.bash && sudo apt purge -y yq
 
       - name: Install Pre-Commit
         run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
