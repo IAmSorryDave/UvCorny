@@ -30,7 +30,7 @@ jobs:
 
       - name: Make Append Script Executable
         shell: bash
-        run: chmod +x ${PWD}/scripts/append_requirements.bash
+        run: chmod +x ${PWD}/scripts/pre-commit
 
       - name: Install YQ && Append Requirements to pre-commit Pytest Hook
         id: append_requirements
