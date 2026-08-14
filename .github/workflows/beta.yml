@@ -40,12 +40,12 @@ jobs:
       - name: Install Pre-Commit
         run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
 
-      - name: Install Hooks
+      - name: Setup
         run: pre-commit install
 
       - name: Run Tests
         shell: bash
-        run: main.bash
+        run: source main.bash
 
-      - name: Clean Up
+      - name: Teardown
         run: pre-commit uninstall
