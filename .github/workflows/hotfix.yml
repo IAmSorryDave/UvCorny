@@ -43,7 +43,8 @@ jobs:
         run: pre-commit install
 
       - name: Run Tests
-        run: pre-commit run pytest --all-files
+        shell: bash
+        run: source main.bash
 
       - name: Clean Up
         run: pre-commit uninstall
