@@ -31,7 +31,7 @@ repos:
       args:
         - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
       fail_fast: true
-      stages: [pre-commit]
+      stages: [pre-commit, manual]
       
   - repo: local
     hooks:
