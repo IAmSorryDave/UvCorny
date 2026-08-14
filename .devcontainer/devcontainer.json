@@ -2,7 +2,7 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "onCreateCommand": "chmod +x .github/scripts/setup/init.sh && .github/scripts/setup/init.sh && chmod -x .github/scripts/setup/init.sh && sleep 3",
+  "onCreateCommand": "chmod +x scripts/setup/init.sh && scripts/setup/init.sh && chmod -x scripts/setup/init.sh && sleep 3",
   "postStartCommand": "bash -i -l -c 'exit 0'",
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
