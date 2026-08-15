@@ -3,6 +3,7 @@
     "dockerfile": "Dockerfile"
   },
   "onCreateCommand": "chmod +x scripts/setup/init.sh && scripts/setup/init.sh && chmod -x scripts/setup/init.sh && sleep 3",
+  "postCreateCommand": "git config core.fileMode false",
   "postStartCommand": "bash -i -l -c 'exit 0'",
   "remoteEnv": {
     "DEVELOPER": "${localEnv:DEVELOPER}",
