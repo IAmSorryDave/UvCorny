@@ -23,7 +23,7 @@ jobs:
 
       - name: Check and create branches
         run: |
-          BRANCHES=("development" "features" "beta" "candidate" "hotfix")
+          BRANCHES=("development" "features" "beta" "candidate")
           
           for branch in "${BRANCHES[@]}"; do
             if git ls-remote --heads origin "$branch" | grep -q "$branch"; then
