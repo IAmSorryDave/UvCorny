@@ -1,5 +1,8 @@
 
 ### Recommended Development Path 🚗
+
+To take advantage of event driven versioning and deployments, follow the recommended development path. 
+
 ```
 nth test set branch
     ↓ (merge new tests / fixtures)
