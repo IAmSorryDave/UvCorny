@@ -1,6 +1,9 @@
 {
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "Dockerfile",
+    "args": {
+      "PYTHON_VERSION": "${localEnv:PYTHON_VERSION:3.14}"
+    }
   },
   "onCreateCommand": "chmod +x scripts/setup/init.sh && scripts/setup/init.sh && chmod -x scripts/setup/init.sh && sleep 3",
   "postCreateCommand": "git config core.fileMode false",
