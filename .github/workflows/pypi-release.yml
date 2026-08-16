@@ -42,25 +42,31 @@ jobs:
           fi
       
       - name: Dry Run Stable Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump stable --dry-run
 
       - name: Stable Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump stable 
 
       - name: Verify Version Changed
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Dry Run Major Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump major --dry-run
 
       - name: Major Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump major
 
       - name: Verify Version Changed
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Build Distribution
@@ -117,26 +123,44 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v7
       
+      - name: Check Current Version
+        id: check_version
+        shell: bash
+        run: |
+          CURRENT_VERSION=$(uv version --short)
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          if [[ "$CURRENT_VERSION" == *".rc"* ]]; then
+            echo "release_candidate=true" >> $GITHUB_OUTPUT
+          else
+            echo "release_candidate=false" >> $GITHUB_OUTPUT
+          fi
+      
       - name: Dry Run Stable Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump stable --dry-run
 
       - name: Stable Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
-          uv version --bump stable
+          uv version --bump stable 
 
       - name: Verify Version Changed
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Dry Run Major Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump major --dry-run
 
       - name: Major Version Increment
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: |
           uv version --bump major
 
       - name: Verify Version Changed
+        if: steps.check_version.outputs.release_candidate== 'true'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Extract Version
@@ -146,8 +170,21 @@ jobs:
           VERSION=$( uv version )
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Tag release
+      - name: Commit Release to Main Branch.
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: main
+          commit_message: "Released {{ steps.version.output.version }}"
+
+      - name: Sync release with hotfix branch.
+        if: steps.check_version.outputs.release_candidate== 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: hotfix
+          commit_message: "Released {{ steps.version.output.version }}"
+
+      - name: Sync release with development branch.
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: development 
           commit_message: "Released {{ steps.version.output.version }}"
