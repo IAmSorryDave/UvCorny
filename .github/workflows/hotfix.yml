@@ -64,11 +64,11 @@ jobs:
       
       - name: Dry Run Version Increment
         run: |
-          uv version --bump patch --bump rc --dry-run
+          uv version --bump patch --dry-run
 
       - name: Version Increment
         run: |
-          uv version --bump patch --bump rc
+          uv version --bump patch
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
@@ -77,7 +77,7 @@ jobs:
         id: version
         shell: bash
         run: |
-          VERSION=$( uv version)
+          VERSION=$(uv version)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit & Push Version Change
