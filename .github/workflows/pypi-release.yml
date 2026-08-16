@@ -174,17 +174,18 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: main
-          commit_message: "Released {{ steps.version.output.version }}"
+          commit_message: "Released ${{ steps.version.outputs.version }}"
 
       - name: Sync release with hotfix branch.
         if: steps.check_version.outputs.release_candidate== 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: hotfix
-          commit_message: "Released {{ steps.version.output.version }}"
+          commit_message: "Released ${{ steps.version.outputs.version }}"
 
       - name: Sync release with development branch.
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: development 
-          commit_message: "Released {{ steps.version.output.version }}"
+          commit_message: "Released ${{ steps.version.outputs.version }}"
+
