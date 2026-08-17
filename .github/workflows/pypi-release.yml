@@ -165,6 +165,12 @@ jobs:
           VERSION=$( uv version )
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Configure Git
+        shell: bash
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Sync release with hotfix branch
         run: |
           git add .
@@ -183,8 +189,6 @@ jobs:
     name: 
     runs-on: ubuntu-latest
     needs: finalize
-    outputs:
-      release_candidate: ${{ needs.finalize.outputs.release_candidate }}
 
     steps:
     
@@ -206,6 +210,12 @@ jobs:
           
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+      - name: Configure Git
+        shell: bash
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync release with development branch.
         run: |
