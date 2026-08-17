@@ -37,7 +37,7 @@ jobs:
         run: |
           CURRENT_VERSION=$(uv version --short)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          if [[ $CURRENT_VERSION == *rc* ]]; then
+          if [[ "$CURRENT_VERSION" == "*rc*" ]]; then
             echo "release_candidate=true" >> $GITHUB_OUTPUT
           else
             echo "release_candidate=false" >> $GITHUB_OUTPUT
