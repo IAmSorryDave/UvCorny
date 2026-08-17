@@ -156,7 +156,6 @@ jobs:
           uv version --bump major
 
       - name: Verify Version Changed
-        if: needs.publish-to-pypi.outputs.release_candidate == 'true'
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Extract Version
@@ -166,12 +165,13 @@ jobs:
           VERSION=$( uv version )
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Update Hotfix Branch if Release is New Release.
-        if: needs.publish-to-pypi.outputs.release_candidate == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          branch: hotfix
-          commit_message: "chore: bump version to ${{ steps.version.outputs.version }}"
+      - name: Sync release with hotfix branch
+        run: |
+          git add .
+          git fetch origin
+          git checkout hotfix
+          git merge main --no-edit
+          git push origin hotfix
 
       - name: Commit & Push Version Change
         uses: stefanzweifel/git-auto-commit-action@v7
@@ -193,6 +193,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
       - name: Dry Run Version Minor and Dev Increment
         run: |
           uv version --bump minor --bump dev --dry-run
@@ -204,17 +207,11 @@ jobs:
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
-      - name: Extract Version
-        id: version
-        shell: bash
+      - name: Sync release with development branch.
         run: |
-          VERSION=$( uv version )
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Commit & Push Version Change
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          branch: development
-          commit_message: "chore: bump version to ${{ steps.version.outputs.version }}"
+          git add pyproject.toml
+          git fetch origin
+          git checkout development
+          git merge main --no-edit
+          git push origin development
     
-
