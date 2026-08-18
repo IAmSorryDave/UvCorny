@@ -170,6 +170,72 @@ jobs:
         with:
           branch: main
           commit_message: "chore: bump version to ${{ steps.version.outputs.version }}"
+  
+  sync:
+    name: Sync Hotfix Branch 🔄
+    runs-on: ubuntu-latest
+    needs: finalize
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Checkout Project
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Sync Hotfix Branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin hotfix || git checkout --orphan hotfix
+          git reset --hard main
+          git push origin hotfix --force-with-lease
+
+  cycle:
+    name: Cycle Development 🔁 Version Bump ⬆️
+    runs-on: ubuntu-latest
+    needs: finalize
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Checkout Project
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Dry Run Minor & Dev Version Increment
+        run: |
+          uv version --bump minor --bump dev --dry-run
+
+      - name: Minor Version Increment
+        run: |
+          uv version --bump minor --bump dev
+
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
+
+      - name: Extract Version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$( uv version )
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit & Push to Development
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          branch: development
+          push_options: '--force-with-lease'
+          commit_message: "chore: cycle development version to ${{ steps.version.outputs.version }}"
 
   
   
