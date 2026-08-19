@@ -30,6 +30,8 @@ jobs:
 
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
 
       - name: Check Current Version
         id: check_version
@@ -37,7 +39,7 @@ jobs:
         run: |
           CURRENT_VERSION=$(uv version --short)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          if [[ "$CURRENT_VERSION" == "*rc*" ]]; then
+          if [[ "$CURRENT_VERSION" == *rc* ]]; then
             echo "release_candidate=true" >> $GITHUB_OUTPUT
           else
             echo "release_candidate=false" >> $GITHUB_OUTPUT
@@ -107,7 +109,6 @@ jobs:
         name: pypi-python-package-distributions
         path: dist/
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        run_conclusion: success
 
     - name: Publish Distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -118,6 +119,9 @@ jobs:
     name: Increment Version ⬆️ and Issue Release
     runs-on: ubuntu-latest
     needs: publish-to-pypi
+    permissions:
+      actions: write
+      contents: write
     outputs:
       release_candidate: ${{ needs.publish-to-pypi.outputs.release_candidate }}
 
@@ -130,6 +134,8 @@ jobs:
 
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
 
       - name: Dry Run Stable Version Increment
         if: needs.publish-to-pypi.outputs.release_candidate == 'true'
@@ -177,21 +183,24 @@ jobs:
     needs: finalize
     permissions:
       contents: write
-
+  
     steps:
-
+  
       - name: Checkout Project
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
-
-      - name: Sync Hotfix Branch
+  
+      - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin hotfix || git checkout --orphan hotfix
-          git reset --hard main
+  
+      - name: Sync Hotfix Branch
+        run: |
+          git fetch origin hotfix || true
+          git checkout -B hotfix origin/main
           git push origin hotfix --force-with-lease
 
   cycle:
@@ -203,39 +212,52 @@ jobs:
 
     steps:
 
-      - name: Checkout Project
+      - name: Checkout Main
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup Development Branch
+        run: |
+          git fetch origin development || true
+          git checkout development || git checkout -b development main
+          git reset --hard main
+
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
 
-      - name: Dry Run Minor & Dev Version Increment
+      - name: Format UV Version
+        id: format
+        shell: bash
         run: |
-          uv version --bump minor --bump dev --dry-run
-
-      - name: Minor Version Increment
+          CURRENT_VERSION=$(uv version --short)
+          MAJOR=${CURRENT_VERSION:0:1}
+          MINOR=$(find ./tests -maxdepth 1 -mindepth 1 -type d | wc -l)
+          PATCH=${CURRENT_VERSION:4:1}
+          VERSION="${MAJOR}.${MINOR}.${PATCH}.dev1"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+    
+      - name: Sync Semver
+        shell: bash
         run: |
-          uv version --bump minor --bump dev
+          echo ${{ steps.format.outputs.version }}
+          uv version ${{ steps.format.outputs.version }}
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
-      - name: Extract Version
-        id: version
-        shell: bash
-        run: |
-          VERSION=$( uv version )
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Commit & Push to Development
+      - name: Commit & Push Version Change
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: development
           push_options: '--force-with-lease'
-          commit_message: "chore: cycle development version to ${{ steps.version.outputs.version }}"
-
-  
-  
+          commit_message: "chore: bump development version to ${{ steps.format.outputs.version }}"
+          file_pattern: pyproject.toml
