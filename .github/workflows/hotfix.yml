@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: hotfix
 
@@ -55,7 +55,7 @@ jobs:
     if: success()
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: hotfix
   
@@ -69,6 +69,23 @@ jobs:
       - name: Version Increment
         run: |
           uv version --bump patch
+
+      - name: Format UV Version
+        id: format
+        shell: bash
+        run: |
+          CURRENT_VERSION=$(uv version --short)
+          MAJOR=${CURRENT_VERSION:0:1}
+          MINOR=$(find ./tests -maxdepth 1 -mindepth 1 -type d | wc -l)
+          PATCH=${CURRENT_VERSION:4:1}
+          VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+    
+      - name: Sync Semver
+        shell: bash
+        run: |
+          echo ${{ steps.format.outputs.version }}
+          uv version ${{ steps.format.outputs.version }}
 
       - name: Verify Version Changed
         run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
