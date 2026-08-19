@@ -8,24 +8,26 @@ nth test set branch
     ↓ (merge new tests / fixtures)
     ↓ (increment minor) 
 development branch ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← (New Development Cycle)
-    ↓ (merge changes)                                                                                                 ↑
-    ↓ (increment alpha)                                                                                               ↑
-features branch ← (push new feature) ← (write implementation with AI)                                                 ↑
-    ↓ (tests pass)                                                                                                    ↑
-    ↓ (increment beta)                                                                                                ↑
-beta branch                                                                                                           ↑
-    ↓                                                                                                                 ↑
-spawns stable branch, the nth beta                                                                                    ↑
-    ↓ (merge changes)                                                                                                 ↑
-    ↓ (increment release canidate)                                                                                    ↑
+    ↓ (merge changes)                                                                                                ↑
+    ↓ (increment alpha)                                                                                              ↑
+features branch ← (push new feature) ← (write implementation with AI)                                                ↑
+    ↓ (tests pass)                                                                                                   ↑
+    ↓ (increment beta)                                                                                               ↑
+beta branch                                                                                                          ↑
+    ↓                                                                                                                ↑
+spawns stable branch, the nth beta                                                                                   ↑
+    ↓ (merge changes)                                                                                                ↑
+    ↓ (increment release canidate)                                                                                   ↑
 candidate branch → (spawns release canidate branch) → Auto-Deploy to TestPyPI → Deploy to PyPI → (merge changes) → main
-    ↑            → → (spawns hotfix branch)
-(increment patch)            ↓
-    ↑                        ↓
-(merge changes)              ↓
-    ↑                        ↓
-hotfix branch ← (merge new patch if necessary)
+                                                                                                                     ↑
+                                                                                                            (increment patch)                                
+                                                                                                                     ↑ 
+                                                                                                            (merge changes)
+                                                                                                                     ↑ 
+                                                                                                            hotfix branch ← (merge new patch if necessary)                                                                       
 ```
+
+This should go without saying but DO NOT delete the development, features, beta, hotfix and candidate branches.
 
 ### Default Run Arguments 🏃‍♀️
 
