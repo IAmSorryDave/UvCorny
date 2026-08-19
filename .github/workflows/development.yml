@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,45 +27,29 @@ jobs:
         if: steps.check_pyproject_file.outputs.files_exists == 'true'
         uses: astral-sh/setup-uv@v7
 
-      - name: Check Current Version
-        if: steps.check_pyproject_file.outputs.files_exists == 'true'
-        id: check_version
+      - name: Format UV Version
+        id: format
         shell: bash
         run: |
           CURRENT_VERSION=$(uv version --short)
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          if [[ "$CURRENT_VERSION" == *".dev"* ]]; then
-            echo "has_dev=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_dev=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Dry Run Version Minor and Dev Increment
-        if: steps.check_version.outputs.has_dev == 'false'
-        run: |
-          uv version --bump minor --bump dev --dry-run
-
-      - name: Version Minor and Dev Increment
-        if: steps.check_version.outputs.has_dev == 'false'
-        run: |
-          uv version --bump minor --bump dev
-          
-      - name: Verify Version Changed
-        if: steps.check_version.outputs.has_dev == 'false'
-        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
-
-      - name: Get Updated Version
-        if: steps.check_pyproject_file.outputs.files_exists == 'true'
-        id: version
+          MAJOR=${CURRENT_VERSION:0:1}
+          MINOR=$(find ./tests -maxdepth 1 -mindepth 1 -type d | wc -l)
+          PATCH=${CURRENT_VERSION:4:1}
+          VERSION="${MAJOR}.${MINOR}.${PATCH}.dev1"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+    
+      - name: Sync Semver
         shell: bash
         run: |
-          VERSION=$(uv version)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo ${{ steps.format.outputs.version }}
+          uv version ${{ steps.format.outputs.version }}
+
+      - name: Verify Version Changed
+        run: git diff --exit-code pyproject.toml || echo "Version updated successfully"
 
       - name: Commit & Push Version Change
-        if: steps.check_version.outputs.has_dev == 'false'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: development
-          commit_message: "chore: bump development version to ${{ steps.version.outputs.version }}"
+          commit_message: "chore: bump development version to ${{ steps.format.outputs.version }}"
           file_pattern: pyproject.toml
