@@ -6,6 +6,9 @@ on:
     branches:
       - candidate
 
+permissions:
+  contents: write
+
 jobs:
 
   increment:
@@ -21,6 +24,8 @@ jobs:
   
       - name: Install UV
         uses: astral-sh/setup-uv@v7
+        with:
+          cache-suffix: ${{ github.job }}
       
       - name: Dry Run Version Increment
         run: |
@@ -56,12 +61,14 @@ jobs:
     if: success()
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: candidate
 
-      - name: Setup UV
+      - name: Install UV
         uses: astral-sh/setup-uv@v7
+        with:
+          cache-suffix: ${{ github.job }}
 
       - name: Build Package
         run: uv build
@@ -75,11 +82,11 @@ jobs:
           if-no-files-found: error
           overwrite: 'true'
 
-  hotfix:
-    permissions:
+  release:
+    permissions: 
       contents: write
     name: Create Branch
-    needs: increment
+    needs: build
     runs-on: ubuntu-latest
     steps:
     
@@ -89,39 +96,15 @@ jobs:
           ref: candidate
           fetch-depth: 0
 
-      - name: Setup UV
+      - name: Install UV
         uses: astral-sh/setup-uv@v7
-
-      - name: Create release branch from version
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git checkout candidate
-          git checkout -b hotfix
-          git push origin hotfix
-
-  release:
-    permissions: 
-      contents: write
-    name: Create Branch
-    needs: hotfix
-    runs-on: ubuntu-latest
-    steps:
-    
-      - name: Checkout Code
-        uses: actions/checkout@v7
         with:
-          ref: hotfix
-          fetch-depth: 0  # Fetch all history
-
-      - name: Setup UV
-        uses: astral-sh/setup-uv@v7
+          cache-suffix: ${{ github.job }}
 
       - name: Create release branch from version
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git checkout hotfix
           git checkout -b release@v$(uv version --short)
           git push origin release@v$(uv version --short)
 
@@ -147,7 +130,7 @@ jobs:
           run: echo "name=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
         
         - name: Download Distribution Packages
-          uses: actions/download-artifact@v4
+          uses: actions/download-artifact@v8
           with:
             name: release-canidate-python-package-distributions
             path: dist/
