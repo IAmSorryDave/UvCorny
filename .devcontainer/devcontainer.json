@@ -18,5 +18,5 @@
     }
   },
   "waitFor": "onCreateCommand",
-  "runArgs": ["--env-file", ".devcontainer/.env"]
+  "runArgs": ["--env-file", ".devcontainer/.env", "-v", "/var/run/docker.sock:/var/run/docker.sock"]
 }
