@@ -16,6 +16,10 @@ echo "Installing yq..."
 chmod +x .scripts/setup/install-yq.sh && .scripts/setup/install-yq.sh && chmod -x .scripts/setup/install-yq.sh
 sleep 1
 
+echo "Installing docker compose..."
+chmod +x .scripts/setup/install-compose.sh && .scripts/setup/install-compose.sh && chmod -x .scripts/setup/install-compose.sh
+sleep 1
+
 echo "Configuring files..."
 chmod +x .scripts/setup/configure-files.sh && .scripts/setup/configure-files.sh && chmod -x .scripts/setup/configure-files.sh
 sleep 1
@@ -30,5 +34,6 @@ sleep 1
 
 echo "Configuring pre-commit..."
 chmod +x .scripts/setup/configure-pre-commit.sh && .scripts/setup/configure-pre-commit.sh && chmod -x .scripts/setup/configure-pre-commit.sh
+
 
 echo "Setup completed successfully"
