@@ -3,7 +3,6 @@ from pathlib import Path
 from jinja2 import FileSystemLoader
 from jinja2.sandbox import SandboxedEnvironment
 from tomllib import load
-from subprocess import run
 
 def write_documentation():
     """Generate documentation from pyproject.toml and jinja2 template."""
