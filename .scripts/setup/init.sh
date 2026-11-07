@@ -35,5 +35,10 @@ sleep 1
 echo "Configuring pre-commit..."
 chmod +x .scripts/setup/configure-pre-commit.sh && .scripts/setup/configure-pre-commit.sh && chmod -x .scripts/setup/configure-pre-commit.sh
 
+echo "Configuring npm..."
+chmod +x .scripts/setup/install-npm.sh && .scripts/setup/install-npm.sh && chmod -x .scripts/setup/install-npm.sh
+
+echo "Configuring Copilot cli..."
+chmod +x .scripts/setup/install-copilot-cli.sh && .scripts/setup/install-copilot-cli.sh && chmod -x .scripts/setup/install-copilot-cli.sh
 
 echo "Setup completed successfully"
