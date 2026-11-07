@@ -35,6 +35,9 @@ sleep 1
 echo "Configuring pre-commit..."
 chmod +x .scripts/setup/configure-pre-commit.sh && .scripts/setup/configure-pre-commit.sh && chmod -x .scripts/setup/configure-pre-commit.sh
 
+echo "Configuring watchexec..."
+chmod +x .scripts/setup/install-watchexec.sh && .scripts/setup/install-watchexec.sh && chmod -x .scripts/setup/install-watchexec.sh
+
 echo "Configuring npm..."
 chmod +x .scripts/setup/install-npm.sh && .scripts/setup/install-npm.sh && chmod -x .scripts/setup/install-npm.sh
 
