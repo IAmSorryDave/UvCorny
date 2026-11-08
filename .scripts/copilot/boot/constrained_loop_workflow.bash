@@ -1,13 +1,15 @@
 #!/bin/bash
 
-set -eu
-
-WATCH_DIR="${1:-test}"
+WATCH_DIR="${1:-tests}"
 LOG_DIR="$(pwd)/.build_logs"
-LOG_FILE="$LOG_DIR/copilot-implementaion-builds.log"
-PROMPT="$(cat .github/copilot-instructions.md)"
+LOG_FILE="$LOG_DIR/copilot-implementation-builds.log"
+
+mkdir -p "$LOG_DIR"
 
 source .scripts/copilot/setup/environment.bash
+export WATCH_DIR LOG_DIR
+
+chmod +x .scripts/copilot/boot/implementation_subagent.bash
 
 watchexec \
   --watch "$WATCH_DIR" \
@@ -16,9 +18,6 @@ watchexec \
   --ignore "**/conftest.py" \
   --debounce 2s \
   --restart false \
-  -- copilot -p "Files changed in $WATCH_DIR. $PROMPT" \
-   --available-tools='bash,edit,view,grep,glob' \
-   --allow-tool='shell(bash main.bash),write(src/**),write(README.md.jinja),read(.build_logs/**)' \
-   --deny-tool='write(src/**/__init__.py),write(src/**/_loader.py),write(test/**),write(.build_logs/**)' \
-   2>&1 | tee -a "$LOG_FILE"
+  -- .scripts/copilot/boot/implementation_subagent.bash 2>&1 | tee -a "$LOG_FILE"
 
+chmod -x .scripts/copilot/boot/implementation_subagent.bash
