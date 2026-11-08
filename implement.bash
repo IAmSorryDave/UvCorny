@@ -1,8 +1,24 @@
 #!/bin/bash
 
-README_TEMPLATE="README.md.jinja"
-INITIAL_README_TEMPLATE_HASH="$(sha256sum "$README_TEMPLATE" 2>/dev/null | awk '{print $1}' || true)"
+set -eu
 
-while ! bash main.bash || [ "$(sha256sum "$README_TEMPLATE" 2>/dev/null | awk '{print $1}' || true)" = "$INITIAL_README_TEMPLATE_HASH" ]; do
-  bash .scripts/copilot/boot/constrained_loop_workflow.bash
-done
+WATCH_DIR="${1:-tests}"
+LOG_DIR="$(pwd)/.build_logs"
+LOG_FILE="$LOG_DIR/copilot-implementation-builds.log"
+
+mkdir -p "$LOG_DIR"
+
+source .scripts/copilot/setup/environment.bash
+
+chmod +x .scripts/copilot/boot/constrained_loop_workflow.bash
+
+watchexec \
+  --watch "$WATCH_DIR" \
+  --exts py \
+  --ignore "**/__init__.py" \
+  --ignore "**/conftest.py" \
+  --debounce 2s \
+  --restart false \
+  -- .scripts/copilot/boot/constrained_loop_workflow.bash 2>&1 | tee -a "$LOG_FILE"
+
+chmod -x .scripts/copilot/boot/constrained_loop_workflow.bash

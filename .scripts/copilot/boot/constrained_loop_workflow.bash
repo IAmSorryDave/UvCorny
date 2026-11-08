@@ -1,23 +1,18 @@
 #!/bin/bash
 
+set -eu
+
+README_TEMPLATE="README.md.jinja"
+INITIAL_README_TEMPLATE_HASH="$(sha256sum "$README_TEMPLATE" 2>/dev/null | awk '{print $1}' || true)"
 WATCH_DIR="${1:-tests}"
-LOG_DIR="$(pwd)/.build_logs"
-LOG_FILE="$LOG_DIR/copilot-implementation-builds.log"
+PROMPT=$(tr '\n' ' ' < .github/copilot-instructions.md)
 
-mkdir -p "$LOG_DIR"
+export PROMPT WATCH_DIR
 
-source .scripts/copilot/setup/environment.bash
-export WATCH_DIR LOG_DIR
+while ! bash main.bash ; do
+  source .scripts/copilot/boot/implementation_subagent.bash
+done
 
-chmod +x .scripts/copilot/boot/implementation_subagent.bash
-
-watchexec \
-  --watch "$WATCH_DIR" \
-  --exts py \
-  --ignore "**/__init__.py" \
-  --ignore "**/conftest.py" \
-  --debounce 2s \
-  --restart false \
-  -- .scripts/copilot/boot/implementation_subagent.bash 2>&1 | tee -a "$LOG_FILE"
-
-chmod -x .scripts/copilot/boot/implementation_subagent.bash
+while [ "$(sha256sum "$README_TEMPLATE" 2>/dev/null | awk '{print $1}' || true)" = "$INITIAL_README_TEMPLATE_HASH" ]; do
+  source .scripts/copilot/boot/implementation_subagent.bash
+done

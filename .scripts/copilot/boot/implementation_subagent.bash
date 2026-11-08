@@ -1,8 +1,8 @@
 #!/bin/bash
 
-PROMPT=$(tr '\n' ' ' < .github/copilot-instructions.md)
+set -eu
 
-exec copilot -p "Files changed in ${WATCH_DIR}. ${PROMPT}" \
+copilot -p "Files changed in ${WATCH_DIR}. ${PROMPT}" \
   --available-tools="bash,edit,view,grep,glob" \
   --allow-tool='shell(bash main.bash)' \
   --allow-tool='write(src/**)' \
