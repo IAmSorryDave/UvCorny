@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_DIR="$(pwd)/.build_logs"
-LOG_FILE="$LOG_DIR/copilot-implementation-builds.log"
+LOG_FILE="$LOG_DIR/copilot-implementation-pytests.log"
 
 mkdir -p "$LOG_DIR"
 

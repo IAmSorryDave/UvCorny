@@ -4,7 +4,7 @@ set -eu
 
 copilot -p "Files changed in ${WATCH_DIR}. ${PROMPT}" \
   --available-tools="edit,view,grep,glob" \
-  --allow-tool='write(src/**)' \
+  --allow-tool='write(src/**/**)' \
   --allow-tool='write(README.md.jinja)' \
   --allow-tool='read(.build_logs/**)' \
   --allow-tool='read(.github/copilot-instructions.md)' \

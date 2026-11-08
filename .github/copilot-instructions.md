@@ -6,10 +6,11 @@
 
 <StepsToFollow>
 - Implement features defined by the tests in the ```tests``` folder.
-- Read ```.build_logs``` to idenifiy what tests are failing.
-- Make changes only inside ```src/**``` directories.
+- If there are no tests defined, skip to the last step in this section.
+- Read the contents of the directory ```.build_logs``` to idenifiy what tests are failing.
+- Make changes only inside ```src/**/**``` directories.
 - Alert the user once all tests are passing.
-- Once all tests are passing, document how to use the artifact by writing detailed instructions to the jinja2 template. 
+- Document how to use the artifact by writing detailed instructions to the README.md.jinja template in the project root. DO NOT overwrite formatting. 
 </StepsToFollow>
 
 <BuildInstructions>
