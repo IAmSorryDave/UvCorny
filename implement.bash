@@ -18,7 +18,6 @@ watchexec \
   --ignore "**/__init__.py" \
   --ignore "**/conftest.py" \
   --debounce 2s \
-  --restart false \
   -- .scripts/copilot/boot/constrained_loop_workflow.bash 2>&1 | tee -a "$LOG_FILE"
 
 chmod -x .scripts/copilot/boot/constrained_loop_workflow.bash
