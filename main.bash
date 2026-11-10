@@ -16,4 +16,4 @@ watchexec \
   --ignore "**/__init__.py" \
   --ignore "**/conftest.py" \
   --debounce 2s \
-  -- bash "$GATE" "$WORKFLOW" "$WATCH_DIR"
+  -- "$GATE" "$WORKFLOW" "$WATCH_DIR"
