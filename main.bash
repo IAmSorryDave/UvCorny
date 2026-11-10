@@ -8,7 +8,7 @@ GATE=".scripts/bash/copilot/boot/subdir_gate.bash"
 source .scripts/bash/copilot/setup/environment.bash
 
 chmod +x "$WORKFLOW" "$GATE"
-trap 'chmod -x "$WORKFLOW" "$GATE"' EXIT
+'chmod -x "$WORKFLOW" "$GATE"' EXIT
 
 watchexec \
   --watch "$WATCH_DIR" \
@@ -16,4 +16,4 @@ watchexec \
   --ignore "**/__init__.py" \
   --ignore "**/conftest.py" \
   --debounce 2s \
-  -- "$GATE" "$WORKFLOW" "$WATCH_DIR"
+  -- bash "$GATE" "$WORKFLOW" "$WATCH_DIR"

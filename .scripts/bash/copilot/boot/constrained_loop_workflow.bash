@@ -17,6 +17,6 @@ PROMPT="$(tr '\n' ' ' < .github/copilot-instructions.md)"
 
 export PROMPT WATCH_DIR
 
-while ! bash main.bash || [ "$(sha256sum "$README_TEMPLATE" | awk '{print $1}')" = "$INITIAL_README_TEMPLATE_HASH" ]; do
+while ! bash .scripts/bash/pre-commit/test.bash || [ "$(sha256sum "$README_TEMPLATE" | awk '{print $1}')" = "$INITIAL_README_TEMPLATE_HASH" ]; do
   source .scripts/bash/copilot/boot/implementation_subagent.bash 2>&1 | tee -a "$LOG_FILE"
 done
