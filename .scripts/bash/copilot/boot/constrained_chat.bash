@@ -3,9 +3,9 @@
 set -eu
 
 LOG_DIR="$(pwd)/.build_logs"
-LOG_FILE="$LOG_DIR/copilot-implementaion-builds.log"
+LOG_FILE="$LOG_DIR/copilot-implementation-builds.log"
 
-source .scripts/copilot/setup/environment.bash
+source .scripts/bash/copilot/setup/environment.bash
 
 copilot \
    --available-tools='bash,edit,view,grep,glob' \

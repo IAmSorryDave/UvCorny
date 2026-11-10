@@ -1,3 +1,19 @@
 #!/bin/bash
+set -eu
 
-source .scripts/pre-commit/test.bash
+WATCH_DIR="${1:-tests}"
+WORKFLOW=".scripts/bash/copilot/boot/constrained_loop_workflow.bash"
+GATE=".scripts/bash/copilot/boot/subdir_gate.bash"
+
+source .scripts/bash/copilot/setup/environment.bash
+
+chmod +x "$WORKFLOW" "$GATE"
+trap 'chmod -x "$WORKFLOW" "$GATE"' EXIT
+
+watchexec \
+  --watch "$WATCH_DIR" \
+  --exts py \
+  --ignore "**/__init__.py" \
+  --ignore "**/conftest.py" \
+  --debounce 2s \
+  -- bash "$GATE" "$WORKFLOW" "$WATCH_DIR"
