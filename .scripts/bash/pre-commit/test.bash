@@ -1,8 +1,5 @@
 #!/bin/bash
 
-LOG_DIR="$(pwd)/.build_logs"
-LOG_FILE="$LOG_DIR/copilot-implementation-pytests.log"
+source .scripts/bash/logs/setup/environment.bash
 
-mkdir -p "$LOG_DIR"
-
-pre-commit run --hook-stage manual pytest --all-files 2>&1 | tee -a "$LOG_FILE"
+pre-commit run --hook-stage manual pytest --all-files 2>&1 | tee -a "$IMPLEMENTATION_PYTEST_LOG_FILE"

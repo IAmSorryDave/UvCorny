@@ -7,9 +7,6 @@ GATE=".scripts/bash/copilot/boot/subdir_gate.bash"
 
 source .scripts/bash/copilot/setup/environment.bash
 
-chmod +x "$WORKFLOW" "$GATE"
-'chmod -x "$WORKFLOW" "$GATE"' EXIT
-
 watchexec \
   --watch "$WATCH_DIR" \
   --exts py \

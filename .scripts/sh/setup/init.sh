@@ -32,6 +32,10 @@ echo "Configuring project..."
 chmod +x .scripts/sh/setup/configure-project.sh && .scripts/sh/setup/configure-project.sh && chmod -x .scripts/sh/setup/configure-project.sh
 sleep 1
 
+echo "Configuring logs..."
+chmod +x .scripts/sh/setup/configure-logs.sh && .scripts/sh/setup/configure-logs.sh && chmod -x .scripts/sh/setup/configure-logs.sh
+sleep 1
+
 echo "Configuring pre-commit..."
 chmod +x .scripts/sh/setup/configure-pre-commit.sh && .scripts/sh/setup/configure-pre-commit.sh && chmod -x .scripts/sh/setup/configure-pre-commit.sh
 
