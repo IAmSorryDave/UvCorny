@@ -36,6 +36,19 @@ In .devcontainer/.env -
 - ```LICENSE_TYPE``` : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - ```UV_LINK_MODE``` : symlink ( This setting is the least noisy link mode when working in a codespace. If required, adapt this setting to your needs. )
 - ```UV_PROJECT_TYPE``` : --lib ( Must be one of --app, --lib, --package. See https://docs.astral.sh/uv/concepts/projects/init/#libraries for more on project setup)
+- ```IMPORT_STYLE``` : choose how package modules are exposed:
+    - `package` (default): use `import package`, then access objects through their
+      module, such as `package.subpackage.object`.
+    - `subpackage`: import objects from their defining module, such as
+      `from package.subpackage import object`. Importing the package does not
+      eagerly load its submodules.
+    - `star`: re-export public objects from submodules at the package root, allowing
+      `from package import *`.
+
+The selected value is written into the generated package's `_loader.py` when
+the project is initialized. Changing `.devcontainer/.env` later does not
+rewrite an existing package; update `IMPORT_STYLE` in that package's
+`_loader.py` to change its behavior.
 
 ### Dev Container Dockerfile 🐳
 
