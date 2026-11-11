@@ -38,7 +38,7 @@ repos:
     hooks:
       - id: write-documentation
         name: Sync project documentation.
-        entry: python .python/scripts/write_documentation.py
+        entry: python .scripts/python/scripts/write_documentation.py
         fail_fast: true
         language: python
         additional_dependencies:
