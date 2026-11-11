@@ -1,3 +1,21 @@
 # {{ title }}
 
 {{ description }}
+
+## Package Import Style
+
+Before creating a new project in the dev container, set `IMPORT_STYLE` in
+`.devcontainer/.env` to choose how package modules are exposed:
+
+- `package` (default): use `import package`, then access objects through their
+  module, such as `package.subpackage.object`.
+- `subpackage`: import objects from their defining module, such as
+  `from package.subpackage import object`. Importing the package does not
+  eagerly load its submodules.
+- `star`: re-export public objects from submodules at the package root, allowing
+  `from package import *`.
+
+The selected value is written into the generated package's `_loader.py` when
+the project is initialized. Changing `.devcontainer/.env` later does not
+rewrite an existing package; update `IMPORT_STYLE` in that package's
+`_loader.py` to change its behavior.
