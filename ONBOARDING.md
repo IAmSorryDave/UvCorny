@@ -99,7 +99,6 @@ UvCorny automatically generates a conftest.py file which furnishes project metad
 
 ```python
 from enum import Enum
-
 import pytest
 
 
@@ -156,6 +155,11 @@ def adaptive_importer(project_name, project_import_style):
 
 
 @pytest.fixture
+def feature_name():
+    from pathlib import Path
+    return Path(__file__).parent.name
+
+@pytest.fixture
 def project_directory_path():
     from pathlib import Path
 
@@ -186,17 +190,10 @@ With these fixtures you could write a test called 'test_main.py'
 
 ```python
 import pytest
-from pathlib import Path
-
 
 @pytest.fixture
-def main_module_label(project_name):
-    return f"{project_name}.{Path(__file__).parent.name}.main"
-
-
-@pytest.fixture
-def main_fn(main_module_label):
-    return pytest.importorskip(main_module_label)
+def main_fn(adaptive_importer, feature_name):
+    return adaptive_importer(f"{feature_name}.main", "main")
 
 
 def test_main(main_fn):

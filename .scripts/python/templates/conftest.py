@@ -1,5 +1,4 @@
 from enum import Enum
-
 import pytest
 
 
@@ -54,6 +53,11 @@ def adaptive_importer(project_name, project_import_style):
 
     return adaptive_import
 
+
+@pytest.fixture
+def feature_name():
+    from pathlib import Path
+    return Path(__file__).parent.name
 
 @pytest.fixture
 def project_directory_path():
