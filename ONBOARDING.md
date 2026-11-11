@@ -37,9 +37,9 @@ In .devcontainer/.env -
 - ```UV_LINK_MODE``` : symlink ( This setting is the least noisy link mode when working in a codespace. If required, adapt this setting to your needs. )
 - ```UV_PROJECT_TYPE``` : --lib ( Must be one of --app, --lib, --package. See https://docs.astral.sh/uv/concepts/projects/init/#libraries for more on project setup)
 - ```IMPORT_STYLE``` : choose how package modules are exposed:
-    - `package` (default): use `import package`, then access objects through their
+    - `package` : use `import package`, then access objects through their
       module, such as `package.subpackage.object`.
-    - `subpackage`: import objects from their defining module, such as
+    - `subpackage` (default): import objects from their defining module, such as
       `from package.subpackage import object`. Importing the package does not
       eagerly load its submodules.
     - `star`: re-export public objects from submodules at the package root, allowing
