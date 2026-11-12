@@ -218,22 +218,4 @@ test_2_needed_to_implement_feature.py
 ...
 ```
 
-Copilot is prompted to create features like so...
-```markdown
-\src
-   |
-\your-cool-package
-   |
-__init__.py
-_loader.py
-\your-new-feature
-  ...
-```
-
 This ensures a one to one mapping between test sets and features.
-
-### Prompts 💬
-
-There are two defualt prompts under ```.github/prompts/```.
-These add relevant context to CoPilot specific to UvCorny.
-Add or subtract as needed.
