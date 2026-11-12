@@ -36,6 +36,19 @@ In .devcontainer/.env -
 - ```LICENSE_TYPE``` : MIT (See a list of valid licenses and identifiers here 👉 https://spdx.org/licenses/)
 - ```UV_LINK_MODE``` : symlink ( This setting is the least noisy link mode when working in a codespace. If required, adapt this setting to your needs. )
 - ```UV_PROJECT_TYPE``` : --lib ( Must be one of --app, --lib, --package. See https://docs.astral.sh/uv/concepts/projects/init/#libraries for more on project setup)
+- ```IMPORT_STYLE``` : choose how package modules are exposed:
+    - `package` : use `import package`, then access objects through their
+      module, such as `package.subpackage.object`.
+    - `subpackage` (default): import objects from their defining module, such as
+      `from package.subpackage import object`. Importing the package does not
+      eagerly load its submodules.
+    - `star`: re-export public objects from submodules at the package root, allowing
+      `from package import *`.
+
+The selected value is written into the generated package's `_loader.py` when
+the project is initialized. Changing `.devcontainer/.env` later does not
+rewrite an existing package; update `IMPORT_STYLE` in that package's
+`_loader.py` to change its behavior.
 
 ### Dev Container Dockerfile 🐳
 
@@ -85,8 +98,66 @@ Tests should be writen before code.
 UvCorny automatically generates a conftest.py file which furnishes project metadata fixtures.
 
 ```python
+from enum import Enum
 import pytest
 
+
+class ProjectEnvironmentVariable(str, Enum):
+    UV_LINK_MODE = "UV_LINK_MODE"
+    LICENSE_TYPE = "LICENSE_TYPE"
+    UV_PROJECT_TYPE = "UV_PROJECT_TYPE"
+    IMPORT_STYLE = "IMPORT_STYLE"
+    PYTHON_VERSION = "PYTHON_VERSION"
+
+
+class ImportStyle(str, Enum):
+    PACKAGE = "package"
+    SUBPACKAGE = "subpackage"
+    STAR = "star"
+
+
+@pytest.fixture
+def project_import_style():
+    from os import environ
+
+    import_style = environ.get(
+        ProjectEnvironmentVariable.IMPORT_STYLE, ImportStyle.PACKAGE
+    )
+    try:
+        return ImportStyle(import_style)
+    except ValueError as error:
+        raise ValueError(
+            f"Unsupported {ProjectEnvironmentVariable.IMPORT_STYLE} {import_style!r}. "
+            f"Choose one of: {', '.join(style.value for style in ImportStyle)}."
+        ) from error
+
+
+@pytest.fixture
+def adaptive_importer(project_name, project_import_style):
+    from importlib import import_module
+
+    def adaptive_import(module_name=None, object_name=None):
+        if project_import_style is ImportStyle.STAR:
+            module = import_module(project_name)
+            if object_name is not None:
+                return getattr(module, object_name)
+            return module
+
+        if module_name is None:
+            module = import_module(project_name)
+        else:
+            module = import_module(f"{project_name}.{module_name}")
+        if object_name is not None:
+            return getattr(module, object_name)
+        return module
+
+    return adaptive_import
+
+
+@pytest.fixture
+def feature_name():
+    from pathlib import Path
+    return Path(__file__).parent.name
 
 @pytest.fixture
 def project_directory_path():
@@ -119,17 +190,10 @@ With these fixtures you could write a test called 'test_main.py'
 
 ```python
 import pytest
-from pathlib import Path
-
 
 @pytest.fixture
-def main_module_label(project_name):
-    return f"{project_name}.{Path(__file__).parent.name}.main"
-
-
-@pytest.fixture
-def main_fn(main_module_label):
-    return pytest.importorskip(main_module_label)
+def main_fn(adaptive_importer, feature_name):
+    return adaptive_importer(f"{feature_name}.main", "main")
 
 
 def test_main(main_fn):
@@ -154,22 +218,4 @@ test_2_needed_to_implement_feature.py
 ...
 ```
 
-Copilot is prompted to create features like so...
-```markdown
-\src
-   |
-\your-cool-package
-   |
-__init__.py
-_loader.py
-\your-new-feature
-  ...
-```
-
 This ensures a one to one mapping between test sets and features.
-
-### Prompts 💬
-
-There are two defualt prompts under ```.github/prompts/```.
-These add relevant context to CoPilot specific to UvCorny.
-Add or subtract as needed.
