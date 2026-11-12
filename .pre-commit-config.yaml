@@ -45,3 +45,11 @@ repos:
           - jinja2
         files: pyproject.toml
         stages: [pre-commit]
+
+      - id: validate-yaml-spec
+        name: Validate specification YAML.
+        entry: python .scripts/python/scripts/validate_yaml_spec.py
+        language: python
+        files: ^specification\.yml$
+        pass_filenames: false
+        stages: [pre-commit, manual]
