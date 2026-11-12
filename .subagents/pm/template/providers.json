@@ -1,0 +1,16 @@
+{
+  "providers": [
+    {
+      "name": "pm-provider",
+      "type": "openai"
+    }
+  ],
+  "models": [
+    {
+      "id": "pm-model",
+      "provider": "pm-provider",
+      "maxPromptTokens": 128000,
+      "maxOutputTokens": 8192
+    }
+  ]
+}

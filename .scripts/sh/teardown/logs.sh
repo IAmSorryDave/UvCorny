@@ -2,5 +2,10 @@
 
 set -eu
 
-rm -rf -- .logs/implementation/pytest .logs/implementation/stream
-rmdir .logs/implementation .logs 2>/dev/null || true
+rm -rf -- \
+  .subagents/implementation/logs/pytest \
+  .subagents/implementation/logs/stream \
+  .subagents/qa/logs/pytest \
+  .subagents/qa/logs/stream \
+  .subagents/pm/logs/chat \
+  .subagents/pm/logs/stream

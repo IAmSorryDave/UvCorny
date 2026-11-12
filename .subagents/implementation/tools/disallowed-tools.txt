@@ -1,0 +1,5 @@
+write(README.md)
+write(src/**/__init__.py)
+write(src/**/_loader.py)
+write(tests/**)
+write(.subagents/implementation/logs/**)

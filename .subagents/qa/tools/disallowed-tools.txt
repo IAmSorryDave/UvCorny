@@ -1,0 +1,1 @@
+# Add one --deny-tool pattern per line.

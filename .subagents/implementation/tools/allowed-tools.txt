@@ -1,0 +1,5 @@
+write(src/**/**)
+write(README.md.jinja)
+read(.subagents/implementation/logs/**)
+read(.github/copilot-instructions.md)
+read(README.md.jinja)

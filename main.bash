@@ -2,8 +2,8 @@
 set -eu
 
 WATCH_DIR="${1:-tests}"
-WORKFLOW=".scripts/bash/copilot/boot/constrained_loop_workflow.bash"
-GATE=".scripts/bash/copilot/boot/subdir_gate.bash"
+WORKFLOW=".subagents/implementation/workflows/main_workflow.bash"
+GATE=".subagents/implementation/gate/pytest_subdirectory_gate.bash"
 
 source .scripts/bash/copilot/setup/environment.bash
 
