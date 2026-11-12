@@ -136,17 +136,19 @@ def project_import_style():
 def adaptive_importer(project_name, project_import_style):
     from importlib import import_module
 
-    def adaptive_import(module_name=None, object_name=None):
+    def adaptive_import(module_name=None, object_name=None, mandatory_import=False):
+        importer = import_module if mandatory_import else pytest.importorskip
+
         if project_import_style is ImportStyle.STAR:
-            module = import_module(project_name)
+            module = importer(project_name)
             if object_name is not None:
                 return getattr(module, object_name)
             return module
 
         if module_name is None:
-            module = import_module(project_name)
+            module = importer(project_name)
         else:
-            module = import_module(f"{project_name}.{module_name}")
+            module = importer(f"{project_name}.{module_name}")
         if object_name is not None:
             return getattr(module, object_name)
         return module
@@ -219,3 +221,8 @@ test_2_needed_to_implement_feature.py
 ```
 
 This ensures a one to one mapping between test sets and features.
+
+The `adaptive_importer` fixture uses `pytest.importorskip` by default, so tests
+for optional or not-yet-implemented modules are skipped when the module cannot
+be imported. Pass `mandatory_import=True` when the module is required; normal
+import errors will then fail the test instead of skipping it.

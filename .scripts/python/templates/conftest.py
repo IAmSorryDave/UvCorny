@@ -36,17 +36,19 @@ def project_import_style():
 def adaptive_importer(project_name, project_import_style):
     from importlib import import_module
 
-    def adaptive_import(module_name=None, object_name=None):
+    def adaptive_import(module_name=None, object_name=None, mandatory_import=False):
+        importer = import_module if mandatory_import else pytest.importorskip
+
         if project_import_style is ImportStyle.STAR:
-            module = import_module(project_name)
+            module = importer(project_name)
             if object_name is not None:
                 return getattr(module, object_name)
             return module
 
         if module_name is None:
-            module = import_module(project_name)
+            module = importer(project_name)
         else:
-            module = import_module(f"{project_name}.{module_name}")
+            module = importer(f"{project_name}.{module_name}")
         if object_name is not None:
             return getattr(module, object_name)
         return module
