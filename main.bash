@@ -5,7 +5,7 @@ WATCH_DIR="${1:-tests}"
 WORKFLOW=".subagents/implementation/workflows/main_workflow.bash"
 GATE=".subagents/implementation/gate/pytest_subdirectory_gate.bash"
 
-source .scripts/bash/copilot/setup/environment.bash
+pre-commit run scaffold-subagents --hook-stage manual
 
 watchexec \
   --watch "$WATCH_DIR" \

@@ -12,4 +12,5 @@ if [[ -z "$(find "$WATCH_DIR" -mindepth 2 -maxdepth 2 -type f -name 'test_*.py' 
   exit 0
 fi
 
-source "$WORKFLOW"
+python .scripts/python/scripts/manage_subagents.py run implementation \
+  --workflow "$(basename "$WORKFLOW")" -- "$WATCH_DIR"
