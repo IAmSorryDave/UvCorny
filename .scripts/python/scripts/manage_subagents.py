@@ -46,7 +46,11 @@ def run_subagent(
             child_env.pop(configured_role.api_key_secret, None)
         for variable in PROVIDER_ENVIRONMENT_VARIABLES:
             child_env.pop(variable, None)
-        child_env["COPILOT_PROVIDERS_CONFIG"] = str(config_path)
+
+        child_env.pop("COPILOT_PROVIDERS_CONFIG", None)
+        if config_path is not None:
+            child_env["COPILOT_PROVIDERS_CONFIG"] = str(config_path)
+
         result = subprocess.run(
             ["bash", str(script), *arguments],
             cwd=root,

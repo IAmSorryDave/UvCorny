@@ -5,7 +5,7 @@ WATCH_DIR="${1:-tests}"
 WORKFLOW=".subagents/implementation/workflows/main_workflow.bash"
 GATE=".subagents/implementation/gate/pytest_subdirectory_gate.bash"
 
-pre-commit run scaffold-subagents --hook-stage manual
+python .scripts/python/scripts/manage_subagents.py scaffold .
 
 watchexec \
   --watch "$WATCH_DIR" \

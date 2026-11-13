@@ -85,18 +85,20 @@ def temporary_provider_config(
     project_root: str,
     role: Role,
     environ: Mapping[str, str] | None = None,
-) -> Iterator[Path]:
-    """Yield a role-specific config with secrets added in a read-only tmpfs file."""
+) -> Iterator[Path | None]:
     source_env = os.environ if environ is None else environ
+    base_url, api_key = _resolve_endpoint_credentials(role, source_env)
+
+    if not base_url or not api_key:
+        yield None
+        return
+
     provider_path = (
         subagent_root(project_root) / role.value / "template" / "providers.json"
     )
     config, provider = _load_role_provider(provider_path)
-    base_url, api_key = _resolve_endpoint_credentials(role, source_env)
-    if base_url:
-        provider["baseUrl"] = base_url
-    if api_key:
-        provider["apiKey"] = api_key
+    provider["baseUrl"] = base_url
+    provider["apiKey"] = api_key
 
     temporary_directory = Path(
         tempfile.mkdtemp(

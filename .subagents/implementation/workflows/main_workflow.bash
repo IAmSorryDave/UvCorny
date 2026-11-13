@@ -17,4 +17,5 @@ export PROMPT WATCH_DIR
 
 while ! bash .scripts/bash/pre-commit/test.bash || [ "$(sha256sum "$README_TEMPLATE" | awk '{print $1}')" = "$INITIAL_README_TEMPLATE_HASH" ]; do
   source .subagents/implementation/subagent/subagent.bash 2>&1 | tee -a "$IMPLEMENTATION_STREAM_LOG_FILE"
+  sleep 5
 done
