@@ -1,7 +1,16 @@
 #!/bin/bash
 
 LOG_ROOT="$(pwd)/.subagents"
-IMPLEMENTATION_LOG_DIR="$LOG_ROOT/implementation/logs"
+
+BRANCH_NAME="$(git branch --show-current)"
+if [ -z "$BRANCH_NAME" ]; then
+  BRANCH_NAME="detached-$(git rev-parse --short HEAD)"
+fi
+BRANCH_SLUG="$(printf '%s' "$BRANCH_NAME" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-48)"
+BRANCH_HASH="$(printf '%s' "$BRANCH_NAME" | cksum | awk '{print $1}')"
+BRANCH_LOG_KEY="${BRANCH_SLUG}-${BRANCH_HASH}"
+
+IMPLEMENTATION_LOG_DIR="$LOG_ROOT/implementation/logs/$BRANCH_LOG_KEY"
 IMPLEMENTATION_PYTEST_LOG_DIR="$IMPLEMENTATION_LOG_DIR/pytest"
 IMPLEMENTATION_STREAM_LOG_DIR="$IMPLEMENTATION_LOG_DIR/stream"
 
@@ -9,13 +18,13 @@ IMPLEMENTATION_BUILD_LOG_FILE="$IMPLEMENTATION_LOG_DIR/copilot-implementation-bu
 IMPLEMENTATION_PYTEST_LOG_FILE="$IMPLEMENTATION_PYTEST_LOG_DIR/copilot-implementation-pytests.log"
 IMPLEMENTATION_STREAM_LOG_FILE="$IMPLEMENTATION_STREAM_LOG_DIR/copilot-implementation-stream.log"
 
-QA_LOG_DIR="$LOG_ROOT/qa/logs"
+QA_LOG_DIR="$LOG_ROOT/qa/logs/$BRANCH_LOG_KEY"
 QA_PYTEST_LOG_DIR="$QA_LOG_DIR/pytest"
 QA_STREAM_LOG_DIR="$QA_LOG_DIR/stream"
 QA_PYTEST_LOG_FILE="$QA_PYTEST_LOG_DIR/copilot-qa-pytests.log"
 QA_STREAM_LOG_FILE="$QA_STREAM_LOG_DIR/copilot-qa-stream.log"
 
-PM_LOG_DIR="$LOG_ROOT/pm/logs"
+PM_LOG_DIR="$LOG_ROOT/pm/logs/$BRANCH_LOG_KEY"
 PM_CHAT_LOG_DIR="$PM_LOG_DIR/chat"
 PM_STREAM_LOG_DIR="$PM_LOG_DIR/stream"
 PM_CHAT_LOG_FILE="$PM_CHAT_LOG_DIR/copilot-pm-chat.log"
