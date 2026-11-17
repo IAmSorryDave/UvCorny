@@ -1,21 +1,30 @@
 
 ## Persistent Copilot subagents
 
-Create a project-local `.subagents` tree for the `implementation`, `qa`, and `pm`
-roles by manually running the pre-commit hook:
+Create missing role directories and provider configuration files by running:
 
 ```bash
-pre-commit run scaffold-subagents --hook-stage manual
+python .scripts/python/scripts/manage_subagents.py scaffold .
 ```
 
-Scaffolding creates a `template/providers.json`, a `subagent/subagent.bash`, a
-`tools/` directory, a `workflows/` directory, and a `logs/` directory for each
-role. Implementation and QA have `logs/pytest/` and `logs/stream/`; PM has
-`logs/chat/` and `logs/stream/`. Script and tool defaults are copied from
-the checked-in `.subagents/<role>/` files; existing files are left untouched,
-so role definitions and provider settings can be customized and committed. The
-Python manager contains no embedded subagent script bodies; edit the checked-in
-role files to change defaults for newly scaffolded roles.
+Scaffolding creates the `template/`, `subagent/`, `tools/`, and `workflows/`
+directories and role-specific base log directories. It creates a missing
+`template/providers.json` without overwriting an existing one. It does not
+create or copy the role scripts, tool configuration files, or instruction
+files; supply those separately under `.subagents/<role>/`. Commit them if they
+should be part of the project's defaults. The Python manager contains no
+embedded subagent script bodies.
+
+The base log directories are `logs/pytest/` and `logs/stream/` for
+implementation and QA, and `logs/chat/` and `logs/stream/` for PM. At runtime,
+logs are written beneath a branch-specific directory:
+`.subagents/<role>/logs/<branch-key>/...`.
+
+Each role uses only `.subagents/<role>/instructions/instructions.md` as its
+custom prompt. The runner passes `--no-custom-instructions` so Copilot CLI does
+not also load repository instruction files. Create the file for each role; an
+empty file is allowed, but provides no instructions. No `PROMPT` environment
+variable or extra prompt argument is needed.
 
 Each `.subagents/<role>/tools/` directory controls the Copilot CLI tools for
 that role:
@@ -44,28 +53,28 @@ resolved values are added to the temporary config in `/dev/shm`:
 | PM | `PM_SUBAGENT_PROVIDER_BASE_URL` | `PM_SUBAGENT_PROVIDER_API_KEY` |
 
 Run a role with the appropriate secrets already provided by Codespaces or
-GitHub Actions. The implementation script also expects `PROMPT` and
-`WATCH_DIR`; QA and PM expect `PROMPT`.
+GitHub Actions. The instructions file is the sole custom prompt source for
+every role.
 
 ```bash
-export PROMPT="Describe the work for this subagent"
-export WATCH_DIR=tests
 python .scripts/python/scripts/manage_subagents.py run implementation
 ```
 
-To run the implementation workflow with the provider config attached to the
-entire loop:
+To run the implementation workflow:
 
 ```bash
 python .scripts/python/scripts/manage_subagents.py run implementation \
-  --workflow constrained_loop_workflow.bash -- tests
+  --workflow main_workflow.bash
 ```
 
-Each invocation launches its own bash process and sets Copilot CLI's documented
-singular `COPILOT_PROVIDERS_CONFIG` variable to a distinct config file under
-`/dev/shm`. The runtime file contains resolved endpoint credentials, is
-read-only, and is deleted when the subprocess exits. Other role-specific
-secrets and provider variables are removed from that child process's
-environment. This lets role processes run concurrently without racing over a
-shared provider-config variable or file. The host must provide a writable
-`/dev/shm`; the runner fails rather than falling back to disk storage.
+When both the base URL and API key are available, each invocation launches its
+own bash process and sets Copilot CLI's documented singular
+`COPILOT_PROVIDERS_CONFIG` variable to a distinct config file under `/dev/shm`.
+The runtime file contains resolved endpoint credentials, is read-only, and is
+deleted when the subprocess exits. Other role-specific secrets and provider
+variables are removed from that child process's environment. This lets role
+processes run concurrently without racing over a shared provider-config
+variable or file. In this case, the host must provide a writable `/dev/shm`
+mounted as `tmpfs`; the runner fails rather than falling back to disk storage.
+If either credential is unavailable, no temporary provider config is created
+or injected into the child process.

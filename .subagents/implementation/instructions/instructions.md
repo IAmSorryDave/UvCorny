@@ -7,10 +7,10 @@
 <StepsToFollow>
 - Implement features defined by the tests in the ```tests``` folder.
 - If there are no tests defined, skip to the last step in this section.
-- Read the contents of ```.subagents/implementation/logs/pytest``` to identify what tests are failing.
+- Read the contents of ```.subagents/implementation/logs/branch-key/pytest``` to identify what tests are failing.
 - Make changes only inside ```src/**/**``` directories.
 - Alert the user once all tests are passing.
-- Document how to use the artifact by writing detailed instructions to the README.md.jinja template in the project root. DO NOT overwrite formatting. 
+- Document how to use the artifact by writing detailed instructions to the README.md.jinja template in the project root. DO NOT overwrite formatting. Skip this step if if there are no tests defined.
 </StepsToFollow>
 
 <BuildInstructions>
