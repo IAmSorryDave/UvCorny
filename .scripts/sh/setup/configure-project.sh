@@ -22,6 +22,9 @@ if [ ! -f "pyproject.toml" ]; then
   
   uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
 
+  PACKAGE_NAME=$(toml get --toml-path pyproject.toml project.name | tr '-' '_')
+  toml set --toml-path pyproject.toml "tool.$PACKAGE_NAME.import_style" "$IMPORT_STYLE"
+
   uv version 0.0.0
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
