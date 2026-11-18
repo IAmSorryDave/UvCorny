@@ -18,24 +18,19 @@ if [ ! -f "pyproject.toml" ]; then
   if [ -f "LICENSE" ]; then rm LICENSE ; fi
   if [ -f ".gitignore" ]; then rm .gitignore ; fi
 
-  uv tool install toml-cli && echo "TOML CLI added as UV tool."
-  
-  uv init $UV_PROJECT_TYPE . && uv run toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
-
-  PACKAGE_NAME=$(toml get --toml-path pyproject.toml project.name | tr '-' '_')
-  toml set --toml-path pyproject.toml "tool.$PACKAGE_NAME.import_style" "$IMPORT_STYLE"
+  uv init $UV_PROJECT_TYPE . && uvx --from toml-cli toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
+  PACKAGE_NAME=$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name | tr '-' '_')
+  printf '\n[tool.%s]\nimport_style = "%s"\n' "$PACKAGE_NAME" "$IMPORT_STYLE" >> pyproject.toml
 
   uv version 0.0.0
 
   case "$UV_PROJECT_TYPE" in '--lib' | '--package')
 
-    rm src/$(toml get --toml-path pyproject.toml project.name )/__init__.py && cp .scripts/python/templates/__init__.py src/$(toml get --toml-path pyproject.toml project.name )/ && cp .scripts/python/templates/_loader.py src/$(toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
-    sed -i "s/^IMPORT_STYLE = .*/IMPORT_STYLE = \"$IMPORT_STYLE\"/" src/$(toml get --toml-path pyproject.toml project.name )/_loader.py
+    rm src/$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name )/__init__.py && cp .scripts/python/templates/__init__.py src/$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name )/ && cp .scripts/python/templates/_loader.py src/$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name )/  # The default UV init file is pretty useless. Tagging in custom __init__.py.
+    sed -i "s/^IMPORT_STYLE = .*/IMPORT_STYLE = \"$IMPORT_STYLE\"/" src/$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name )/_loader.py
 
   esac
 
-  uv tool uninstall toml-cli && echo "TOML CLI removed as UV tool." 
-    
   uvx easyignore python
 
   echo "Project configured."
