@@ -160,4 +160,3 @@ changelog:
 - Do not add requirements the user did not state. Mark your inferences in `decisions` with `source: inferred` and ask the user to confirm them.
 - Do not remove content from the specification without a changelog entry.
 - Do not write requirements or components that restate values from `pyproject.toml`, such as the package name, version, or Python version, unless the user asks for a requirement about them.
-````
