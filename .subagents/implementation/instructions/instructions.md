@@ -1,20 +1,32 @@
 <Goals>
-- Implement all features. 
-- Pass all unit tests.
-- Update documentation.
+- Implement every in-scope feature in `specification.yml`, so that each component matches its declared details.
+- Make all tests in `tests/` directories pass without modifying them.
+- Document how to use the package in `README.md.jinja`.
 </Goals>
 
 <StepsToFollow>
-- Implement features defined by the tests in the ```tests``` folder.
-- If there are no tests defined, skip to the last step in this section.
-- Read the contents of ```.subagents/implementation/logs/branch-key/pytest``` to identify what tests are failing.
-- Make changes only inside ```src/**/**``` directories.
-- Alert the user once all tests are passing.
-- Document how to use the artifact by writing detailed instructions to the README.md.jinja template in the project root. DO NOT overwrite formatting. Skip this step if if there are no tests defined.
+1. Read `pyproject.toml`. Derive the import package name from the `[project]` name by replacing hyphens with underscores. This name is the root of the source tree. This should already be created under `src/`
+2. Read `specification.yml`. Note `package.import_style`, which defaults to `subpackage` when absent. Select the features whose `status` is `accepted`, `in_progress`, or `done`. Do not implement `proposed` or `deprecated` features.
+3. Read the tests in `tests/` for each in-scope feature. Treat them as the definition of correct behavior. If a test contradicts the specification, stop and report the conflict.
+4. Implement each in-scope component under `src/<import_name>/<feature_slug>/`. Match its `kind`, `name`, `is_a`, `has_a`, and the signature-level details exactly as written in the spec.
+5. Run `pytest` in `tests/` and save the full output to `.subagents/implementation/logs/<current_git_branch>/pytest`.
+6. Read that log and fix the implementation for each failing test. Repeat until every in-scope test passes. If a failure can only be fixed by editing a protected file, changing a test, or changing the specification, stop and report it instead of working around it.
+7. When all in-scope tests pass, tell the user.
+8. If in-scope tests exist, update `README.md.jinja` with detailed usage instructions. Cover installation, the import form for the active `import_style`, and one usage example for each in-scope feature.
 </StepsToFollow>
 
+<ImportStyleRules>
+- `package`: Attribute access such as `package.subpackage.object` must work.
+- `subpackage`: `from package.subpackage import object` must work, and importing the package root must not eagerly load its submodules.
+- `star`: Public components must be listed in the root `__all__`, and `from package import *` must expose them.
+- If any import style requires changes to `__init__.py` or `_loader.py`, stop and report it, because those files are protected.
+</ImportStyleRules>
+
 <BuildInstructions>
-- Each feature should be a subdirectory of the ```src/**``` folder that maps 1-to-1 to a subdirectory in the tests folder.
-- Do NOT edit the __init__.py and _loader.py scripts.
-- Use a reasonable, professional amount of emoji. DO NOT overwrite formatting.
+- Make changes only inside `src/**`. Do not edit `tests/`, `specification.yml`, `pyproject.toml`, `__init__.py`, `_loader.py`, or `conftest.py`.
+- Each feature directory under `src/<import_name>/` maps one-to-one to the matching subdirectory under `tests/`.
+- Do not add behavior that the specification does not state. If a feature needs detail the spec lacks, report it.
+- In `README.md.jinja`, preserve all existing formatting, Jinja tags, and placeholders. Add content only in the sections the template already defines.
+- Use emoji sparingly and professionally in `README.md.jinja` and in your report to the user. Do not use emoji in code, identifiers, docstrings, or log files.
+- Your final report must list the features implemented, the test results, any features skipped, and every conflict or blocked item.
 </BuildInstructions>
