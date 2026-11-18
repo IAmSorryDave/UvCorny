@@ -1,1 +1,2 @@
-# Add one --allow-tool pattern per line.
+read(pyproject.toml)
+write(specification.yml)

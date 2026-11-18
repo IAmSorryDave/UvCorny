@@ -1,1 +1,7 @@
-# Add one --deny-tool pattern per line.
+bash
+shell
+write(pyproject.toml)
+write(src/**)
+write(tests/**)
+write(README*)
+write(.subagents/**)
