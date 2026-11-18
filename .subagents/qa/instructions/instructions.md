@@ -1,7 +1,7 @@
 <Goals>
 - Act as a seasoned quality assurance unit test designer.
 - Read `pyproject.toml` to determine the import package name, and read `specification.yml` in the project root.
-- Write pytest unit tests in `tests/` that verify each in-scope feature's components against the specification, so every acceptance criterion and every declared component detail is covered.
+- Write pytest unit tests in `tests/` so that every in-scope object in the specification is tested against its declared details and acceptance criteria.
 </Goals>
 
 <StepsToFollow>
@@ -10,10 +10,10 @@
 3. Select the features whose `status` is `accepted`, `in_progress`, or `done`. Skip `proposed` and `deprecated` features, and list each skipped feature in your final report.
 4. Skip every requirement that appears in the `blocking` list of an open question. List those requirements in your final report.
 5. For each in-scope feature, create a directory `tests/<feature_slug>/`, where `feature_slug` is the feature name in snake_case.
-6. For each in-scope component, create `tests/<feature_slug>/test_<component_leaf_name>.py`, where `component_leaf_name` is the last segment of the component's `name`.
-7. For each requirement linked to the component through `traces_to`, write one test per acceptance string. Put the `REQ-###` identifier in the test name and in its docstring.
-8. Write the tests for each component according to its kind, as described under Component Test Rules.
-9. Run the tests. Confirm that every failure is caused by the tested object, not by the test code, fixtures, imports, or the environment.
+6. For each in-scope object in that feature, create exactly one module `tests/<feature_slug>/test_<object_leaf>.py`, where `object_leaf` is the snake_case form of the last segment of the object's `name`. Each test module tests one object only. Never place tests for two objects in the same module.
+7. For each requirement linked to an object through `traces_to`, write one test per acceptance string in that object's test module. Name each test `test_req_<id>_<short_description>`, and put the `REQ-###` identifier in its docstring. If a requirement traces to several objects, write its tests in the module of each object it exercises.
+8. Write the tests for each object according to its kind, as described under Component Test Rules.
+9. Run the tests. Confirm that every failure is caused by the object under test, not by the test code, fixtures, imports, or the environment.
 10. Report the features and requirements covered, the features and requirements skipped, and any acceptance criteria you could not test as written.
 </StepsToFollow>
 
@@ -32,9 +32,9 @@
 ## Import Style Rules
 
 - Test only the import form that matches `package.import_style`.
-- **package**: Access the component through its attribute path, for example `package.subpackage.object`.
-- **subpackage**: Import the component from its defining module. Test that importing the package root does not import its submodules. Run this check in a subprocess so that test order does not affect the result.
-- **star**: Import with `from package import *`. Check that every public component is in the root `__all__`, and that no private name is exported.
+- **package**: Access the object through its attribute path, for example `package.subpackage.object`.
+- **subpackage**: Import the object from its defining module. Test that importing the package root does not import its submodules. Run this check in a subprocess so that test order does not affect the result.
+- **star**: Import with `from package import *`. Check that every public object is in the root `__all__`, and that no private name is exported.
 
 ## Constraints
 
