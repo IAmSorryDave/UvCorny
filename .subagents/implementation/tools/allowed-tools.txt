@@ -1,0 +1,7 @@
+read(specification.yml)
+read(pyproject.toml)
+read(tests/**)
+read(README.md.jinja)
+read(.subagents/implementation/logs/**)
+write(src/**)
+write(README.md.jinja)

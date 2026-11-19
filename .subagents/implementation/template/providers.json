@@ -1,0 +1,16 @@
+{
+  "providers": [
+    {
+      "name": "implementation-provider",
+      "type": "openai"
+    }
+  ],
+  "models": [
+    {
+      "id": "implementation-model",
+      "provider": "implementation-provider",
+      "maxPromptTokens": 128000,
+      "maxOutputTokens": 8192
+    }
+  ]
+}

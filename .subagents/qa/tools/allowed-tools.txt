@@ -1,0 +1,3 @@
+read(specification.yml)
+read(pyproject.toml)
+write(tests/**)

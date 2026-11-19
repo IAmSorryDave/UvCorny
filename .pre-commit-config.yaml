@@ -1,6 +1,5 @@
 
 repos:
-
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
     rev: 0.11.6
@@ -8,34 +7,66 @@ repos:
       - id: uv-sync
       - id: uv-lock
       - id: uv-export
-        args: [ --format, requirements.txt, --output-file, requirements.txt ]
-      
+        args: [--format, requirements.txt, --output-file, requirements.txt]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.15.10
     hooks:
       # Run the linter.
       - id: ruff-check
-        types_or: [ python, pyproject]
-        args: [ --fix ] # If you live dangerously, add the --fix-unsafe flag.
+        types_or: [python, pyproject]
+        args: [--fix] # If you live dangerously, add the --fix-unsafe flag.
       # Run the formatter.
       - id: ruff-format
-        types_or: [ python, pyproject]
-
+        types_or: [python, pyproject]
   - repo: https://github.com/christophmeissner/pytest-pre-commit
     rev: 1.0.0
     hooks:
-    - id: pytest
-      additional_dependencies:
-        - pytest-custom_exit_code
-      args:
-        - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
-      fail_fast: true
-      stages: [pre-commit, manual]
-      pass_filenames: false
-      
+      - id: pytest
+        additional_dependencies:
+          - pytest-custom_exit_code
+        args:
+          - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
+        fail_fast: true
+        stages: [pre-commit, manual]
+        pass_filenames: false
   - repo: local
     hooks:
+      - id: manage-subagents-scaffold
+        name: Scaffold persistent subagents.
+        entry: python .scripts/python/scripts/manage_subagents.py
+        args: [scaffold, .]
+        language: python
+        pass_filenames: false
+        stages: [manual]
+      - id: manage-subagents-run-implementation
+        name: Run implementation subagent.
+        entry: python .scripts/python/scripts/manage_subagents.py
+        args: [run, implementation]
+        language: python
+        pass_filenames: false
+        stages: [manual]
+      - id: manage-subagents-run-implementation-workflow
+        name: Run implementation workflow.
+        entry: python .scripts/python/scripts/manage_subagents.py
+        args: [run, implementation, --workflow, workflow.bash]
+        language: python
+        pass_filenames: false
+        stages: [manual]
+      - id: manage-subagents-run-qa-workflow
+        name: Run QA workflow.
+        entry: python .scripts/python/scripts/manage_subagents.py
+        args: [run, qa, --workflow, workflow.bash]
+        language: python
+        pass_filenames: false
+        stages: [manual]
+      - id: manage-subagents-run-pm-workflow
+        name: Run PM workflow.
+        entry: python .scripts/python/scripts/manage_subagents.py
+        args: [run, pm, --workflow, chat.bash]
+        language: python
+        pass_filenames: false
+        stages: [manual]
       - id: write-documentation
         name: Sync project documentation.
         entry: python .scripts/python/scripts/write_documentation.py
@@ -44,12 +75,14 @@ repos:
         additional_dependencies:
           - jinja2
         files: pyproject.toml
-        stages: [pre-commit]
-
+        pass_filenames: false
+        stages: [pre-commit, manual]
       - id: validate-yaml-spec
         name: Validate specification YAML.
         entry: python .scripts/python/scripts/validate_yaml_spec.py
         language: python
+        additional_dependencies:
+          - PyYAML
         files: ^specification\.yml$
         pass_filenames: false
-        stages: [pre-commit, manual]
+        stages: [manual]

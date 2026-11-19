@@ -1,0 +1,7 @@
+bash
+shell
+write(pyproject.toml)
+write(src/**)
+write(tests/**)
+write(README*)
+write(.subagents/**)

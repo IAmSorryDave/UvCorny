@@ -1,8 +1,7 @@
 #!/bin/bash
 set -eu
 
-WORKFLOW="$1"
-WATCH_DIR="$2"
+WATCH_DIR="${1:?Usage: $0 <watch-directory>}"
 
 # Match tests/<subdir>/test_*.py only.
 # -mindepth 2 -maxdepth 2 skips top-level files in tests/ and
@@ -12,4 +11,4 @@ if [[ -z "$(find "$WATCH_DIR" -mindepth 2 -maxdepth 2 -type f -name 'test_*.py' 
   exit 0
 fi
 
-source "$WORKFLOW"
+bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-implementation-workflow

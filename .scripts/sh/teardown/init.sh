@@ -36,6 +36,7 @@ sh .scripts/sh/teardown/fetch-template-file.sh .pre-commit-config.yaml "$pre_com
 sh .scripts/sh/teardown/hooks.sh
 sh .scripts/sh/teardown/project-files.sh "$include_tracked"
 sh .scripts/sh/teardown/logs.sh
+sh .scripts/sh/teardown/branch-logs.sh
 
 if [ "$include_tracked" = yes ] || [ ! -e README.md ] ||
   ! git ls-files --error-unmatch README.md >/dev/null 2>&1; then

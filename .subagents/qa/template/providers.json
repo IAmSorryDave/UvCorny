@@ -1,0 +1,16 @@
+{
+  "providers": [
+    {
+      "name": "qa-provider",
+      "type": "openai"
+    }
+  ],
+  "models": [
+    {
+      "id": "qa-model",
+      "provider": "qa-provider",
+      "maxPromptTokens": 128000,
+      "maxOutputTokens": 8192
+    }
+  ]
+}
