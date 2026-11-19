@@ -72,7 +72,7 @@ in your Codespace secret store for git to work properly.
 
 ### pre-commit Hooks 🪝
 
-By default, UvCorny calls official sync, lock, and export Astral hooks.
+UvCorny's framework-managed hooks live in `.hooks/system/.pre-commit-config.yaml` and call official sync, lock, and export Astral hooks.
 Offical Ruff hooks are also built in for formatting and code style standardization.
 
 Two custom hooks are added by defualt.
@@ -83,14 +83,12 @@ b. On codespace creation, a script appends the '-r' flag and absolute path of th
   
 - A custom hook which automatially updates your README.md title and description according to the title and description in the pyproject.toml. Thus you should not edit your README.md directly but rather the README.md.jinja file this hook relies on.
 
+Add your own hooks to the clean `.hooks/user/.pre-commit-config.yaml`. Both your hooks and UvCorny's framework hooks run on each commit.
+
 If you are not familar with pre-commit, any files modified by hooks will cause the hook to fail and block the commit. This ensures you double check any modifications before commitng to them. 
 By combining these hooks together, you can reduce the need to add these steps to your CI/CD workflows.
 
-You are free to modify the pre-commit configuration to your liking.
-However if you choose to do so, do not remove the pytest hook. No tests are required of you, but removing this hook will cause UvCorny to break.
-
-Furthermore, do not edit the pre-commit configuration in a codespace! This also risks breaking UvCorny.
-Any modifications to the configuration should be made from the web editor.
+You can edit `.hooks/user/.pre-commit-config.yaml` freely; leave `.hooks/system/.pre-commit-config.yaml` unchanged because UvCorny manages its framework hooks there.
 
 ### Creating Pytests 🧪
 

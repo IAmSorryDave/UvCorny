@@ -86,3 +86,8 @@ repos:
         files: ^specification\.yml$
         pass_filenames: false
         stages: [manual]
+      - id: user-defined-hooks
+        name: Run project pre-commit hooks.
+        entry: pre-commit run --config .hooks/user/.pre-commit-config.yaml --files
+        language: system
+        stages: [pre-commit]

@@ -7,4 +7,4 @@ if [[ $# -ne 1 ]]; then
   exit 2
 fi
 
-pre-commit run --hook-stage manual "$1" --all-files
+pre-commit run --config .hooks/system/.pre-commit-config.yaml --hook-stage manual "$1" --all-files
