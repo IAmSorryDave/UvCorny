@@ -75,6 +75,8 @@ in your Codespace secret store for git to work properly.
 UvCorny's framework-managed hooks live in `.hooks/system/.pre-commit-config.yaml` and call official sync, lock, and export Astral hooks.
 Offical Ruff hooks are also built in for formatting and code style standardization.
 
+Project requirements are maintained in `requirements/features/<feature_slug>/specification.yml`, one file per feature. The system YAML hook validates each feature file and regenerates the combined `requirements/aggregate/specification.yml` consumed by the QA and implementation subagents. Do not edit the aggregate directly.
+
 Two custom hooks are added by defualt.
 
 - Cristopher Meissner's pytest-pre-commit (https://github.com/christophmeissner/pytest-pre-commit) is modified to allow the pytest hook to

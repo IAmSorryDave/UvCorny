@@ -23,7 +23,7 @@ trap cleanup EXIT
 
 watchexec \
   --watch-non-recursive . \
-  --filter "/specification.yml" \
+  --filter "/requirements/features/**/specification.yml" \
   --postpone \
   --debounce 2s \
   -- bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-qa-workflow &

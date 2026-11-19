@@ -14,7 +14,7 @@ case "${1:-}" in
   *) echo "Usage: $0 [--untracked-only]" >&2; exit 2 ;;
 esac
 
-printf '%s\n' "This will remove recognized initialization files, src/, tests/, requirements.txt, generated logs, and the repository pre-commit hook." "Project source and tests will be deleted; README.md and LICENSE will be restored from origin/main. Your .hooks/user/.pre-commit-config.yaml will be preserved."
+printf '%s\n' "This will remove recognized initialization files, src/, tests/, requirements/, requirements.txt, generated logs, and the repository pre-commit hook." "Project source, tests, and requirements will be deleted; README.md and LICENSE will be restored from origin/main. Your .hooks/user/.pre-commit-config.yaml will be preserved."
 if [ "$include_tracked" = no ]; then
   echo "Untracked-only mode: tracked files will be preserved."
 fi

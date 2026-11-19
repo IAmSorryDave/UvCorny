@@ -32,6 +32,10 @@ echo "Configuring project..."
 chmod +x .scripts/sh/setup/configure-project.sh && .scripts/sh/setup/configure-project.sh && chmod -x .scripts/sh/setup/configure-project.sh
 sleep 1
 
+echo "Configuring requirements..."
+chmod +x .scripts/sh/setup/configure-requirements.sh && .scripts/sh/setup/configure-requirements.sh && chmod -x .scripts/sh/setup/configure-requirements.sh
+sleep 1
+
 echo "Configuring logs..."
 chmod +x .scripts/sh/setup/configure-logs.sh && .scripts/sh/setup/configure-logs.sh && chmod -x .scripts/sh/setup/configure-logs.sh
 sleep 1

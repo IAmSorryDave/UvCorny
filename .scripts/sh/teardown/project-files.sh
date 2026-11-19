@@ -32,3 +32,10 @@ if [ -d src ] && {
   printf '%s\n' "Removed src/"
 fi
 
+if [ -d requirements ] && {
+  [ "$include_tracked" = yes ] || ! git ls-files --error-unmatch requirements >/dev/null 2>&1
+}; then
+  rm -rf -- requirements
+  printf '%s\n' "Removed requirements/"
+fi
+
