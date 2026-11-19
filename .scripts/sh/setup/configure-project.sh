@@ -22,6 +22,7 @@ if [ ! -f "pyproject.toml" ]; then
 
   uv init $UV_PROJECT_TYPE . && uvx --from toml-cli toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
   uvx --from toml-cli toml set --toml-path pyproject.toml project.requires-python ">=${PYTHON_VERSION}"
+  printf '%s\n' "$PYTHON_VERSION" > .python-version
   PACKAGE_NAME=$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name | tr '-' '_')
   printf '\n[tool.%s]\nimport_style = "%s"\n' "$PACKAGE_NAME" "$IMPORT_STYLE" >> pyproject.toml
 
