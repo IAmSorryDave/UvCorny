@@ -60,6 +60,13 @@ FROM $IMAGE
 ```
 See https://docs.astral.sh/uv/guides/integration/docker/ for a list of available alpine images.
 
+Set `PYTHON_VERSION` in `.devcontainer/.env` to choose the project's minimum
+Python version. On project creation, setup writes it to
+`project.requires-python` in `pyproject.toml` as `>=<version>` and pins the same
+version in `.python-version`. This is independent of the Dockerfile's
+build-time image version. To change the interpreter available in the
+container, update the Dockerfile's `ARG PYTHON_VERSION` separately.
+
 ### Dev Container ENVIRONMENTAL VARIABLES ❎
 
 The Alpine UV image does not have git configured by default.
