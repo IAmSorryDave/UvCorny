@@ -1,5 +1,7 @@
 #!/bin/sh
 
+: "${PYTHON_VERSION:?Set PYTHON_VERSION in .devcontainer/.env}"
+
 IMPORT_STYLE=${IMPORT_STYLE:-package}
 
 case "$IMPORT_STYLE" in
@@ -19,6 +21,7 @@ if [ ! -f "pyproject.toml" ]; then
   if [ -f ".gitignore" ]; then rm .gitignore ; fi
 
   uv init $UV_PROJECT_TYPE . && uvx --from toml-cli toml set --toml-path pyproject.toml project.license $LICENSE_TYPE
+  uvx --from toml-cli toml set --toml-path pyproject.toml project.requires-python ">=${PYTHON_VERSION}"
   PACKAGE_NAME=$(uvx --from toml-cli toml get --toml-path pyproject.toml project.name | tr '-' '_')
   printf '\n[tool.%s]\nimport_style = "%s"\n' "$PACKAGE_NAME" "$IMPORT_STYLE" >> pyproject.toml
 
