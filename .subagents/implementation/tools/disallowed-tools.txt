@@ -3,6 +3,6 @@ shell
 write(README.md)
 write(src/**/__init__.py)
 write(tests/**)
-write(specification.yml)
+write(requirements/**/specification.yml)
 write(pyproject.toml)
 write(.subagents/**)

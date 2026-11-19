@@ -10,7 +10,7 @@ fi
 template_file=$1
 output_file=$2
 case "$template_file" in
-  README.md|LICENSE|.pre-commit-config.yaml) ;;
+  README.md|LICENSE) ;;
   *) echo "Unsupported template file: $template_file" >&2; exit 2 ;;
 esac
 

@@ -1,2 +1,4 @@
 read(pyproject.toml)
-write(specification.yml)
+read(.scripts/bash/logs/setup/environment.bash)
+read(requirements/features/**/specification.yml)
+write(requirements/features/**/specification.yml)

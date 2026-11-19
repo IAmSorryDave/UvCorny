@@ -9,4 +9,4 @@ if command -v pre-commit >/dev/null 2>&1 &&
   pre-commit uninstall || true
 fi
 
-git update-index --no-assume-unchanged .pre-commit-config.yaml 2>/dev/null || true
+git update-index --no-assume-unchanged .hooks/system/.pre-commit-config.yaml 2>/dev/null || true

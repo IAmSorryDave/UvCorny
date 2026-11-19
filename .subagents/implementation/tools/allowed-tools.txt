@@ -1,4 +1,4 @@
-read(specification.yml)
+read(requirements/aggregate/specification.yml)
 read(pyproject.toml)
 read(tests/**)
 read(README.md.jinja)

@@ -40,7 +40,7 @@ jobs:
         run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
 
       - name: Setup
-        run: pre-commit install
+        run: pre-commit install --config .hooks/system/.pre-commit-config.yaml
 
       - name: Run Tests
         shell: bash
