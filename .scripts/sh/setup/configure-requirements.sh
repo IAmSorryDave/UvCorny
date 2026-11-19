@@ -13,4 +13,5 @@ branch_log_key="${branch_slug}-${branch_hash}"
 
 mkdir -p \
   requirements/aggregate \
-  "requirements/features/$branch_log_key"
+  "requirements/features/$branch_log_key" \
+  "tests/$branch_log_key"

@@ -75,7 +75,7 @@ in your Codespace secret store for git to work properly.
 UvCorny's framework-managed hooks live in `.hooks/system/.pre-commit-config.yaml` and call official sync, lock, and export Astral hooks.
 Offical Ruff hooks are also built in for formatting and code style standardization.
 
-Project requirements are maintained in `requirements/features/<feature_slug>/specification.yml`, one file per feature. The system YAML hook validates each feature file and regenerates the combined `requirements/aggregate/specification.yml` consumed by the QA and implementation subagents. Do not edit the aggregate directly.
+Project requirements are maintained in `requirements/features/<feature_slug>/specification.yml`, one file per feature. Setup creates the current branch's specification and pytest feature directories. The system YAML hook validates each feature file and regenerates the combined `requirements/aggregate/specification.yml`; the QA subagent runs only after that aggregate is committed. Do not edit the aggregate directly.
 
 Two custom hooks are added by defualt.
 
