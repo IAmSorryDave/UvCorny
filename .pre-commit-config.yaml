@@ -25,8 +25,6 @@ repos:
       - id: pytest
         additional_dependencies:
           - pytest-custom_exit_code
-          - -r
-          - /workspaces/UvCorny/requirements.txt
         args:
           - "--suppress-no-test-exit-code" # Remove argument if hook should fail on the absence of tests.
         fail_fast: true
