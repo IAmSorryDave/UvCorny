@@ -1,5 +1,5 @@
 #!/bin/bash
 
-set -o pipefail
+set -euo pipefail
 
 pre-commit run --hook-stage manual pytest --all-files

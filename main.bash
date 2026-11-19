@@ -4,11 +4,9 @@ set -eu
 source .scripts/bash/logs/setup/environment.bash
 
 WATCH_DIR="${1:-tests}"
-WORKFLOW=".subagents/implementation/workflows/workflow.bash"
 GATE=".subagents/implementation/gate/pytest_subdirectory_gate.bash"
-QA_WORKFLOW=".subagents/qa/workflows/workflow.bash"
 
-python .scripts/python/scripts/manage_subagents.py scaffold .
+bash .scripts/bash/CI/manage_subagents.bash manage-subagents-scaffold
 
 QA_WATCHER_PID=""
 IMPLEMENTATION_WATCHER_PID=""
@@ -28,8 +26,7 @@ watchexec \
   --filter "/specification.yml" \
   --postpone \
   --debounce 2s \
-  -- python .scripts/python/scripts/manage_subagents.py run qa \
-  --workflow "$(basename "$QA_WORKFLOW")" &
+  -- bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-qa-workflow &
 QA_WATCHER_PID=$!
 
 watchexec \
@@ -38,10 +35,9 @@ watchexec \
   --ignore "**/__init__.py" \
   --ignore "**/conftest.py" \
   --debounce 2s \
-  -- bash "$GATE" "$WORKFLOW" "$WATCH_DIR" &
+  -- bash "$GATE" "$WATCH_DIR" &
 IMPLEMENTATION_WATCHER_PID=$!
 
-python .scripts/python/scripts/manage_subagents.py run pm \
-  --workflow chat.bash
+bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-pm-workflow
 
 wait -n "$QA_WATCHER_PID" "$IMPLEMENTATION_WATCHER_PID"

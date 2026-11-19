@@ -4,7 +4,7 @@
 Create missing role directories and provider configuration files by running:
 
 ```bash
-python .scripts/python/scripts/manage_subagents.py scaffold .
+bash .scripts/bash/CI/manage_subagents.bash manage-subagents-scaffold
 ```
 
 Scaffolding creates the `template/`, `subagent/`, `tools/`, and `workflows/`
@@ -57,14 +57,13 @@ GitHub Actions. The instructions file is the sole custom prompt source for
 every role.
 
 ```bash
-python .scripts/python/scripts/manage_subagents.py run implementation
+bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-implementation
 ```
 
 To run the implementation workflow:
 
 ```bash
-python .scripts/python/scripts/manage_subagents.py run implementation \
-  --workflow main_workflow.bash
+bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-implementation-workflow
 ```
 
 When both the base URL and API key are available, each invocation launches its
