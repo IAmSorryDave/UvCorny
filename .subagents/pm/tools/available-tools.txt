@@ -2,4 +2,3 @@ edit
 view
 grep
 glob
-write
