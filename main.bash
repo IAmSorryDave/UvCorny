@@ -18,6 +18,7 @@ trap cleanup EXIT
 bash .scripts/bash/CI/watch_aggregate_specification.bash &
 QA_WATCHER_PID=$!
 
-bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-pm-workflow
+# bash .scripts/bash/CI/manage_subagents.bash manage-subagents-run-pm-workflow
+python .scripts/python/scripts/manage_subagents.py run pm --workflow chat.bash
 
 wait "$QA_WATCHER_PID"
