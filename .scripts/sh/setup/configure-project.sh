@@ -41,4 +41,11 @@ if [ ! -f "pyproject.toml" ]; then
 
 else # It's presence indicates you are resuming work on an existing project that uses uvcorny.
 
-  uv init ; fi
+  uv init
+
+  if [ ! -f ".python-version" ]; then
+    uvx --from toml-cli toml set --toml-path pyproject.toml project.requires-python ">=${PYTHON_VERSION}"
+    printf '%s\n' "$PYTHON_VERSION" > .python-version
+  fi
+
+fi
