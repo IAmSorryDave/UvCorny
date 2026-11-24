@@ -8,6 +8,7 @@ SCOPE
 SOURCE LAYOUT
 - Feature folders are not part of the source layout. Feature grouping exists only in the spec and in tests/.
 - Derive each source file from the object's module path. For mypkg.parsers.JsonParser, the module is mypkg.parsers, so the file is src/mypkg/parsers.py. Several objects can live in the same module file.
+- Read package.import_style from the spec and implement that style only.
 - Derive the module path by dropping the leaf, then mapping each remaining segment to a directory or file.
 - Do not create a source file or package for a feature slug.
 
