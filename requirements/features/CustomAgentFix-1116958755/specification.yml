@@ -1,0 +1,93 @@
+package:
+  import_style: subpackage
+features:
+  - slug: CustomAgentFix-1116958755
+    status: proposed
+    requirements:
+      - id: LEDGER-001
+        description: >-
+          Provide FastAPI operations to create an account, post a transaction,
+          and get an account balance. The balance operation is
+          GET /accounts/{id}/balance and must verify that the supplied user_id
+          owns the account before returning its balance.
+        objects:
+          - name: uvcorny.ledger_lite.api.create_account
+            kind: function
+            signature:
+              args:
+                - name: request
+                  type: account creation request body (schema unresolved)
+              kwargs: []
+              returns: created account response or an error response
+          - name: uvcorny.ledger_lite.api.post_transaction
+            kind: function
+            signature:
+              args:
+                - name: account_id
+                  type: account identifier
+                - name: request
+                  type: transaction request body (schema unresolved)
+              kwargs: []
+              returns: transaction response or an error response
+          - name: uvcorny.ledger_lite.api.get_balance
+            kind: function
+            signature:
+              args:
+                - name: account_id
+                  type: account identifier
+                - name: user_id
+                  type: caller identifier supplied in the request body
+              kwargs: []
+              returns: account balance response for its owner or an error response
+      - id: LEDGER-002
+        description: >-
+          Accept transaction amounts as integer cents and allow overdrafts.
+          The requested float-rounding defect says balances are stored as
+          floats and gives 0.1 + 0.2 as the reproduction case; how that case
+          relates to integer-cent inputs remains unresolved.
+        objects: []
+      - id: LEDGER-003
+        description: >-
+          Provide a summary operation. The README must state that discounts
+          apply to the pre-tax subtotal. The requested training defect applies
+          the discount after tax in the implementation.
+        objects:
+          - name: uvcorny.ledger_lite.api.get_summary
+            kind: function
+            signature:
+              args:
+                - name: request
+                  type: summary request body (schema unresolved)
+              kwargs: []
+              returns: summary response with subtotal, tax, discount, and total
+      - id: LEDGER-004
+        description: >-
+          Include a README documenting the business rules and a pytest suite
+          covering the service operations and the requested training defects.
+        objects: []
+open_questions:
+  - id: LEDGER-OQ-001
+    question: >-
+      What account-creation fields and response schema should the API use,
+      including whether an initial balance is supported?
+    status: open
+  - id: LEDGER-OQ-002
+    question: >-
+      Should the transaction amount be interpreted as integer cents
+      throughout, or should the intentional float-balance defect also
+      accept decimal amounts such as 0.1 and 0.2?
+    status: open
+  - id: LEDGER-OQ-003
+    question: >-
+      What transaction request fields and route should be used, and how
+      should positive and negative amounts affect the balance?
+    status: open
+  - id: LEDGER-OQ-004
+    question: >-
+      What inputs, route, tax rate, discount representation, and response
+      schema should the summary operation use?
+    status: open
+blocking:
+  - LEDGER-001
+  - LEDGER-002
+  - LEDGER-003
