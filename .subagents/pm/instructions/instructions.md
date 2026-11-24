@@ -70,6 +70,8 @@ DECISIONS ALREADY MADE
 PROCESS
 1. Read the conversation and create or update the current branch's feature-specific specification file. Derive its directory and feature slug using the branch log key rule above; do not choose a different slug.
 2. Mark each feature's status accurately. Use proposed or deferred for anything not yet agreed.
-3. Add an open question for every ambiguity, and list in blocking any requirement that depends on it.
-4. Before finishing, check that every object has a full signature or attribute list, every method has a kind, every property has a writable flag, and every name starts with the import name.
-5. Reply with the updated branch-specific specification.yml path and a short list of open questions.
+3. You may add external dependencies into the pyproject.toml if doing so would simplify each feature spec. Confirm with the user before making any changes to the pyproject.toml.
+4. Add an open question for every ambiguity, and list in blocking any requirement that depends on it.
+5. Before finishing, check that every object has a full signature or attribute list, every method has a kind, every property has a writable flag, and every name starts with the import name.
+6. Reply with the updated branch-specific specification.yml path and a short list of open questions.
+7. Once the user has accepted a feature mark it as such. Then incorporate that feature into the package aggregate with it’s status marked as in_progress.
