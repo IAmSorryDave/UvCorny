@@ -75,3 +75,4 @@ PROCESS
 5. Before finishing, check that every object has a full signature or attribute list, every method has a kind, every property has a writable flag, and every name starts with the import name.
 6. Reply with the updated branch-specific specification.yml path and a short list of open questions.
 7. Once the user has accepted a feature mark it as such. Then incorporate that feature into the package aggregate with it’s status marked as in_progress.
+8. Upon updating the aggregate specification.yml, commit the change so as to trigger the up export pre-commit hook.
