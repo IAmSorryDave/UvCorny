@@ -1,0 +1,104 @@
+package:
+  import_style: subpackage
+features:
+- slug: Simplify-to-subagent-chats-1016433958
+  status: accepted
+  requirements:
+  - id: CALC-001
+    description: The package shall provide a Calculator class that adds two numbers.
+    objects:
+    - name: uvcorny.calculator.Calculator
+      kind: class
+      init_signature:
+        args: []
+        kwargs: []
+      instance_attributes: []
+      class_attributes: []
+      methods:
+      - name: add
+        kind: instance
+        signature:
+          args:
+          - name: left
+            type: number
+          - name: right
+            type: number
+          kwargs: []
+          returns: number
+  - id: CALC-002
+    description: The package shall provide a Calculator class that subtracts two numbers.
+    objects:
+    - name: uvcorny.calculator.Calculator
+      kind: class
+      init_signature:
+        args: []
+        kwargs: []
+      instance_attributes: []
+      class_attributes: []
+      methods:
+      - name: subtract
+        kind: instance
+        signature:
+          args:
+          - name: left
+            type: number
+          - name: right
+            type: number
+          kwargs: []
+          returns: number
+  - id: CALC-003
+    description: The package shall provide a Calculator class that multiplies two
+      numbers.
+    objects:
+    - name: uvcorny.calculator.Calculator
+      kind: class
+      init_signature:
+        args: []
+        kwargs: []
+      instance_attributes: []
+      class_attributes: []
+      methods:
+      - name: multiply
+        kind: instance
+        signature:
+          args:
+          - name: left
+            type: number
+          - name: right
+            type: number
+          kwargs: []
+          returns: number
+  - id: CALC-004
+    description: The package shall provide a Calculator class that divides two numbers.
+    objects:
+    - name: uvcorny.calculator.Calculator
+      kind: class
+      init_signature:
+        args: []
+        kwargs: []
+      instance_attributes: []
+      class_attributes: []
+      methods:
+      - name: divide
+        kind: instance
+        signature:
+          args:
+          - name: numerator
+            type: number
+          - name: denominator
+            type: number
+          kwargs: []
+          returns: number
+open_questions:
+- id: OQ-CALC-001
+  question: Which numeric input types should the calculator support and what return
+    type should it preserve?
+  status: open
+- id: OQ-CALC-002
+  question: How should division by zero be handled?
+  status: open
+blocking:
+- CALC-001
+- CALC-002
+- CALC-003
+- CALC-004
